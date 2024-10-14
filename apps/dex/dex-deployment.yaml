@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dex
+  namespace: dex
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dex
+  template:
+    metadata:
+      labels:
+        app: dex
+    spec:
+      containers:
+        - name: dex
+          image: ghcr.io/dexidp/dex:v2.30.0
+          ports:
+            - containerPort: 5556
+          env:
+            - name: GOOGLE_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: dex-google-credentials
+                  key: clientID
+            - name: GOOGLE_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dex-google-credentials
+                  key: clientSecret
+          volumeMounts:
+            - name: config
+              mountPath: /etc/dex/cfg
+              subPath: config.yaml
+      volumes:
+        - name: config
+          configMap:
+            name: dex-config
+

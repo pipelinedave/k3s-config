@@ -1,0 +1,3 @@
+test/
+# Dont be a doofus
+*-secret.yaml

@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dex-config
+  namespace: dex
+data:
+  config.yaml: |
+    issuer: https://dex.stillon.top
+    storage:
+      type: kubernetes
+      config:
+        inCluster: true
+    web:
+      http: 0.0.0.0:5556
+    staticClients:
+      - id: argocd
+        redirectURIs:
+          - 'https://argocd.stillon.top/auth/callback'
+        name: ArgoCD
+        secret: argocd-secret
+    connectors:
+      - type: google
+        id: google
+        name: Google
+        config:
+          clientID: $GOOGLE_CLIENT_ID
+          clientSecret: $GOOGLE_CLIENT_SECRET
+          redirectURI: https://dex.stillon.top/callback

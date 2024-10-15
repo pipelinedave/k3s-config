@@ -2,14 +2,19 @@
 apiVersion: bitnami.com/v1alpha1
 kind: SealedSecret
 metadata:
+  annotations:
+    sealedsecrets.bitnami.com/namespace-wide: "true"
   creationTimestamp: null
-  name: vault-sealed
+  name: vault-secrets
   namespace: supersecretmessage
 spec:
   encryptedData:
-    VAULT_TOKEN: AgAM1vEllThgixQoqL5wxEBd2RlVzBiHdecgtzFxOfzMUHiQhMKUiAV01N+ftW1cmR5HCw/2B09K7dg8kliY8I9buNPVma0I6HGcG2TNjN5mV1HNP4mm1OSfDtlFdFnOK4pVkEB3qS6vZ5Wyoy2DiIFcw9aaWLf2HRg9hrtXSOyVthfBn6rGeqNRtZwDD//OLXD+1NG6cBBNHHGeSDPzxBjaS2dMEUJzCeGOXK0LjdK6ur+2VZMzKkZblIAS26mr/grJ00zKitMikfx8lwsKXd6e//ZOV7SagxTEjE4C07HKGZOcDBmzEyj0TIodAq6uXQC/IbUrtgnTjPMMqjyrGo4Ca5H903QNjMkNT7PO9vaUmdq/075/bDyorkxW6NGr22VOIr0oayZIODyIQLLWnoipWSoMBTBHEalfEF1u4xeAXYWS//f29YoYzPCcLpWMXtHMVTyXtkw5KqepNUUFTSKfj4Dh7sFrJy8k6s8DcGugJojn5+UypGFpMocIcTPtSESVq4UOTtmQkEQOY7IgCes0gIEvnIHVaNEclfJCRFckdgV54MX6Hy2bh/mtvWhZsG6uKGFxMQRX6nQfN4fhrsp/7wLXZQfByAWFhwd0VoONhj+qYQ8DU8pYIHViGYcI69Tuf8KsBdKJOKtyYPN/+JHabemog7zvigLBrP69FNrl+xWgfm7p3qLfUjtwSweiozE=
+    VAULT_DEV_ROOT_TOKEN_ID: AgAxdwDsPfK7MbWTOm9N0iOC8ezpTlWDM1qDsGlw7CgfyjkHko3dnfpDiwXfDdhjHxD3j++fOkSAsPuFfymyGxI66Rwsh8RNfyyB1K0OCyBm+TzIx+Q6jncg/YzSKjG6Bk0bOhGFysB37HVzadJngOoXm47AoJMTZvpwxDqAWMCs7yovFEP0PZLHoPfZNueCmi9lG1s41juffGPkg6+l7VHBKIpVcXEmP5uCHv6oHjhbaMXmSevYXfWW8e3aOdZtkbNF8MJHk8qM4fIks2oS7XT2BqtMmD7XKyQ0H0gvHFJCbLoDTIFhps/txXO/tfCefXHnT/r4oysg/MkWcgWhVmsr0MgSBK67o+/NwCavF4CNSadnxkfxKazMHqe88FfmcMnWavqSxFm2JIOnY/xWMBbLGyByeZsl2t/6wjKi6n6Yq2T6wDs6otmpiR8G5SNVEC5owXrYxs5NN6ahtI0uFQKWJ8YTY+EANxa0v1C9dB5FbU07nQ6sBjScS8J/IzE0EB10inOy9NEEzD1gfmYl+0aNUtEHDUaaDdcLoZOpvyt4hxWxJQLk/gVo630j33jt49GEb7EaO1Af08DWzI/PmvTxwhnTBOI0ttUUk538beKMdwwZUIYIUFP6327QJDUeQkaTERCuzGVcpEdolS9rgeqXmmN155DJTTHOC9rNjBFOHME0f3J6/bQgo7ZD6zrjad929eSHY+YZu16MdRTJi4VfLPPbUBSAPRhOb6+r8DLbi++YLx2oLlEoZuop/Z9VgZY=
   template:
     metadata:
+      annotations:
+        sealedsecrets.bitnami.com/namespace-wide: "true"
       creationTimestamp: null
       name: vault-secrets
       namespace: supersecretmessage
+    type: Opaque

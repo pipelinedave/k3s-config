@@ -12,5 +12,4 @@ resources:
 - supersecret-deployment.yaml
 - supersecret-service.yaml
 - supersecret-ingress.yaml
-- supersecret-sealed.yaml
 

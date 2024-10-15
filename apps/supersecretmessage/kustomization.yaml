@@ -8,7 +8,9 @@ resources:
 - namespace.yaml
 - vault-deployment.yaml
 - vault-service.yaml
+- vault-sealed.yaml
 - supersecret-deployment.yaml
 - supersecret-service.yaml
 - supersecret-ingress.yaml
+- supersecret-sealed.yaml
 

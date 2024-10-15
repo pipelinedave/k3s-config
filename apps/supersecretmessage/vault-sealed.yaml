@@ -1,0 +1,15 @@
+---
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: vault-sealed
+  namespace: supersecretmessage
+spec:
+  encryptedData:
+    VAULT_TOKEN: AgAM1vEllThgixQoqL5wxEBd2RlVzBiHdecgtzFxOfzMUHiQhMKUiAV01N+ftW1cmR5HCw/2B09K7dg8kliY8I9buNPVma0I6HGcG2TNjN5mV1HNP4mm1OSfDtlFdFnOK4pVkEB3qS6vZ5Wyoy2DiIFcw9aaWLf2HRg9hrtXSOyVthfBn6rGeqNRtZwDD//OLXD+1NG6cBBNHHGeSDPzxBjaS2dMEUJzCeGOXK0LjdK6ur+2VZMzKkZblIAS26mr/grJ00zKitMikfx8lwsKXd6e//ZOV7SagxTEjE4C07HKGZOcDBmzEyj0TIodAq6uXQC/IbUrtgnTjPMMqjyrGo4Ca5H903QNjMkNT7PO9vaUmdq/075/bDyorkxW6NGr22VOIr0oayZIODyIQLLWnoipWSoMBTBHEalfEF1u4xeAXYWS//f29YoYzPCcLpWMXtHMVTyXtkw5KqepNUUFTSKfj4Dh7sFrJy8k6s8DcGugJojn5+UypGFpMocIcTPtSESVq4UOTtmQkEQOY7IgCes0gIEvnIHVaNEclfJCRFckdgV54MX6Hy2bh/mtvWhZsG6uKGFxMQRX6nQfN4fhrsp/7wLXZQfByAWFhwd0VoONhj+qYQ8DU8pYIHViGYcI69Tuf8KsBdKJOKtyYPN/+JHabemog7zvigLBrP69FNrl+xWgfm7p3qLfUjtwSweiozE=
+  template:
+    metadata:
+      creationTimestamp: null
+      name: vault-secrets
+      namespace: supersecretmessage

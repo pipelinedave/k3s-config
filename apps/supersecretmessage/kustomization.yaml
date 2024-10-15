@@ -1,0 +1,14 @@
+# kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: supersecretmessage
+
+resources:
+- namespace.yaml
+- vault-deployment.yaml
+- vault-service.yaml
+- supersecret-deployment.yaml
+- supersecret-service.yaml
+- supersecret-ingress.yaml
+

@@ -1,0 +1,13 @@
+﻿apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: choremane-prod
+
+bases:
+  - ../../base
+
+resources:
+  - namespace.yaml
+
+patchesStrategicMerge:
+  - ingress-patch.yaml

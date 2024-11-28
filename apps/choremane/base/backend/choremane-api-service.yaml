@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: choremane-api
+  namespace: choremane
+spec:
+  selector:
+    app: choremane-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: ClusterIP

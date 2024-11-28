@@ -1,0 +1,11 @@
+﻿apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - choremane-api-deployment.yaml
+  - choremane-api-service.yaml
+  - db-schema-configmap.yaml
+  - postgres-deployment.yaml
+  - postgres-pv.yaml
+  - postgres-sealed.yaml
+  - postgres-service.yaml

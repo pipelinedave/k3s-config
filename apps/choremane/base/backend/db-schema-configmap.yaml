@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: db-schema-config
+  namespace: choremane
+data:
+  db.schema: |
+    -- Table for chores
+    CREATE TABLE IF NOT EXISTS chores (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) NOT NULL,
+        interval_days INT NOT NULL,
+        due_date DATE NOT NULL,
+        done BOOLEAN DEFAULT FALSE,
+        done_by VARCHAR(255),
+        archived BOOLEAN DEFAULT FALSE
+    );
+
+    -- Table for chore logs
+    CREATE TABLE IF NOT EXISTS chore_logs (
+        id SERIAL PRIMARY KEY,
+        chore_id INT NOT NULL,
+        done_by VARCHAR(255),
+        done_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        action_type VARCHAR(50) NOT NULL, -- 'created', 'updated', 'archived', 'marked_done', 'undone'
+        action_details JSON DEFAULT NULL, -- JSON to store previous state for undo
+        FOREIGN KEY (chore_id) REFERENCES chores (id) ON DELETE CASCADE
+    );

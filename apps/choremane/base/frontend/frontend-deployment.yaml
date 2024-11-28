@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: choremane
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+      annotations:
+        redeploy-timestamp: "2023-10-22T15:30:00Z"
+    spec:
+      containers:
+        - name: frontend
+          image: pipelinedave/choremane-frontend:v0.2
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          # If you need to set environment variables, uncomment below:
+          # env:
+          #   - name: VUE_APP_API_URL
+          #     value: "https://api.yourdomain.com"

@@ -5,7 +5,6 @@ namespace: choremane-staging
 
 resources:
   - ../../base
-  - postgres-sealed-staging.yaml
 
 patches:
   - target:

@@ -12,29 +12,6 @@ spec:
       labels:
         app: postgres
     spec:
-      initContainers:
-        - name: init-db
-          image: postgres:14
-          env:
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_USER
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_PASSWORD
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_DB
-          command: ['sh', '-c', 'until pg_isready -h postgres -U $POSTGRES_USER; do echo "Waiting for postgres..."; sleep 2; done; psql -h postgres -U $POSTGRES_USER -d $POSTGRES_DB -f /schema/db.schema']
-          volumeMounts:
-            - name: schema-volume
-              mountPath: /schema
       containers:
         - name: postgres
           image: postgres:14
@@ -66,10 +43,16 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgres-storage
-      volumes:
-        - name: postgres-storage
-          persistentVolumeClaim:
-            claimName: postgres-pvc
-        - name: schema-volume
-          configMap:
-            name: db-schema-config
+            - mountPath: /docker-entrypoint-initdb.d
+              name: schema-volume
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/sh", "-c", "psql -U $POSTGRES_USER -d $POSTGRES_DB -f /docker-entrypoint-initdb.d/db.schema"]
+          volumes:
+            - name: postgres-storage
+              persistentVolumeClaim:
+                claimName: postgres-pvc
+            - name: schema-volume
+              configMap:
+                name: db-schema-config

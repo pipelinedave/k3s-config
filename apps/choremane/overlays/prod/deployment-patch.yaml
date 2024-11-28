@@ -1,0 +1,19 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+        - name: frontend
+          image: pipelinedave/choremane-frontend:v0.4
+          env:
+            - name: VUE_APP_API_BASE_URL
+              value: "https://chores.stillon.top/api"

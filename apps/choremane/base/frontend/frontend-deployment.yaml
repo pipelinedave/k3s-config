@@ -13,8 +13,6 @@ spec:
     metadata:
       labels:
         app: frontend
-      annotations:
-        redeploy-timestamp: "2023-10-22T15:30:00Z"
     spec:
       containers:
         - name: frontend
@@ -22,7 +20,13 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
-          # If you need to set environment variables, uncomment below:
-          # env:
-          #   - name: VUE_APP_API_URL
-          #     value: "https://api.yourdomain.com"
+          resources:
+              requests:
+                memory: "256Mi"
+                cpu: "250m"
+              limits:
+                memory: "512Mi"
+                cpu: "500m"
+          env:
+            - name: VUE_APP_API_URL
+              value: "placeholder"

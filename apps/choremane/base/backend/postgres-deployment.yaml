@@ -31,7 +31,7 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_DB
-          command: ['sh', '-c', 'until pg_isready -h localhost -U $POSTGRES_USER; do echo "Waiting for postgres..."; sleep 2; done; psql -h localhost -U $POSTGRES_USER -d $POSTGRES_DB -f /schema/db.schema']
+          command: ['sh', '-c', 'until pg_isready -h postgres -U $POSTGRES_USER; do echo "Waiting for postgres..."; sleep 2; done; psql -h postgres -U $POSTGRES_USER -d $POSTGRES_DB -f /schema/db.schema']
           volumeMounts:
             - name: schema-volume
               mountPath: /schema

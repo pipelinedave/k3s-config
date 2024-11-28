@@ -1,0 +1,32 @@
+﻿apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: choremane-applicationset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: prod
+            namespace: choremane-prod
+            overlay: prod
+          - name: staging
+            namespace: choremane-staging
+            overlay: staging
+  template:
+    metadata:
+      name: "choremane-{{name}}"
+    spec:
+      project: default
+      source:
+        repoURL: 'https://github.com/pipelinedave/k3s-config.git'
+        targetRevision: HEAD
+        path: 'apps/choremane/overlays/{{overlay}}'
+      destination:
+        server: 'https://kubernetes.default.svc'
+        namespace: '{{namespace}}'
+        createNamespace: true
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

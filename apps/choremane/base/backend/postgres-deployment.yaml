@@ -49,10 +49,10 @@ spec:
             postStart:
               exec:
                 command: ["/bin/sh", "-c", "psql -U $POSTGRES_USER -d $POSTGRES_DB -f /docker-entrypoint-initdb.d/db.schema"]
-          volumes:
-            - name: postgres-storage
-              persistentVolumeClaim:
-                claimName: postgres-pvc
-            - name: schema-volume
-              configMap:
-                name: db-schema-config
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+        - name: schema-volume
+          configMap:
+            name: db-schema-config

@@ -5,6 +5,7 @@ namespace: choremane-prod
 
 resources:
   - ../../base
+  - postgres-sealed-prod.yaml
 
 patches:
   - target:

@@ -4,7 +4,6 @@ kind: SealedSecret
 metadata:
   creationTimestamp: null
   name: postgres-secret
-  namespace: choremane
 spec:
   encryptedData:
     POSTGRES_DB: AgBXo1d0CfTBTjL9kA8Q/4JgRA0mx4CPU6lq/fklDmlxaHuQnYn3fPelI9ejsjhqJWPEieLVk3UwcjDqVTt0ejzJ8HJP0stHAtsuUU+8z5RBHR8jNvrTgEFqbopF5QoihaPODt5hDiB7/e1fG7lvmGLQ4kfOsxa9j6wqGy/ncUoiPV2/e8yzMLbDxY+XTm65ckGC33Hm3UDSUHBc5hgnEqpzKeMH01LkuJBG1SFQBxQSbkGvXfXsDxv39DlzVRMlnOLQI7TFrxtXTkMBQm6U08gCtof/TeX7BotBZLH1Ck7ErHEPhhCn+HsU34+IS2Uza1dUMIyRZTRFe/AW++/IiI/9rUPGGGgduvqivKRvf6uxxBAuMJ7IiWzdx/k440hUOXvGZjeTyNOOdeCdyH3+YL3kSr5AzNIQ464+TGlEeIuGnwnkMB1iTtTreDWQoS6hiC5AowvoYiyEwL3KkMRDsNSfkDJX3lNMHIW/nF71tknjt/MKBUU/6XABLElaw8Dyse8tgy7tnXIF5QeJvk6ngpUxkzipmg85qxDzeGm5bua1W/MoRaHIq3Vv03XvEMqipXma2ikWU3hBGrqtB1DYTKi0hXwNyDRLom59HaT/nyRLGEZZtxnvADsFe51fQcBSFcRiDuATIQ8TyIPLchsIQT6t3OWJFoSz57B4k/hbmOfHS34SFBRwGRHH7OVLoEGTWSEgflvBNCT9KA==
@@ -14,4 +13,3 @@ spec:
     metadata:
       creationTimestamp: null
       name: postgres-secret
-      namespace: choremane

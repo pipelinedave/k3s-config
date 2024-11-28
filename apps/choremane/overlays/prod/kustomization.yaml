@@ -3,11 +3,8 @@ kind: Kustomization
 
 namespace: choremane-prod
 
-bases:
+resources:
   - ../../base
 
-resources:
-  - namespace.yaml
-
-patchesStrategicMerge:
+patches:
   - ingress-patch.yaml

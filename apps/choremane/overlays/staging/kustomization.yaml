@@ -3,11 +3,9 @@ kind: Kustomization
 
 namespace: choremane-staging
 
-bases:
-  - ../../base
-
 resources:
+  - ../../base
   - namespace.yaml
 
-patchesStrategicMerge:
+patches:
   - ingress-patch.yaml

@@ -5,6 +5,6 @@ resources:
   - choremane-api-deployment.yaml
   - choremane-api-service.yaml
   - db-schema-configmap.yaml
+  - postgres-sealed-secret.yaml
   - postgres-deployment.yaml
-  - postgres-sealed.yaml
   - postgres-service.yaml

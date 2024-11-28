@@ -5,6 +5,7 @@ namespace: choremane-staging
 
 resources:
   - ../../base
+  - ../common/postgres-pvc.yaml
 
 patches:
   - target:

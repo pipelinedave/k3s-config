@@ -5,7 +5,6 @@ namespace: choremane-staging
 
 resources:
   - ../../base
-  - ../common
 
 patches:
   - target:

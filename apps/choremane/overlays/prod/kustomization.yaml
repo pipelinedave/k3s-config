@@ -5,7 +5,6 @@ namespace: choremane-prod
 
 resources:
   - ../../base
-  - ../common
 
 patches:
   - target:

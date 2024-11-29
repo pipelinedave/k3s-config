@@ -37,7 +37,3 @@ spec:
                   key: POSTGRES_PASSWORD
             - name: PYTHONUNBUFFERED
               value: "1"
-          resources:
-            limits:
-              memory: "512Mi"
-              cpu: "500m"

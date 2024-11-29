@@ -4,10 +4,15 @@ metadata:
   name: frontend-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: traefik
 spec:
+  tls:
+    - hosts:
+        - chores.stillon.top
+      secretName: chores-stillon-top-tls
   rules:
-    - host: PLACEHOLDER_HOST
+    - host: chores.stillon.top
       http:
         paths:
           - path: /
@@ -15,12 +20,5 @@ spec:
             backend:
               service:
                 name: frontend-service
-                port:
-                  number: 80
-          - path: /api
-            pathType: Prefix
-            backend:
-              service:
-                name: choremane-api
                 port:
                   number: 80

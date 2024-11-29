@@ -20,6 +20,3 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
-          env:
-            - name: VUE_APP_API_BASE_URL
-              value: "placeholder"

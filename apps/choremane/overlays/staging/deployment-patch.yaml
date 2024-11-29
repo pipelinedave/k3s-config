@@ -13,7 +13,4 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: pipelinedave/choremane-frontend:v0.5
-          env:
-            - name: VUE_APP_API_BASE_URL
-              value: "https://chores-staging.stillon.top/api"
+          image: pipelinedave/choremane-frontend:v0.5.1

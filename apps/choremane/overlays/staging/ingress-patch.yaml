@@ -22,6 +22,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: choremane-api
+                name: api-service
                 port:
                   number: 80

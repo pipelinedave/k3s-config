@@ -1,19 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: choremane-api
+  name: api-deployment
+  labels:
+    app.kubernetes.io/name: choremane
+    app.kubernetes.io/component: api
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: choremane-api
+      app.kubernetes.io/name: choremane
+      app.kubernetes.io/component: api
   template:
     metadata:
       labels:
-        app: choremane-api
+        app.kubernetes.io/name: choremane
+        app.kubernetes.io/component: api
     spec:
       containers:
-        - name: choremane-api
+        - name: api
           image: pipelinedave/choremane-api:v0.3.1
           ports:
             - containerPort: 80

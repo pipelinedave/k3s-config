@@ -2,15 +2,20 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: postgres
+  labels:
+    app.kubernetes.io/name: choremane
+    app.kubernetes.io/component: database
 spec:
+  replicas: 1
   selector:
     matchLabels:
-      app: postgres
-  replicas: 1
+      app.kubernetes.io/name: choremane
+      app.kubernetes.io/component: database
   template:
     metadata:
       labels:
-        app: postgres
+        app.kubernetes.io/name: choremane
+        app.kubernetes.io/component: database
     spec:
       containers:
         - name: postgres

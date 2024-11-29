@@ -1,16 +1,16 @@
 ﻿apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
-namespace: choremane-staging
+namespace: choremane-dev
 
 resources:
   - ../../base
 
 patches:
   - target:
-      kind: Ingress
-      name: frontend-ingress
-    path: frontend-ingress-patch.yaml
+      kind: Deployment
+      name: api-deployment
+    path: api-deployment-patch.yaml
   - target:
       kind: Deployment
       name: frontend-deployment

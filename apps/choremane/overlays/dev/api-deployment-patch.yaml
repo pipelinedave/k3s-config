@@ -1,0 +1,15 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: choremane
+      app.kubernetes.io/component: api
+  template:
+    spec:
+      containers:
+        - name: api
+          image: pipelinedave/fastapi-task-api:dev  # Dev-specific image

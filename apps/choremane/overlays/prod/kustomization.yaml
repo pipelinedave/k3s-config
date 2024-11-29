@@ -10,8 +10,8 @@ patches:
   - target:
       kind: Ingress
       name: frontend-ingress
-    path: ingress-patch.yaml
+    path: frontend-ingress-patch.yaml
   - target:
       kind: Deployment
       name: frontend-deployment
-    path: deployment-patch.yaml
+    path: frontend-deployment-patch.yaml

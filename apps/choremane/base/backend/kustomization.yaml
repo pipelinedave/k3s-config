@@ -2,8 +2,8 @@
 kind: Kustomization
 
 resources:
-  - choremane-api-deployment.yaml
-  - choremane-api-service.yaml
+  - api-deployment.yaml
+  - api-service.yaml
   - db-schema-configmap.yaml
   - postgres-pvc.yaml
   - postgres-deployment.yaml

@@ -6,10 +6,11 @@ namespace: choremane-dev
 resources:
   - ../../base
 
-transformers:
-  - remove-frontend-ingress.yaml
-
 patches:
+  - target:
+      kind: Ingress
+      name: frontend-ingress
+    path: frontend-ingress-patch.yaml
   - target:
       kind: Deployment
       name: api-deployment

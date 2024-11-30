@@ -13,6 +13,9 @@ spec:
           - name: staging
             namespace: choremane-staging
             overlay: staging
+          - name: dev
+            namespace: choremane-dev
+            overlay: dev
   template:
     metadata:
       name: "choremane-{{name}}"

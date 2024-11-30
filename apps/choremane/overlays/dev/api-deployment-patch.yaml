@@ -12,4 +12,4 @@ spec:
     spec:
       containers:
         - name: api
-          image: pipelinedave/fastapi-task-api:latest
+          image: pipelinedave/choremane-api:latest

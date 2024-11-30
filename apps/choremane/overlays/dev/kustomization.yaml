@@ -6,6 +6,9 @@ namespace: choremane-dev
 resources:
   - ../../base
 
+transformers:
+  - remove-frontend-ingress.yaml
+
 patches:
   - target:
       kind: Deployment

@@ -1,0 +1,10 @@
+﻿apiVersion: builtin
+kind: PatchTransformer
+metadata:
+  name: remove-frontend-ingress
+patch: |-
+  - op: remove
+    path: /spec/rules
+    target:
+      kind: Ingress
+      name: frontend-ingress

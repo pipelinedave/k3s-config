@@ -17,11 +17,18 @@ spec:
         app.kubernetes.io/name: choremane
         app.kubernetes.io/component: database
     spec:
-      containers:
-        - name: postgres
+      initContainers:
+        - name: init-db
           image: postgres:14
-          ports:
-            - containerPort: 5432
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until pg_isready -h 127.0.0.1 -p 5432; do
+                echo "Waiting for PostgreSQL to be ready...";
+                sleep 2;
+              done;
+              psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f /docker-entrypoint-initdb.d/db.schema
           env:
             - name: POSTGRES_USER
               valueFrom:
@@ -39,14 +46,32 @@ spec:
                   name: postgres-secret
                   key: POSTGRES_DB
           volumeMounts:
-            - mountPath: /var/lib/postgresql/data
-              name: postgres-storage
             - mountPath: /docker-entrypoint-initdb.d
               name: schema-volume
-          lifecycle:
-            postStart:
-              exec:
-                command: ["/bin/sh", "-c", "psql -U $POSTGRES_USER -d $POSTGRES_DB -f /docker-entrypoint-initdb.d/db.schema"]
+      containers:
+        - name: postgres
+          image: postgres:14
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: POSTGRES_PASSWORD
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: POSTGRES_DB
+                  key: POSTGRES_DB
+          volumeMounts:
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-storage
       volumes:
         - name: postgres-storage
           persistentVolumeClaim:

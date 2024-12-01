@@ -10,12 +10,15 @@ spec:
           - name: prod
             namespace: choremane-prod
             overlay: prod
+            tag: v1.0.0
           - name: staging
             namespace: choremane-staging
             overlay: staging
+            tag: v1.0.0-staging
           - name: dev
             namespace: choremane-dev
             overlay: dev
+            tag: HEAD
   template:
     metadata:
       name: "choremane-{{name}}"
@@ -23,7 +26,7 @@ spec:
       project: default
       source:
         repoURL: 'https://github.com/pipelinedave/k3s-config.git'
-        targetRevision: HEAD
+        targetRevision: '{{tag}}'
         path: 'apps/choremane/overlays/{{overlay}}'
       destination:
         server: 'https://kubernetes.default.svc'

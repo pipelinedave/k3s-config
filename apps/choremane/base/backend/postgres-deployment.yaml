@@ -17,37 +17,6 @@ spec:
         app.kubernetes.io/name: choremane
         app.kubernetes.io/component: database
     spec:
-      initContainers:
-        - name: init-db
-          image: postgres:14
-          command:
-            - /bin/sh
-            - -c
-            - |
-              until pg_isready -h postgres-service -p 5432; do
-                echo "Waiting for PostgreSQL to be ready...";
-                sleep 2;
-              done;
-              psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f /docker-entrypoint-initdb.d/db.schema
-          env:
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_USER
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_PASSWORD
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_DB
-          volumeMounts:
-            - mountPath: /docker-entrypoint-initdb.d
-              name: schema-volume
       containers:
         - name: postgres
           image: postgres:14
@@ -76,6 +45,52 @@ spec:
         - name: postgres-storage
           persistentVolumeClaim:
             claimName: postgres-pvc
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-db-schema
+  labels:
+    app.kubernetes.io/name: choremane
+    app.kubernetes.io/component: database-init
+spec:
+  template:
+    spec:
+      containers:
+        - name: init-db
+          image: postgres:14
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until pg_isready -h postgres-service -p 5432; do
+                echo "Waiting for PostgreSQL to be ready...";
+                sleep 2;
+              done;
+              echo "PostgreSQL is ready. Applying schema...";
+              PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgres-service -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f /docker-entrypoint-initdb.d/db.schema
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d
+              name: schema-volume
+      restartPolicy: OnFailure
+      volumes:
         - name: schema-volume
           configMap:
             name: db-schema-config
+  backoffLimit: 4

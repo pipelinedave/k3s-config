@@ -62,12 +62,12 @@ spec:
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: POSTGRES_PASSWORD
+                  name: postgres-secret
                   key: POSTGRES_PASSWORD
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: POSTGRES_DB
+                  name: postgres-secret
                   key: POSTGRES_DB
           volumeMounts:
             - mountPath: /var/lib/postgresql/data

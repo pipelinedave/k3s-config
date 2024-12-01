@@ -14,7 +14,7 @@ spec:
           - name: staging
             namespace: choremane-staging
             overlay: staging
-            tag: v1.0.4-staging
+            tag: choremane/staging/v0.6.0
           - name: dev
             namespace: choremane-dev
             overlay: dev

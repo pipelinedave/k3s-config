@@ -8,10 +8,6 @@ resources:
 
 patches:
   - target:
-      kind: Ingress
-      name: frontend-ingress
-    path: frontend-ingress-patch.yaml
-  - target:
       kind: Deployment
       name: api-deployment
     path: api-deployment-patch.yaml

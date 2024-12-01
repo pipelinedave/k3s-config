@@ -2,6 +2,13 @@
 kind: Ingress
 metadata:
   name: frontend-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: traefik
+  labels:
+    app.kubernetes.io/name: choremane
+    app.kubernetes.io/component: frontend
 spec:
   tls:
     - hosts:

@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
         - name: api
-          image: pipelinedave/choremane-api:v0.5.3
+          image: pipelinedave/choremane-api:dev

@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: pipelinedave/choremane-frontend:v0.5.2
+          image: pipelinedave/choremane-frontend:dev

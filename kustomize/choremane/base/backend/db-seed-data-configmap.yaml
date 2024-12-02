@@ -1,0 +1,364 @@
+﻿apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: seed-data-config
+  namespace: choremane
+data:
+  backup.sql: |
+    --
+    -- PostgreSQL database dump
+    --
+
+    -- Dumped from database version 14.13 (Debian 14.13-1.pgdg120+1)
+    -- Dumped by pg_dump version 15.6
+
+    SET statement_timeout = 0;
+    SET lock_timeout = 0;
+    SET idle_in_transaction_session_timeout = 0;
+    SET client_encoding = 'UTF8';
+    SET standard_conforming_strings = on;
+    SELECT pg_catalog.set_config('search_path', '', false);
+    SET check_function_bodies = false;
+    SET xmloption = content;
+    SET client_min_messages = warning;
+    SET row_security = off;
+
+    --
+    -- Name: public; Type: SCHEMA; Schema: -; Owner: admin
+    --
+
+    -- *not* creating schema, since initdb creates it
+
+
+    ALTER SCHEMA public OWNER TO admin;
+
+    SET default_tablespace = '';
+
+    SET default_table_access_method = heap;
+
+    --
+    -- Name: chore_logs; Type: TABLE; Schema: public; Owner: admin
+    --
+
+    CREATE TABLE public.chore_logs (
+        id integer NOT NULL,
+        chore_id integer NOT NULL,
+        done_by character varying(255),
+        done_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+        action_type character varying(50) NOT NULL,
+        action_details json
+    );
+
+
+    ALTER TABLE public.chore_logs OWNER TO admin;
+
+    --
+    -- Name: chore_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+    --
+
+    CREATE SEQUENCE public.chore_logs_id_seq
+        AS integer
+        START WITH 1
+        INCREMENT BY 1
+        NO MINVALUE
+        NO MAXVALUE
+        CACHE 1;
+
+
+    ALTER TABLE public.chore_logs_id_seq OWNER TO admin;
+
+    --
+    -- Name: chore_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+    --
+
+    ALTER SEQUENCE public.chore_logs_id_seq OWNED BY public.chore_logs.id;
+
+
+    --
+    -- Name: chores; Type: TABLE; Schema: public; Owner: admin
+    --
+
+    CREATE TABLE public.chores (
+        id integer NOT NULL,
+        name character varying(255) NOT NULL,
+        interval_days integer NOT NULL,
+        due_date date NOT NULL,
+        done boolean DEFAULT false,
+        done_by character varying(255),
+        archived boolean DEFAULT false
+    );
+
+
+    ALTER TABLE public.chores OWNER TO admin;
+
+    --
+    -- Name: chores_id_seq; Type: SEQUENCE; Schema: public; Owner: admin
+    --
+
+    CREATE SEQUENCE public.chores_id_seq
+        AS integer
+        START WITH 1
+        INCREMENT BY 1
+        NO MINVALUE
+        NO MAXVALUE
+        CACHE 1;
+
+
+    ALTER TABLE public.chores_id_seq OWNER TO admin;
+
+    --
+    -- Name: chores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin
+    --
+
+    ALTER SEQUENCE public.chores_id_seq OWNED BY public.chores.id;
+
+
+    --
+    -- Name: chore_logs id; Type: DEFAULT; Schema: public; Owner: admin
+    --
+
+    ALTER TABLE ONLY public.chore_logs ALTER COLUMN id SET DEFAULT nextval('public.chore_logs_id_seq'::regclass);
+
+
+    --
+    -- Name: chores id; Type: DEFAULT; Schema: public; Owner: admin
+    --
+
+    ALTER TABLE ONLY public.chores ALTER COLUMN id SET DEFAULT nextval('public.chores_id_seq'::regclass);
+
+
+    --
+    -- Data for Name: chore_logs; Type: TABLE DATA; Schema: public; Owner: admin
+    --
+
+    COPY public.chore_logs (id, chore_id, done_by, done_at, action_type, action_details) FROM stdin;
+    1	4	\N	2024-11-26 19:20:41.869536	created	{"id": null, "name": "sdasdada", "interval_days": 1, "due_date": "2024-11-26", "done": false, "done_by": null, "archived": false}
+    2	1	\N	2024-11-26 19:21:02.19762	archived	{}
+    3	1	\N	2024-11-26 19:21:02.290216	archived	{}
+    4	5	\N	2024-11-26 19:21:17.340872	created	{"id": null, "name": "lkn", "interval_days": 9, "due_date": "2024-12-07", "done": false, "done_by": null, "archived": false}
+    5	6	\N	2024-11-26 19:21:32.184775	created	{"id": null, "name": "jbhkjb", "interval_days": 3, "due_date": "2024-11-27", "done": false, "done_by": null, "archived": false}
+    6	7	\N	2024-11-26 19:23:46.002788	created	{"id": null, "name": "testmann", "interval_days": 5, "due_date": "2024-12-06", "done": false, "done_by": null, "archived": false}
+    7	6	anonymous	2024-11-26 19:25:37.786516	marked_done	{}
+    8	4	anonymous	2024-11-26 19:25:43.908288	marked_done	{}
+    9	7	anonymous	2024-11-26 19:25:48.447531	marked_done	{}
+    10	5	\N	2024-11-26 19:30:16.423693	archived	{}
+    11	5	\N	2024-11-26 19:30:16.512766	archived	{}
+    12	8	\N	2024-11-26 19:30:31.075594	created	{"id": null, "name": "wahdawdwada", "interval_days": 2, "due_date": "2024-11-29", "done": false, "done_by": null, "archived": false}
+    13	8	\N	2024-11-26 19:30:47.975558	updated	{"previous_state": {"id": 8, "name": "wahdawdwada", "interval_days": 2, "due_date": "2024-11-29", "done": false, "done_by": null, "archived": false}}
+    14	8	\N	2024-11-26 19:30:48.065747	updated	{"previous_state": {"id": 8, "name": "wahdawdwada", "interval_days": 3, "due_date": "2024-11-29", "done": false, "done_by": null, "archived": false}}
+    15	8	\N	2024-11-26 19:30:52.678395	updated	{"previous_state": {"id": 8, "name": "wahdawdwada", "interval_days": 3, "due_date": "2024-11-29", "done": false, "done_by": null, "archived": false}}
+    16	8	\N	2024-11-26 19:30:52.773288	updated	{"previous_state": {"id": 8, "name": "wahdawdwada", "interval_days": 5, "due_date": "2024-11-29", "done": false, "done_by": null, "archived": false}}
+    17	8	anonymous	2024-11-26 19:30:55.52265	marked_done	{}
+    18	8	anonymous	2024-11-26 19:31:03.866378	marked_done	{}
+    19	8	anonymous	2024-11-26 19:31:05.254578	marked_done	{}
+    20	7	\N	2024-11-26 19:31:21.284939	updated	{"previous_state": {"id": 7, "name": "testmann", "interval_days": 5, "due_date": "2024-12-11", "done": true, "done_by": "anonymous", "archived": false}}
+    21	7	\N	2024-11-26 19:31:21.383946	updated	{"previous_state": {"id": 7, "name": "testmann", "interval_days": 5, "due_date": "2024-11-26", "done": true, "done_by": "anonymous", "archived": false}}
+    22	6	anonymous	2024-11-26 19:37:17.78443	marked_done	{}
+    23	4	\N	2024-11-26 19:37:24.960593	updated	{"previous_state": {"id": 4, "name": "sdasdada", "interval_days": 1, "due_date": "2024-11-27", "done": true, "done_by": "anonymous", "archived": false}}
+    24	4	\N	2024-11-26 19:37:25.071933	updated	{"previous_state": {"id": 4, "name": "sdasdada", "interval_days": 2, "due_date": "2024-11-27", "done": true, "done_by": "anonymous", "archived": false}}
+    25	6	\N	2024-11-26 19:37:54.051785	archived	{}
+    26	6	\N	2024-11-26 19:37:54.138841	archived	{}
+    27	9	\N	2024-11-26 19:38:10.33602	created	{"id": null, "name": "restmuell", "interval_days": 3, "due_date": "2024-11-26", "done": false, "done_by": null, "archived": false}
+    28	7	anonymous	2024-11-26 19:38:12.837518	marked_done	{}
+    29	9	anonymous	2024-11-26 19:40:51.514403	marked_done	{}
+    30	10	\N	2024-11-26 19:42:00.785335	created	{"id": null, "name": "gelber sack", "interval_days": 4, "due_date": "2024-11-26", "done": false, "done_by": null, "archived": false}
+    31	4	anonymous	2024-11-26 19:42:31.086886	marked_done	{}
+    32	9	anonymous	2024-11-26 19:46:41.539322	marked_done	{"chore_id": 9, "new_due_date": "2024-12-02"}
+    33	9	anonymous	2024-11-26 19:46:47.009196	marked_done	{"chore_id": 9, "new_due_date": "2024-12-05"}
+    34	4	anonymous	2024-11-26 19:47:56.218797	marked_done	{"chore_id": 4, "new_due_date": "2024-12-01"}
+    35	9	anonymous	2024-11-26 19:48:13.322855	marked_done	{"chore_id": 9, "new_due_date": "2024-12-08"}
+    36	4	\N	2024-11-26 19:48:30.903006	updated	{"previous_state": {"id": 4, "name": "sdasdada", "interval_days": 2, "due_date": "2024-12-01", "done": true, "done_by": "anonymous", "archived": false}}
+    37	4	\N	2024-11-26 19:48:31.001473	updated	{"previous_state": {"id": 4, "name": "sdasdada", "interval_days": 3, "due_date": "2024-11-29", "done": true, "done_by": "anonymous", "archived": false}}
+    38	7	anonymous	2024-11-26 19:51:18.399416	marked_done	{"chore_id": 7, "new_due_date": "2024-12-06"}
+    40	10	anonymous	2024-11-26 19:53:39.999841	marked_done	{"chore_id": 10, "new_due_date": "2024-11-30"}
+    41	11	\N	2024-11-26 21:02:57.956715	created	{"id": null, "name": "Staubsaugen Treppe Oben", "interval_days": 5, "due_date": "2024-11-27", "done": false, "done_by": null, "archived": false}
+    42	10	anonymous	2024-11-26 21:03:05.706824	marked_done	{"chore_id": 10, "new_due_date": "2024-12-04"}
+    43	8	\N	2024-11-26 21:03:29.456754	archived	{}
+    44	8	\N	2024-11-26 21:03:29.628967	archived	{}
+    45	9	\N	2024-11-26 21:03:45.526819	updated	{"previous_state": {"id": 9, "name": "restmuell", "interval_days": 3, "due_date": "2024-12-08", "done": true, "done_by": "anonymous", "archived": false}}
+    46	9	\N	2024-11-26 21:03:45.651217	updated	{"previous_state": {"id": 9, "name": "restmuell", "interval_days": 3, "due_date": "2024-11-27", "done": true, "done_by": "anonymous", "archived": false}}
+    47	9	\N	2024-11-26 21:05:22.860951	updated	{"previous_state": {"id": 9, "name": "restmuell", "interval_days": 3, "due_date": "2024-11-27", "done": true, "done_by": "anonymous", "archived": false}}
+    48	9	\N	2024-11-26 21:05:22.963778	updated	{"previous_state": {"id": 9, "name": "Restm\\u00fcll", "interval_days": 3, "due_date": "2024-11-27", "done": true, "done_by": "anonymous", "archived": false}}
+    49	4	\N	2024-11-26 21:05:48.64858	updated	{"previous_state": {"id": 4, "name": "sdasdada", "interval_days": 3, "due_date": "2024-11-29", "done": true, "done_by": "anonymous", "archived": false}}
+    50	4	\N	2024-11-26 21:05:48.763916	updated	{"previous_state": {"id": 4, "name": "Papierm\\u00fcll", "interval_days": 4, "due_date": "2024-11-26", "done": true, "done_by": "anonymous", "archived": false}}
+    51	10	\N	2024-11-26 21:27:42.644915	updated	{"previous_state": {"id": 10, "name": "gelber sack", "interval_days": 4, "due_date": "2024-12-04", "done": true, "done_by": "anonymous", "archived": false}}
+    52	10	\N	2024-11-26 21:27:42.781093	updated	{"previous_state": {"id": 10, "name": "Gelber Sack", "interval_days": 4, "due_date": "2024-12-04", "done": true, "done_by": "anonymous", "archived": false}}
+    53	12	\N	2024-11-26 21:28:03.582647	created	{"id": null, "name": "Staubsaugen Wohnzimmer und K\\u00fcche ", "interval_days": 3, "due_date": "2024-11-27", "done": false, "done_by": null, "archived": false}
+    54	13	\N	2024-11-26 21:28:46.905962	created	{"id": null, "name": "Staubsaugen Galerie, Bad und Balkon ", "interval_days": 3, "due_date": "2024-11-28", "done": false, "done_by": null, "archived": false}
+    55	14	\N	2024-11-26 21:29:06.763421	created	{"id": null, "name": "Staubsaugen Treppe Unten", "interval_days": 5, "due_date": "2024-11-28", "done": false, "done_by": null, "archived": false}
+    56	15	\N	2024-11-26 21:29:45.568576	created	{"id": null, "name": "Klo putzen", "interval_days": 5, "due_date": "2024-11-28", "done": false, "done_by": null, "archived": false}
+    58	4	anonymous	2024-11-26 22:23:24.682144	marked_done	{"chore_id": 4, "new_due_date": "2024-11-30"}
+    59	4	anonymous	2024-11-26 22:29:26.420349	marked_done	{"chore_id": 4, "new_due_date": "2024-12-04"}
+    60	4	\N	2024-11-26 22:29:33.38531	updated	{"previous_state": {"id": 4, "name": "Papierm\\u00fcll", "interval_days": 4, "due_date": "2024-12-04", "done": true, "done_by": "anonymous", "archived": false}}
+    61	4	\N	2024-11-26 22:29:33.492201	updated	{"previous_state": {"id": 4, "name": "Papierm\\u00fcll", "interval_days": 4, "due_date": "2024-11-26", "done": true, "done_by": "anonymous", "archived": false}}
+    62	10	anonymous	2024-11-26 22:36:36.568095	marked_done	{"chore_id": 10, "new_due_date": "2024-11-30"}
+    63	7	anonymous	2024-11-26 22:36:41.414905	marked_done	{"chore_id": 7, "new_due_date": "2024-12-01"}
+    64	7	\N	2024-11-26 22:36:50.411775	updated	{"previous_state": {"id": 7, "name": "testmann", "interval_days": 5, "due_date": "2024-12-01", "done": true, "done_by": "anonymous", "archived": false}}
+    65	7	\N	2024-11-26 22:36:50.508203	updated	{"previous_state": {"id": 7, "name": "testmann", "interval_days": 5, "due_date": "2024-12-19", "done": true, "done_by": "anonymous", "archived": false}}
+    66	12	anonymous	2024-11-26 22:37:00.243924	marked_done	{"chore_id": 12, "new_due_date": "2024-11-29"}
+    67	14	anonymous	2024-11-26 22:37:08.175836	marked_done	{"chore_id": 14, "new_due_date": "2024-12-01"}
+    68	10	anonymous	2024-11-26 22:37:16.345494	marked_done	{"chore_id": 10, "new_due_date": "2024-11-30"}
+    69	10	anonymous	2024-11-26 22:37:23.495904	marked_done	{"chore_id": 10, "new_due_date": "2024-11-30"}
+    70	10	\N	2024-11-26 22:37:42.702121	updated	{"previous_state": {"id": 10, "name": "Gelber Sack", "interval_days": 4, "due_date": "2024-11-30", "done": true, "done_by": "anonymous", "archived": false}}
+    71	10	\N	2024-11-26 22:37:42.796078	updated	{"previous_state": {"id": 10, "name": "Gelber Sack", "interval_days": 4, "due_date": "2024-11-27", "done": true, "done_by": "anonymous", "archived": false}}
+    72	9	anonymous	2024-11-26 22:37:51.079498	marked_done	{"chore_id": 9, "new_due_date": "2024-11-29"}
+    73	9	anonymous	2024-11-26 22:37:53.807559	marked_done	{"chore_id": 9, "new_due_date": "2024-11-29"}
+    74	12	anonymous	2024-11-26 22:40:56.366766	marked_done	{"chore_id": 12, "new_due_date": "2024-11-29"}
+    75	14	anonymous	2024-11-26 22:41:06.100328	marked_done	{"chore_id": 14, "new_due_date": "2024-12-01"}
+    76	12	\N	2024-11-26 22:41:31.424321	updated	{"previous_state": {"id": 12, "name": "Staubsaugen Wohnzimmer und K\\u00fcche ", "interval_days": 3, "due_date": "2024-11-29", "done": true, "done_by": "anonymous", "archived": false}}
+    77	12	\N	2024-11-26 22:41:31.533873	updated	{"previous_state": {"id": 12, "name": "Staubsaugen Wohnzimmer und K\\u00fcche ", "interval_days": 4, "due_date": "2024-11-29", "done": true, "done_by": "anonymous", "archived": false}}
+    78	12	anonymous	2024-11-26 22:41:33.279776	marked_done	{"chore_id": 12, "new_due_date": "2024-11-30"}
+    79	15	anonymous	2024-11-26 22:41:44.219671	marked_done	{"chore_id": 15, "new_due_date": "2024-12-01"}
+    80	14	anonymous	2024-11-26 22:42:53.291216	marked_done	{"chore_id": 14, "new_due_date": "2024-12-01"}
+    81	15	anonymous	2024-11-26 22:42:54.806123	marked_done	{"chore_id": 15, "new_due_date": "2024-12-01"}
+    82	12	anonymous	2024-11-26 22:42:56.30472	marked_done	{"chore_id": 12, "new_due_date": "2024-11-30"}
+    83	4	anonymous	2024-11-26 22:46:14.84047	marked_done	{"chore_id": 4, "new_due_date": "2024-11-30"}
+    84	4	\N	2024-11-26 22:46:23.586326	updated	{"previous_state": {"id": 4, "name": "Papierm\\u00fcll", "interval_days": 4, "due_date": "2024-11-30", "done": true, "done_by": "anonymous", "archived": false}}
+    85	4	\N	2024-11-26 22:46:23.705744	updated	{"previous_state": {"id": 4, "name": "Papierm\\u00fcll", "interval_days": 4, "due_date": "2024-11-26", "done": true, "done_by": "anonymous", "archived": false}}
+    86	11	anonymous	2024-11-26 22:46:41.571797	marked_done	{"chore_id": 11, "new_due_date": "2024-12-01"}
+    87	11	\N	2024-11-26 22:46:54.523838	updated	{"previous_state": {"id": 11, "name": "Staubsaugen Treppe Oben", "interval_days": 5, "due_date": "2024-12-01", "done": true, "done_by": "anonymous", "archived": false}}
+    88	11	\N	2024-11-26 22:46:54.637301	updated	{"previous_state": {"id": 11, "name": "Staubsaugen Treppe Oben", "interval_days": 5, "due_date": "2024-11-27", "done": true, "done_by": "anonymous", "archived": false}}
+    89	16	\N	2024-11-26 22:47:30.97516	created	{"id": null, "name": "Wasserkocher entkalken", "interval_days": 90, "due_date": "2024-12-17", "done": false, "done_by": null, "archived": false}
+    90	17	\N	2024-11-26 22:48:37.240795	created	{"id": null, "name": "Wohnzimmertisch wischen", "interval_days": 3, "due_date": "2024-11-26", "done": false, "done_by": null, "archived": false}
+    91	18	\N	2024-11-26 22:50:00.40365	created	{"id": null, "name": "Kaffeemaschine leeren", "interval_days": 4, "due_date": "2024-11-27", "done": false, "done_by": null, "archived": false}
+    92	19	\N	2024-11-26 22:51:35.091862	created	{"id": null, "name": "Bad Waschbecken wischen", "interval_days": 5, "due_date": "2024-11-27", "done": false, "done_by": null, "archived": false}
+    93	20	\N	2024-11-26 22:52:44.05452	created	{"id": null, "name": "Mikrowelle reinigen ", "interval_days": 21, "due_date": "2024-11-28", "done": false, "done_by": null, "archived": false}
+    94	21	\N	2024-11-26 22:53:31.325453	created	{"id": null, "name": "Staubwischen Wohnzimmer", "interval_days": 6, "due_date": "2024-11-28", "done": false, "done_by": null, "archived": false}
+    95	22	\N	2024-11-26 22:53:50.898543	created	{"id": null, "name": "Staubwischen Bad", "interval_days": 6, "due_date": "2024-11-29", "done": false, "done_by": null, "archived": false}
+    96	23	\N	2024-11-26 22:54:29.993154	created	{"id": null, "name": "Dunstabzugshaube reinigen ", "interval_days": 180, "due_date": "2024-12-12", "done": false, "done_by": null, "archived": false}
+    97	24	\N	2024-11-26 22:55:00.486866	created	{"id": null, "name": "Gefrierfach enteisen", "interval_days": 180, "due_date": "2024-12-20", "done": false, "done_by": null, "archived": false}
+    98	25	\N	2024-11-26 22:55:48.348077	created	{"id": null, "name": "K\\u00fcchenfronten abwischen ", "interval_days": 30, "due_date": "2024-11-30", "done": false, "done_by": null, "archived": false}
+    99	26	\N	2024-11-26 23:28:40.069883	created	{"id": null, "name": "Sp\\u00fclbecken wischen", "interval_days": 8, "due_date": "2024-12-02", "done": false, "done_by": null, "archived": false}
+    100	27	\N	2024-11-26 23:29:33.14108	created	{"id": null, "name": "Pflanzen gie\\u00dfen ", "interval_days": 4, "due_date": "2024-11-28", "done": false, "done_by": null, "archived": false}
+    101	4	anonymous	2024-11-26 23:29:53.207914	marked_done	{"chore_id": 4, "new_due_date": "2024-11-30"}
+    102	4	\N	2024-11-26 23:30:06.286711	updated	{"previous_state": {"id": 4, "name": "Papierm\\u00fcll", "interval_days": 4, "due_date": "2024-11-30", "done": true, "done_by": "anonymous", "archived": false}}
+    103	4	\N	2024-11-26 23:30:06.392988	updated	{"previous_state": {"id": 4, "name": "Papierm\\u00fcll", "interval_days": 4, "due_date": "2024-11-25", "done": true, "done_by": "anonymous", "archived": false}}
+    104	28	\N	2024-11-26 23:31:47.896996	created	{"id": null, "name": "Treppenhaus staubsaugen ", "interval_days": 14, "due_date": "2024-11-29", "done": false, "done_by": null, "archived": false}
+    105	29	\N	2024-11-26 23:32:39.877001	created	{"id": null, "name": "K\\u00fchlschrank aufr\\u00e4umen ", "interval_days": 7, "due_date": "2024-11-28", "done": false, "done_by": null, "archived": false}
+    106	30	\N	2024-11-26 23:32:57.546387	created	{"id": null, "name": "Altglas wegbringen ", "interval_days": 7, "due_date": "2024-11-27", "done": false, "done_by": null, "archived": false}
+    107	18	anonymous	2024-11-26 23:33:08.700899	marked_done	{"chore_id": 18, "new_due_date": "2024-11-30"}
+    108	29	\N	2024-11-26 23:33:35.171803	updated	{"previous_state": {"id": 29, "name": "K\\u00fchlschrank aufr\\u00e4umen ", "interval_days": 7, "due_date": "2024-11-28", "done": false, "done_by": null, "archived": false}}
+    109	29	\N	2024-11-26 23:33:35.275493	updated	{"previous_state": {"id": 29, "name": "K\\u00fchlschrank aufr\\u00e4umen ", "interval_days": 7, "due_date": "2024-11-27", "done": false, "done_by": null, "archived": false}}
+    110	7	\N	2024-11-26 23:34:05.996083	archived	{}
+    111	7	\N	2024-11-26 23:34:06.131329	archived	{}
+    112	31	\N	2024-11-26 23:36:28.270525	created	{"id": null, "name": "Spiegel Bad putzen", "interval_days": 6, "due_date": "2024-11-26", "done": false, "done_by": null, "archived": false}
+    113	32	\N	2024-11-26 23:38:27.069745	created	{"id": null, "name": "Abtropfding K\\u00fcche reinigen ", "interval_days": 12, "due_date": "2024-11-27", "done": false, "done_by": null, "archived": false}
+    114	33	\N	2024-11-26 23:41:01.02104	created	{"id": null, "name": "Staubwischen Galerie", "interval_days": 10, "due_date": "2024-12-03", "done": false, "done_by": null, "archived": false}
+    115	34	\N	2024-11-26 23:41:24.038094	created	{"id": null, "name": "Staubwischen Bad", "interval_days": 8, "due_date": "2024-12-05", "done": false, "done_by": null, "archived": false}
+    116	35	\N	2024-11-26 23:42:42.74223	created	{"id": null, "name": "Dusche putzen", "interval_days": 60, "due_date": "2024-12-07", "done": false, "done_by": null, "archived": false}
+    117	36	\N	2024-11-26 23:43:08.887691	created	{"id": null, "name": "Handt\\u00fccher waschen ", "interval_days": 8, "due_date": "2024-11-29", "done": false, "done_by": null, "archived": false}
+    118	31	anonymous	2024-11-27 16:18:42.151231	marked_done	{"chore_id": 31, "new_due_date": "2024-12-03"}
+    119	19	anonymous	2024-11-27 16:19:12.82217	marked_done	{"chore_id": 19, "new_due_date": "2024-12-02"}
+    120	27	anonymous	2024-11-27 20:28:59.812326	marked_done	{"chore_id": 27, "new_due_date": "2024-12-01"}
+    121	4	anonymous	2024-11-27 20:34:00.434318	marked_done	{"chore_id": 4, "new_due_date": "2024-12-01"}
+    122	4	\N	2024-11-27 20:35:33.222305	updated	{"previous_state": {"id": 4, "name": "Papierm\\u00fcll", "interval_days": 4, "due_date": "2024-12-01", "done": true, "done_by": "anonymous", "archived": false}}
+    123	4	\N	2024-11-27 20:35:33.3817	updated	{"previous_state": {"id": 4, "name": "Papierm\\u00fcll", "interval_days": 4, "due_date": "2024-11-27", "done": true, "done_by": "anonymous", "archived": false}}
+    124	30	\N	2024-11-27 20:35:56.416611	updated	{"previous_state": {"id": 30, "name": "Altglas wegbringen ", "interval_days": 7, "due_date": "2024-11-27", "done": false, "done_by": null, "archived": false}}
+    125	30	\N	2024-11-27 20:35:56.506848	updated	{"previous_state": {"id": 30, "name": "Altglas wegbringen ", "interval_days": 7, "due_date": "2024-11-28", "done": false, "done_by": null, "archived": false}}
+    126	11	anonymous	2024-11-29 12:46:51.94968	marked_done	{"chore_id": 11, "new_due_date": "2024-12-04"}
+    127	28	\N	2024-11-29 12:47:17.033145	updated	{"previous_state": {"id": 28, "name": "Treppenhaus staubsaugen ", "interval_days": 14, "due_date": "2024-11-29", "done": false, "done_by": null, "archived": false}}
+    128	28	\N	2024-11-29 12:47:17.140509	updated	{"previous_state": {"id": 28, "name": "Treppenhaus staubsaugen ", "interval_days": 14, "due_date": "2024-11-30", "done": false, "done_by": null, "archived": false}}
+    129	13	anonymous	2024-11-29 13:07:36.028135	marked_done	{"chore_id": 13, "new_due_date": "2024-12-02"}
+    130	12	anonymous	2024-11-29 13:37:02.549488	marked_done	{"chore_id": 12, "new_due_date": "2024-12-03"}
+    131	9	anonymous	2024-11-29 14:02:30.426229	marked_done	{"chore_id": 9, "new_due_date": "2024-12-02"}
+    132	4	anonymous	2024-11-29 14:02:33.519475	marked_done	{"chore_id": 4, "new_due_date": "2024-12-03"}
+    133	10	anonymous	2024-11-29 14:02:35.395774	marked_done	{"chore_id": 10, "new_due_date": "2024-12-03"}
+    134	30	anonymous	2024-11-29 14:02:40.845744	marked_done	{"chore_id": 30, "new_due_date": "2024-12-06"}
+    135	17	anonymous	2024-11-29 14:24:48.869843	marked_done	{"chore_id": 17, "new_due_date": "2024-12-02"}
+    136	21	anonymous	2024-11-29 14:24:50.742688	marked_done	{"chore_id": 21, "new_due_date": "2024-12-05"}
+    \.
+
+
+    --
+    -- Data for Name: chores; Type: TABLE DATA; Schema: public; Owner: admin
+    --
+
+    COPY public.chores (id, name, interval_days, due_date, done, done_by, archived) FROM stdin;
+    13	Staubsaugen Galerie, Bad und Balkon 	3	2024-12-02	t	anonymous	f
+    2	test2	1	2024-11-26	f	\N	t
+    12	Staubsaugen Wohnzimmer und Küche 	4	2024-12-03	t	anonymous	f
+    9	Restmüll	3	2024-12-02	t	anonymous	f
+    4	Papiermüll	4	2024-12-03	t	anonymous	f
+    3	test3	10	2024-12-07	f	\N	t
+    10	Gelber Sack	4	2024-12-03	t	anonymous	f
+    30	Altglas wegbringen 	7	2024-12-06	t	anonymous	f
+    17	Wohnzimmertisch wischen	3	2024-12-02	t	anonymous	f
+    21	Staubwischen Wohnzimmer	6	2024-12-05	t	anonymous	f
+    1	test1	5	2024-11-27	f	\N	t
+    5	lkn	9	2024-12-07	f	\N	t
+    6	jbhkjb	4	2024-12-01	t	anonymous	t
+    14	Staubsaugen Treppe Unten	5	2024-12-01	t	anonymous	f
+    15	Klo putzen	5	2024-12-01	t	anonymous	f
+    16	Wasserkocher entkalken	90	2024-12-17	f	\N	f
+    8	wahdawdwada	5	2024-12-14	t	anonymous	t
+    20	Mikrowelle reinigen 	21	2024-11-28	f	\N	f
+    22	Staubwischen Bad	6	2024-11-29	f	\N	f
+    23	Dunstabzugshaube reinigen 	180	2024-12-12	f	\N	f
+    24	Gefrierfach enteisen	180	2024-12-20	f	\N	f
+    25	Küchenfronten abwischen 	30	2024-11-30	f	\N	f
+    26	Spülbecken wischen	8	2024-12-02	f	\N	f
+    18	Kaffeemaschine leeren	4	2024-11-30	t	anonymous	f
+    29	Kühlschrank aufräumen 	7	2024-11-27	f	\N	f
+    7	testmann	5	2024-12-19	t	anonymous	t
+    32	Abtropfding Küche reinigen 	12	2024-11-27	f	\N	f
+    33	Staubwischen Galerie	10	2024-12-03	f	\N	f
+    34	Staubwischen Bad	8	2024-12-05	f	\N	f
+    35	Dusche putzen	60	2024-12-07	f	\N	f
+    36	Handtücher waschen 	8	2024-11-29	f	\N	f
+    31	Spiegel Bad putzen	6	2024-12-03	t	anonymous	f
+    19	Bad Waschbecken wischen	5	2024-12-02	t	anonymous	f
+    27	Pflanzen gießen 	4	2024-12-01	t	anonymous	f
+    11	Staubsaugen Treppe Oben	5	2024-12-04	t	anonymous	f
+    28	Treppenhaus staubsaugen 	14	2024-11-30	f	\N	f
+    \.
+
+
+    --
+    -- Name: chore_logs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+    --
+
+    SELECT pg_catalog.setval('public.chore_logs_id_seq', 136, true);
+
+
+    --
+    -- Name: chores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin
+    --
+
+    SELECT pg_catalog.setval('public.chores_id_seq', 36, true);
+
+
+    --
+    -- Name: chore_logs chore_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+    --
+
+    ALTER TABLE ONLY public.chore_logs
+        ADD CONSTRAINT chore_logs_pkey PRIMARY KEY (id);
+
+
+    --
+    -- Name: chores chores_pkey; Type: CONSTRAINT; Schema: public; Owner: admin
+    --
+
+    ALTER TABLE ONLY public.chores
+        ADD CONSTRAINT chores_pkey PRIMARY KEY (id);
+
+
+    --
+    -- Name: chore_logs chore_logs_chore_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin
+    --
+
+    ALTER TABLE ONLY public.chore_logs
+        ADD CONSTRAINT chore_logs_chore_id_fkey FOREIGN KEY (chore_id) REFERENCES public.chores(id) ON DELETE CASCADE;
+
+
+    --
+    -- Name: SCHEMA public; Type: ACL; Schema: -; Owner: admin
+    --
+
+    REVOKE USAGE ON SCHEMA public FROM PUBLIC;
+    GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+    --
+    -- PostgreSQL database dump complete
+    --

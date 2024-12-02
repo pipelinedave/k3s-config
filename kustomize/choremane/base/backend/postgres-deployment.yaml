@@ -22,22 +22,9 @@ spec:
           image: postgres:14
           ports:
             - containerPort: 5432
-          env:
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_USER
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_PASSWORD
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_DB
+          envFrom:
+            - secretRef:
+                name: postgres-secrets
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgres-storage
@@ -69,22 +56,9 @@ spec:
               done;
               echo "PostgreSQL is ready. Applying schema...";
               PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgres-service -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f /docker-entrypoint-initdb.d/db.schema
-          env:
-            - name: POSTGRES_USER
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_USER
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_PASSWORD
-            - name: POSTGRES_DB
-              valueFrom:
-                secretKeyRef:
-                  name: postgres-secret
-                  key: POSTGRES_DB
+          envFrom:
+            - secretRef:
+                name: postgres-secrets
           volumeMounts:
             - mountPath: /docker-entrypoint-initdb.d
               name: schema-volume

@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/pipelinedave/k3s-config.git'
-    targetRevision: harbor/prod/v1.0.2
+    targetRevision: harbor/prod/v1.0.3
     path: helm/harbor
     helm:
       valueFiles:

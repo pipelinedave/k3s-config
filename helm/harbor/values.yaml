@@ -1,5 +1,9 @@
-﻿expose:
+﻿namespace: harbor
+
+expose:
   type: clusterIP
+  tls:
+    enabled: false
   clusterIP:
     name: harbor
     staticClusterIP: ""

@@ -8,11 +8,11 @@ spec:
   project: default
   source:
     repoURL: 'https://github.com/pipelinedave/k3s-config.git'
-    targetRevision: harbor/prod/v1.0.0
+    targetRevision: harbor/prod/v1.0.1
     path: helm/harbor
     helm:
       valueFiles:
-        - helm/harbor/values.yaml
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: harbor

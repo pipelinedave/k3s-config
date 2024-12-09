@@ -1,0 +1,6 @@
+﻿apiVersion: v2
+name: harbor
+description: A Helm chart for deploying Harbor
+type: application
+version: 1.0.2
+appVersion: 2.8.0 # Version of Harbor you're deploying

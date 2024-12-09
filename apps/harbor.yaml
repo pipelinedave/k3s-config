@@ -7,9 +7,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/pipelinedave/k3s-config.git'
-    targetRevision: harbor/prod/v1.0.4
-    path: helm/harbor
+    repoURL: 'https://helm.goharbor.io'
+    chart: harbor
+    targetRevision: 1.8.0
     helm:
       valueFiles:
         - values.yaml

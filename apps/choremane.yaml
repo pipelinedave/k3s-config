@@ -27,7 +27,7 @@ spec:
       source:
         repoURL: 'https://github.com/pipelinedave/k3s-config.git'
         targetRevision: '{{tag}}'
-        path: 'apps/choremane/overlays/{{overlay}}'
+        path: 'kustomize/choremane/overlays/{{overlay}}'
       destination:
         server: 'https://kubernetes.default.svc'
         namespace: '{{namespace}}'

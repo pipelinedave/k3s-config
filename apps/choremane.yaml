@@ -10,7 +10,7 @@ spec:
           - name: prod
             namespace: choremane-prod
             overlay: prod
-            tag: choremane/prod/v0.6.0
+            tag: choremane/prod/v0.7.0
           - name: staging
             namespace: choremane-staging
             overlay: staging

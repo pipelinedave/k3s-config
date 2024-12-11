@@ -24,7 +24,7 @@ spec:
             - containerPort: 5432
           envFrom:
             - secretRef:
-                name: postgres-secrets
+                name: postgres-secret
           volumeMounts:
             - mountPath: /var/lib/postgresql/data
               name: postgres-storage
@@ -58,7 +58,7 @@ spec:
               PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgres-service -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f /docker-entrypoint-initdb.d/db.schema
           envFrom:
             - secretRef:
-                name: postgres-secrets
+                name: postgres-secret
           volumeMounts:
             - mountPath: /docker-entrypoint-initdb.d
               name: schema-volume

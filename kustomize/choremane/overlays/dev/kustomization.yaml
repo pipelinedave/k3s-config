@@ -1,3 +1,4 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: choremane-dev
@@ -20,7 +21,6 @@ patches:
     kind: Job
     name: init-db-schema
 
-apiVersion: kustomize.config.k8s.io/v1beta1
 replacements:
 - source:
     fieldPath: data.VERSION_TAG

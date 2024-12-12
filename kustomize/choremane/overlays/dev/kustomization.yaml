@@ -15,3 +15,7 @@ patches:
       kind: Deployment
       name: frontend-deployment
     path: frontend-deployment-patch.yaml
+  - target:
+      kind: Job
+      name: init-db-schema
+    path: db-seed-data-patch.yaml

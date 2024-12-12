@@ -1,0 +1,27 @@
+﻿apiVersion: batch/v1
+kind: Job
+metadata:
+  name: init-db-schema
+spec:
+  template:
+    spec:
+      containers:
+        - name: init-db
+          volumeMounts:
+            - name: seed-data-volume
+              mountPath: /docker-entrypoint-initdb.d
+          command:
+            - /bin/sh
+            - -c
+            - |
+              until pg_isready -h postgres-service -p 5432; do
+                echo "Waiting for PostgreSQL to be ready...";
+                sleep 2;
+              done;
+              echo "PostgreSQL is ready. Applying schema and seed data...";
+              PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgres-service -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f /docker-entrypoint-initdb.d/db.schema
+              PGPASSWORD="$POSTGRES_PASSWORD" psql -h postgres-service -U "$POSTGRES_USER" -d "$POSTGRES_DB" -f /docker-entrypoint-initdb.d/backup.sql
+      volumes:
+        - name: seed-data-volume
+          configMap:
+            name: seed-data-config

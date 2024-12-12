@@ -26,7 +26,7 @@ spec:
       volumes:
         - name: schema-volume
           configMap:
-            name: db-schema-volume
+            name: db-schema-config
         - name: seed-data-volume
           configMap:
             name: seed-data-config

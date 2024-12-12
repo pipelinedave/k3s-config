@@ -1,3 +1,6 @@
 test/
 # Dont be a doofus
 *secret*
+version-configmap-dev.yaml
+backup.sql
+default.yaml

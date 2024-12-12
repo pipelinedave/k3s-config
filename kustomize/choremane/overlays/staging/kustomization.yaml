@@ -6,9 +6,30 @@ namespace: choremane-staging
 resources:
   - ../../base
   - frontend-ingress.yaml
+  - ../../../version-configmap.yaml
 
 patches:
   - target:
       kind: Deployment
       name: frontend-deployment
     path: frontend-deployment-patch.yaml
+
+vars:
+  - name: VERSION_TAG
+    objref:
+      kind: ConfigMap
+      name: choremane-version
+    fieldref:
+      fieldpath: data.VERSION_TAG
+  - name: BACKEND_IMAGE
+    objref:
+      kind: ConfigMap
+      name: choremane-version
+    fieldref:
+      fieldpath: data.BACKEND_IMAGE
+  - name: FRONTEND_IMAGE
+    objref:
+      kind: ConfigMap
+      name: choremane-version
+    fieldref:
+      fieldpath: data.FRONTEND_IMAGE

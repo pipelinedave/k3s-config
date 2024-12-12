@@ -23,8 +23,6 @@ spec:
           ports:
             - containerPort: 80
           env:
-            - name: POSTGRES_HOST
-              value: "postgres"
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:

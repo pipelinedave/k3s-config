@@ -5,7 +5,7 @@ namespace: choremane-dev
 
 resources:
 - ../../base
-- ../../../version-configmap-dev.yaml
+- ../../../version-configmap.yaml
 
 patches:
 - path: api-deployment-patch.yaml

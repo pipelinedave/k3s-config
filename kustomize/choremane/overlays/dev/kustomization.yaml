@@ -1,42 +1,36 @@
-﻿apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 namespace: choremane-dev
 
 resources:
-  - ../../base
-  - ../../../version-configmap-dev.yaml
+- ../../base
+- ../../../version-configmap-dev.yaml
 
 patches:
-  - target:
-      kind: Deployment
-      name: api-deployment
-    path: api-deployment-patch.yaml
-  - target:
-      kind: Deployment
-      name: frontend-deployment
-    path: frontend-deployment-patch.yaml
-  - target:
-      kind: Job
-      name: init-db-schema
-    path: db-seed-data-patch.yaml
+- path: api-deployment-patch.yaml
+  target:
+    kind: Deployment
+    name: api-deployment
+- path: frontend-deployment-patch.yaml
+  target:
+    kind: Deployment
+    name: frontend-deployment
+- path: db-seed-data-patch.yaml
+  target:
+    kind: Job
+    name: init-db-schema
 
-vars:
-  - name: VERSION_TAG
-    objref:
-      kind: ConfigMap
-      name: choremane-version
-    fieldref:
-      fieldpath: data.VERSION_TAG
-  - name: BACKEND_IMAGE
-    objref:
-      kind: ConfigMap
-      name: choremane-version
-    fieldref:
-      fieldpath: data.BACKEND_IMAGE
-  - name: FRONTEND_IMAGE
-    objref:
-      kind: ConfigMap
-      name: choremane-version
-    fieldref:
-      fieldpath: data.FRONTEND_IMAGE
+apiVersion: kustomize.config.k8s.io/v1beta1
+replacements:
+- source:
+    fieldPath: data.VERSION_TAG
+    kind: ConfigMap
+    name: choremane-version
+- source:
+    fieldPath: data.BACKEND_IMAGE
+    kind: ConfigMap
+    name: choremane-version
+- source:
+    fieldPath: data.FRONTEND_IMAGE
+    kind: ConfigMap
+    name: choremane-version

@@ -18,22 +18,16 @@ patches:
       name: frontend-deployment
     path: frontend-deployment-patch.yaml
 
-vars:
-  - name: VERSION_TAG
-    objref:
-      kind: ConfigMap
-      name: choremane-version
-    fieldref:
-      fieldpath: data.VERSION_TAG
-  - name: BACKEND_IMAGE
-    objref:
-      kind: ConfigMap
-      name: choremane-version
-    fieldref:
-      fieldpath: data.BACKEND_IMAGE
-  - name: FRONTEND_IMAGE
-    objref:
-      kind: ConfigMap
-      name: choremane-version
-    fieldref:
-      fieldpath: data.FRONTEND_IMAGE
+replacements:
+- source:
+    fieldPath: data.VERSION_TAG
+    kind: ConfigMap
+    name: choremane-version
+- source:
+    fieldPath: data.BACKEND_IMAGE
+    kind: ConfigMap
+    name: choremane-version
+- source:
+    fieldPath: data.FRONTEND_IMAGE
+    kind: ConfigMap
+    name: choremane-version

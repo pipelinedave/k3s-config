@@ -6,7 +6,7 @@ namespace: choremane-staging
 resources:
   - ../../base
   - frontend-ingress.yaml
-  - ../../../version-configmap.yaml
+  - version-configmap.yaml
 
 patches:
   - target:

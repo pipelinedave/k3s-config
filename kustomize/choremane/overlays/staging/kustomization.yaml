@@ -17,21 +17,3 @@ patches:
       kind: Deployment
       name: frontend-deployment
     path: frontend-deployment-patch.yaml
-
-# replacements:
-# - source:
-#     fieldPath: data.VERSION_TAG
-#     kind: ConfigMap
-#     name: choremane-version
-#   targets:
-#     - select:
-#       kind: Deployment
-#       name:
-# - source:
-#     fieldPath: data.BACKEND_IMAGE
-#     kind: ConfigMap
-#     name: choremane-version
-# - source:
-#     fieldPath: data.FRONTEND_IMAGE
-#     kind: ConfigMap
-#     name: choremane-version

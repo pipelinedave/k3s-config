@@ -17,6 +17,3 @@ spec:
       containers:
         - name: frontend
           image: pipelinedave/choremane-frontend:1624cd333a6cbf539589237870215c6894fbd33a
-          envFrom:
-          - configMapRef:
-              name: choremane-version

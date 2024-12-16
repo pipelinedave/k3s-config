@@ -11,6 +11,10 @@ resources:
 patches:
   - target:
       kind: Deployment
+      name: backend-deployment
+    path: backend-deployment-patch.yaml
+  - target:
+      kind: Deployment
       name: frontend-deployment
     path: frontend-deployment-patch.yaml
 

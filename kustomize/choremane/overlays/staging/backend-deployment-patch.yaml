@@ -1,0 +1,19 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: choremane
+      app.kubernetes.io/component: backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: choremane
+        app.kubernetes.io/component: backend
+    spec:
+      containers:
+        - name: backend
+          image: pipelinedave/choremane-backend:cc650d3dc85c1bb060245e1820f4d29c95f69755

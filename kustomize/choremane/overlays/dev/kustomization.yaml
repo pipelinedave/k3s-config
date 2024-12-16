@@ -4,14 +4,13 @@ kind: Kustomization
 namespace: choremane-dev
 
 resources:
-- ../../base
-- ../../../version-configmap.yaml
+- ../../base/
 
 patches:
-- path: api-deployment-patch.yaml
+- path: backend-deployment-patch.yaml
   target:
     kind: Deployment
-    name: api-deployment
+    name: backend-deployment
 - path: frontend-deployment-patch.yaml
   target:
     kind: Deployment
@@ -20,17 +19,3 @@ patches:
   target:
     kind: Job
     name: init-db-schema
-
-replacements:
-- source:
-    fieldPath: data.VERSION_TAG
-    kind: ConfigMap
-    name: choremane-version
-- source:
-    fieldPath: data.BACKEND_IMAGE
-    kind: ConfigMap
-    name: choremane-version
-- source:
-    fieldPath: data.FRONTEND_IMAGE
-    kind: ConfigMap
-    name: choremane-version

@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: choremane-version
 data:
-  VERSION_TAG: "choremane/staging/v0.0.6"
+  VERSION_TAG: "choremane/staging/v0.0.8"
   BACKEND_IMAGE: "pipelinedave/choremane-api@"
   FRONTEND_IMAGE: "pipelinedave/choremane-frontend@"

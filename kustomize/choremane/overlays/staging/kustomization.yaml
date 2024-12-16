@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: choremane-staging
 
 resources:
-  - ../../base
+  - ../../base/
   - frontend-ingress.yaml
   - version-configmap.yaml
 

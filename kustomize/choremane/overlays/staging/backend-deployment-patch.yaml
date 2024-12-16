@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
         - name: backend
-          image: pipelinedave/choremane-backend:ff862744cf346c39685dc996794e0df8325e1eef
+          image: pipelinedave/choremane-backend:218fb7a465ac1be4a354c27002f80109c983340c

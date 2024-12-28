@@ -9,7 +9,11 @@ spec:
       app.kubernetes.io/name: choremane
       app.kubernetes.io/component: frontend
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: choremane
+        app.kubernetes.io/component: frontend
     spec:
       containers:
         - name: frontend
-          image: pipelinedave/choremane-frontend:v0.5.2
+          image: pipelinedave/choremane-frontend:6699e25f727151a03c00470726f32e8b3b0bbfb5

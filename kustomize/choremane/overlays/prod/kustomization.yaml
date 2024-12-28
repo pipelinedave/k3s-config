@@ -4,10 +4,15 @@ kind: Kustomization
 namespace: choremane-prod
 
 resources:
-  - ../../base
+  - ../../base/
   - frontend-ingress.yaml
+  - version-configmap.yaml
 
 patches:
+  - target:
+      kind: Deployment
+      name: backend-deployment
+    path: backend-deployment-patch.yaml
   - target:
       kind: Deployment
       name: frontend-deployment

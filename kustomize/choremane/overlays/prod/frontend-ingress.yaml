@@ -12,10 +12,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - chores.stillon.top
-      secretName: chores-stillon-top-tls
+        - vanessa-chores.stillon.top
+      secretName: vanessa-chores-stillon-top-tls
   rules:
-    - host: chores.stillon.top
+    - host: vanessa-chores.stillon.top
       http:
         paths:
           - path: /

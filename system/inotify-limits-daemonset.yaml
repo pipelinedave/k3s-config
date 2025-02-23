@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: increase-inotify-limits
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: increase-inotify-limits
+  template:
+    metadata:
+      labels:
+        name: increase-inotify-limits
+    spec:
+      containers:
+        - name: sysctl
+          image: busybox
+          command:
+            - /bin/sh
+            - -c
+            - "sysctl -w fs.inotify.max_user_watches=524288 && sysctl -w fs.inotify.max_user_instances=8192 && sleep infinity"
+          securityContext:
+            privileged: true
+          # hostPID: true

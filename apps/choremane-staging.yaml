@@ -4,6 +4,7 @@ metadata:
   name: choremane-staging
   namespace: flux-system
 spec:
+  targetNamespace: choremane-staging
   interval: 5m
   path: ./kustomize/choremane/overlays/staging
   prune: true
@@ -12,4 +13,3 @@ spec:
     name: flux-system
   wait: true
   timeout: 2m
-

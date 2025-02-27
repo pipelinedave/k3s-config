@@ -4,5 +4,5 @@ metadata:
   name: choremane-version
 data:
   VERSION_TAG: main
-  BACKEND_IMAGE: "pipelinedave/choremane-backend:5876ed2bb3ebe463e6aac53e2470a8a7be84ae59"
-  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:5876ed2bb3ebe463e6aac53e2470a8a7be84ae59"
+  BACKEND_IMAGE: "pipelinedave/choremane-backend:5ee8c3b9162614143f72c2f82990060e74bf29c4"
+  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:5ee8c3b9162614143f72c2f82990060e74bf29c4"

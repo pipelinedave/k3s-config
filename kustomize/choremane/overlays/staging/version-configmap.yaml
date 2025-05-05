@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: choremane-version
 data:
-  VERSION_TAG: f3af0db348ad940c783fabb9ea4d52866de11f05
-  BACKEND_IMAGE: "pipelinedave/choremane-backend:f3af0db348ad940c783fabb9ea4d52866de11f05"
-  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:f3af0db348ad940c783fabb9ea4d52866de11f05"
+  VERSION_TAG: 1af1e1261ae76d1ebc876ad67a04fb6152106ba7
+  BACKEND_IMAGE: "pipelinedave/choremane-backend:1af1e1261ae76d1ebc876ad67a04fb6152106ba7"
+  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:1af1e1261ae76d1ebc876ad67a04fb6152106ba7"

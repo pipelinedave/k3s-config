@@ -1,12 +1,16 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: db-schema-config
+  name: db-schema
   labels:
-    app.kubernetes.io/name: choremane
-    app.kubernetes.io/component: database
+    app: choremane
+    component: db
+    environment: base
+    managed-by: kustomize
+    part-of: choremane
+    tier: backend
 data:
-  db.schema: |
+  init-db.sql: |
     -- Table for chores
     CREATE TABLE IF NOT EXISTS chores (
         id SERIAL PRIMARY KEY,
@@ -15,6 +19,8 @@ data:
         due_date DATE NOT NULL,
         done BOOLEAN DEFAULT FALSE,
         done_by VARCHAR(255),
+        owner_email VARCHAR(255),
+        is_private BOOLEAN DEFAULT FALSE,
         archived BOOLEAN DEFAULT FALSE
     );
 
@@ -24,7 +30,7 @@ data:
         chore_id INT NOT NULL,
         done_by VARCHAR(255),
         done_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        action_type VARCHAR(50) NOT NULL, -- 'created', 'updated', 'archived', 'marked_done', 'undone'
-        action_details JSON DEFAULT NULL, -- JSON to store previous state for undo
+        action_type VARCHAR(50) NOT NULL,
+        action_details JSON DEFAULT NULL,
         FOREIGN KEY (chore_id) REFERENCES chores (id) ON DELETE CASCADE
     );

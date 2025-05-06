@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: open-webui-ingress
+  namespace: open-webui
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: traefik
+  labels:
+    app.kubernetes.io/name: open-webui
+spec:
+  tls:
+  - hosts:
+    - open-webui.stillon.top
+    secretName: open-webui-tls
+  rules:
+  - host: open-webui.stillon.top
+    http:
+      paths:
+      - backend:
+          service:
+            name: open-webui-service
+            port:
+              number: 8080
+        path: /
+        pathType: Prefix

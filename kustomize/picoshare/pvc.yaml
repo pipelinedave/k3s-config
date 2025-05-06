@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+  name: picoshare-pvc
+  namespace: picoshare
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 80Gi
+  storageClassName: local-path

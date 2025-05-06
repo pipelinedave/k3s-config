@@ -12,12 +12,7 @@ data:
         inCluster: true
     web:
       http: 0.0.0.0:5556
-    staticClients:
-      - id: argocd
-        redirectURIs:
-          - 'https://argocd.stillon.top/auth/callback'
-        name: ArgoCD
-        secret: argocd-secret
+    staticClients: []
     connectors:
       - type: google
         id: google

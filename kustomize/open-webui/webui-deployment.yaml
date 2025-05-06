@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: open-webui-deployment
+  namespace: open-webui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: open-webui
+  template:
+    metadata:
+      labels:
+        app: open-webui
+    spec:
+      containers:
+      - env:
+        - name: OLLAMA_BASE_URL
+          value: http://ollama-service.open-webui.svc.cluster.local:11434
+        image: ghcr.io/open-webui/open-webui:main
+        name: open-webui
+        ports:
+        - containerPort: 8080
+        tty: true
+        volumeMounts:
+        - mountPath: /app/backend/data
+          name: webui-volume
+      volumes:
+      - name: webui-volume
+        persistentVolumeClaim:
+          claimName: open-webui-pvc

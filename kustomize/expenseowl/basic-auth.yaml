@@ -1,0 +1,10 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: expenseowl-basic-auth
+  namespace: expenseowl
+spec:
+  basicAuth:
+    users:
+      - "admin:$2y$10$.CpnTbqSw9XDcyZV08qbpOuor02XhmRVY5pJCejDV8IMvnw9F5/gi"  # Replace <BCRYPT_HASH> with your bcrypt hash for the password
+

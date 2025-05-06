@@ -1,0 +1,250 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"frontend","app.kubernetes.io/instance":"vanessa-choremane","app.kubernetes.io/name":"choremane","app.kubernetes.io/part-of":"choremane"},"name":"frontend-deployment","namespace":"vanessa-choremane"},"spec":{"replicas":1,"selector":{"matchLabels":{"app.kubernetes.io/component":"frontend","app.kubernetes.io/name":"choremane"}},"template":{"metadata":{"labels":{"app.kubernetes.io/component":"frontend","app.kubernetes.io/name":"choremane"}},"spec":{"containers":[{"image":"pipelinedave/choremane-frontend:af69051bdc32d5eb419cfc15e4ed0e74c24a85a1","imagePullPolicy":"Always","name":"frontend","ports":[{"containerPort":5000}]}]}}}}
+    creationTimestamp: "2025-01-01T05:04:55Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: frontend
+      app.kubernetes.io/instance: vanessa-choremane
+      app.kubernetes.io/name: choremane
+      app.kubernetes.io/part-of: choremane
+    name: frontend-deployment
+    namespace: vanessa-choremane
+    resourceVersion: "20907607"
+    uid: aec8798d-feab-4726-aa07-19701848163b
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: frontend
+        app.kubernetes.io/name: choremane
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: frontend
+          app.kubernetes.io/name: choremane
+      spec:
+        containers:
+        - image: pipelinedave/choremane-frontend:af69051bdc32d5eb419cfc15e4ed0e74c24a85a1
+          imagePullPolicy: Always
+          name: frontend
+          ports:
+          - containerPort: 5000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-01-01T05:04:57Z"
+      lastUpdateTime: "2025-01-01T05:04:57Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-01-01T05:04:55Z"
+      lastUpdateTime: "2025-01-01T05:04:57Z"
+      message: ReplicaSet "frontend-deployment-ff7966c5c" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"database","app.kubernetes.io/instance":"vanessa-choremane","app.kubernetes.io/name":"choremane"},"name":"postgres-deployment","namespace":"vanessa-choremane"},"spec":{"replicas":1,"selector":{"matchLabels":{"app.kubernetes.io/component":"database","app.kubernetes.io/name":"choremane"}},"template":{"metadata":{"labels":{"app.kubernetes.io/component":"database","app.kubernetes.io/name":"choremane"}},"spec":{"containers":[{"envFrom":[{"secretRef":{"name":"postgres-secret"}}],"image":"postgres:14","name":"postgres","ports":[{"containerPort":5432}],"volumeMounts":[{"mountPath":"/var/lib/postgresql/data","name":"postgres-storage"}]}],"volumes":[{"name":"postgres-storage","persistentVolumeClaim":{"claimName":"postgres-pvc"}}]}}}}
+    creationTimestamp: "2025-01-01T05:04:55Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: database
+      app.kubernetes.io/instance: vanessa-choremane
+      app.kubernetes.io/name: choremane
+    name: postgres-deployment
+    namespace: vanessa-choremane
+    resourceVersion: "20907865"
+    uid: 20e98944-433c-4af8-b7c6-9f1209fb79b0
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: database
+        app.kubernetes.io/name: choremane
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: database
+          app.kubernetes.io/name: choremane
+      spec:
+        containers:
+        - envFrom:
+          - secretRef:
+              name: postgres-secret
+          image: postgres:14
+          imagePullPolicy: IfNotPresent
+          name: postgres
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgres-storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-01-01T05:10:09Z"
+      lastUpdateTime: "2025-01-01T05:10:09Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-01-01T05:04:55Z"
+      lastUpdateTime: "2025-01-01T05:10:09Z"
+      message: ReplicaSet "postgres-deployment-7d75575bfb" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"backend","app.kubernetes.io/instance":"vanessa-choremane","app.kubernetes.io/name":"choremane"},"name":"backend-deployment","namespace":"vanessa-choremane"},"spec":{"replicas":1,"selector":{"matchLabels":{"app.kubernetes.io/component":"backend","app.kubernetes.io/name":"choremane"}},"template":{"metadata":{"labels":{"app.kubernetes.io/component":"backend","app.kubernetes.io/name":"choremane"}},"spec":{"containers":[{"env":[{"name":"POSTGRES_DB","valueFrom":{"secretKeyRef":{"key":"POSTGRES_DB","name":"postgres-secret"}}},{"name":"POSTGRES_USER","valueFrom":{"secretKeyRef":{"key":"POSTGRES_USER","name":"postgres-secret"}}},{"name":"POSTGRES_PASSWORD","valueFrom":{"secretKeyRef":{"key":"POSTGRES_PASSWORD","name":"postgres-secret"}}},{"name":"PYTHONUNBUFFERED","value":"1"}],"envFrom":[{"configMapRef":{"name":"choremane-version"}}],"image":"pipelinedave/choremane-backend:6699e25f727151a03c00470726f32e8b3b0bbfb5","name":"backend","ports":[{"containerPort":80}]}]}}}}
+    creationTimestamp: "2025-01-01T05:04:55Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: backend
+      app.kubernetes.io/instance: vanessa-choremane
+      app.kubernetes.io/name: choremane
+    name: backend-deployment
+    namespace: vanessa-choremane
+    resourceVersion: "20907871"
+    uid: bbf6a783-dc91-4d4b-859e-8ceee9b94fa7
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/name: choremane
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app.kubernetes.io/component: backend
+          app.kubernetes.io/name: choremane
+      spec:
+        containers:
+        - env:
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_DB
+                name: postgres-secret
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_USER
+                name: postgres-secret
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_PASSWORD
+                name: postgres-secret
+          - name: PYTHONUNBUFFERED
+            value: "1"
+          envFrom:
+          - configMapRef:
+              name: choremane-version
+          image: pipelinedave/choremane-backend:6699e25f727151a03c00470726f32e8b3b0bbfb5
+          imagePullPolicy: IfNotPresent
+          name: backend
+          ports:
+          - containerPort: 80
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2025-01-01T05:10:11Z"
+      lastUpdateTime: "2025-01-01T05:10:11Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2025-01-01T05:04:55Z"
+      lastUpdateTime: "2025-01-01T05:10:11Z"
+      message: ReplicaSet "backend-deployment-69f5c6f854" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

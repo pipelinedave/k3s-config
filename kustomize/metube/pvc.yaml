@@ -5,33 +5,33 @@ items:
   metadata:
     annotations:
       kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"picoshare-pvc","namespace":"picoshare"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"80Gi"}},"storageClassName":"local-path"}}
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"metube-pvc","namespace":"metube"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"30Gi"}}}}
       pv.kubernetes.io/bind-completed: "yes"
       pv.kubernetes.io/bound-by-controller: "yes"
       volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
       volume.kubernetes.io/selected-node: bigboi
       volume.kubernetes.io/storage-provisioner: rancher.io/local-path
-    creationTimestamp: "2025-02-21T17:02:24Z"
+    creationTimestamp: "2024-10-30T19:26:24Z"
     finalizers:
     - kubernetes.io/pvc-protection
-    name: picoshare-pvc
-    namespace: picoshare
-    resourceVersion: "26442430"
-    uid: c6ef8b42-137b-4863-ba14-cb07830bb611
+    name: metube-pvc
+    namespace: metube
+    resourceVersion: "17983722"
+    uid: 03173d78-f237-4a86-b1d4-d70662f973aa
   spec:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 80Gi
+        storage: 30Gi
     storageClassName: local-path
     volumeMode: Filesystem
-    volumeName: pvc-c6ef8b42-137b-4863-ba14-cb07830bb611
+    volumeName: pvc-03173d78-f237-4a86-b1d4-d70662f973aa
   status:
     accessModes:
     - ReadWriteOnce
     capacity:
-      storage: 80Gi
+      storage: 30Gi
     phase: Bound
 kind: List
 metadata:

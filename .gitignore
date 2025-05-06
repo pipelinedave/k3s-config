@@ -4,3 +4,8 @@ test/
 version-configmap-dev.yaml
 backup.sql
 default.yaml
+
+# Temporary files created during export
+extracted/
+/tmp/
+*.tmp

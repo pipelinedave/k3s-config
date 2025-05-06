@@ -1,0 +1,162 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "19"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"memodawg-api","namespace":"memodawg"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"memodawg","tier":"api"}},"template":{"metadata":{"labels":{"app":"memodawg","tier":"api"}},"spec":{"containers":[{"env":[{"name":"AZURE_KEY","valueFrom":{"secretKeyRef":{"key":"AZURE_KEY","name":"memodawg-secret"}}},{"name":"GOTIFY_TOKEN","valueFrom":{"secretKeyRef":{"key":"GOTIFY_TOKEN","name":"memodawg-secret"}}},{"name":"MEMODAWG_KEY","valueFrom":{"secretKeyRef":{"key":"MEMODAWG_KEY","name":"memodawg-secret"}}}],"envFrom":[{"configMapRef":{"name":"memodawg-config"}}],"image":"pipelinedave/memodawg-api:0.1.1","imagePullPolicy":"Always","name":"api","ports":[{"containerPort":5000}],"resources":{"limits":{"cpu":"500m","memory":"1024Mi"},"requests":{"cpu":"250m","memory":"512Mi"}}}]}}}}
+    creationTimestamp: "2023-09-03T08:23:56Z"
+    generation: 19
+    name: memodawg-api
+    namespace: memodawg
+    resourceVersion: "23812461"
+    uid: d9889dce-9fa8-4d1a-9ed9-16e9188d38c6
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: memodawg
+        tier: api
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2023-09-25T16:25:35+02:00"
+        creationTimestamp: null
+        labels:
+          app: memodawg
+          tier: api
+      spec:
+        containers:
+        - env:
+          - name: AZURE_KEY
+            valueFrom:
+              secretKeyRef:
+                key: AZURE_KEY
+                name: memodawg-secret
+          - name: GOTIFY_TOKEN
+            valueFrom:
+              secretKeyRef:
+                key: GOTIFY_TOKEN
+                name: memodawg-secret
+          - name: MEMODAWG_KEY
+            valueFrom:
+              secretKeyRef:
+                key: MEMODAWG_KEY
+                name: memodawg-secret
+          envFrom:
+          - configMapRef:
+              name: memodawg-config
+          image: pipelinedave/memodawg-api:0.1.1
+          imagePullPolicy: Always
+          name: api
+          ports:
+          - containerPort: 5000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-12-15T01:11:42Z"
+      lastUpdateTime: "2024-12-15T01:11:42Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2023-09-03T08:23:56Z"
+      lastUpdateTime: "2025-01-29T11:17:00Z"
+      message: ReplicaSet "memodawg-api-58569c7ddd" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 19
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "20"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"name":"memodawg-frontend","namespace":"memodawg"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"memodawg","tier":"frontend"}},"template":{"metadata":{"labels":{"app":"memodawg","tier":"frontend"}},"spec":{"containers":[{"image":"pipelinedave/memodawg-frontend:0.1.1","imagePullPolicy":"Always","name":"frontend","ports":[{"containerPort":8080}],"resources":{"limits":{"cpu":"500m","memory":"1024Mi"},"requests":{"cpu":"250m","memory":"512Mi"}}}]}}}}
+    creationTimestamp: "2023-09-03T12:12:32Z"
+    generation: 20
+    name: memodawg-frontend
+    namespace: memodawg
+    resourceVersion: "23812519"
+    uid: 84b0d8f7-33d8-4798-8d86-a5fc18c3d155
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: memodawg
+        tier: frontend
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2023-09-03T15:13:29+02:00"
+        creationTimestamp: null
+        labels:
+          app: memodawg
+          tier: frontend
+      spec:
+        containers:
+        - image: pipelinedave/memodawg-frontend:0.1.1
+          imagePullPolicy: Always
+          name: frontend
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-12-15T01:11:52Z"
+      lastUpdateTime: "2024-12-15T01:11:52Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2023-09-03T12:12:32Z"
+      lastUpdateTime: "2025-01-29T11:17:17Z"
+      message: ReplicaSet "memodawg-frontend-7f8449c886" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 20
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

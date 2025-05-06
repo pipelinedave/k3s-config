@@ -1,0 +1,83 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "10"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"pingpong-tracker","app.kubernetes.io/instance":"pingpong-dev","environment":"development"},"name":"pingpong-app","namespace":"pingpong-dev"},"spec":{"replicas":2,"selector":{"matchLabels":{"app":"pingpong-tracker"}},"template":{"metadata":{"labels":{"app":"pingpong-tracker"}},"spec":{"containers":[{"env":[{"name":"NODE_ENV","value":"development"}],"image":"pipelinedave/ping-pong-tracker:dev-20acb4b20b7443980e1c097f47079d0afecff8a6","name":"pingpong-app","ports":[{"containerPort":4173}],"resources":{"limits":{"cpu":"500m","memory":"256Mi"},"requests":{"cpu":"250m","memory":"128Mi"}}}]}}}}
+    creationTimestamp: "2024-10-23T16:41:59Z"
+    generation: 10
+    labels:
+      app: pingpong-tracker
+      app.kubernetes.io/instance: pingpong-dev
+      environment: development
+    name: pingpong-app
+    namespace: pingpong-dev
+    resourceVersion: "23812728"
+    uid: a9217218-cfbf-4b2b-b90a-5171875c13d5
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 2
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: pingpong-tracker
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: pingpong-tracker
+      spec:
+        containers:
+        - env:
+          - name: NODE_ENV
+            value: development
+          image: pipelinedave/ping-pong-tracker:dev-20acb4b20b7443980e1c097f47079d0afecff8a6
+          imagePullPolicy: Always
+          name: pingpong-app
+          ports:
+          - containerPort: 4173
+            protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 128Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 2
+    conditions:
+    - lastTransitionTime: "2024-12-15T01:11:51Z"
+      lastUpdateTime: "2024-12-15T01:11:51Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    - lastTransitionTime: "2024-10-23T16:41:59Z"
+      lastUpdateTime: "2025-01-29T11:18:27Z"
+      message: ReplicaSet "pingpong-app-7f9bf6867f" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    observedGeneration: 10
+    readyReplicas: 2
+    replicas: 2
+    updatedReplicas: 2
+kind: List
+metadata:
+  resourceVersion: ""

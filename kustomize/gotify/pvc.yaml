@@ -5,33 +5,32 @@ items:
   metadata:
     annotations:
       kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"picoshare-pvc","namespace":"picoshare"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"80Gi"}},"storageClassName":"local-path"}}
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"gotify-storage","namespace":"gotify"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"2Gi"}},"storageClassName":"local-path"}}
       pv.kubernetes.io/bind-completed: "yes"
       pv.kubernetes.io/bound-by-controller: "yes"
       volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
       volume.kubernetes.io/selected-node: bigboi
-      volume.kubernetes.io/storage-provisioner: rancher.io/local-path
-    creationTimestamp: "2025-02-21T17:02:24Z"
+    creationTimestamp: "2023-09-25T14:16:31Z"
     finalizers:
     - kubernetes.io/pvc-protection
-    name: picoshare-pvc
-    namespace: picoshare
-    resourceVersion: "26442430"
-    uid: c6ef8b42-137b-4863-ba14-cb07830bb611
+    name: gotify-storage
+    namespace: gotify
+    resourceVersion: "2159975"
+    uid: dbf5067c-5ad2-4408-9111-3bbb3cb88e2e
   spec:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 80Gi
+        storage: 2Gi
     storageClassName: local-path
     volumeMode: Filesystem
-    volumeName: pvc-c6ef8b42-137b-4863-ba14-cb07830bb611
+    volumeName: pvc-dbf5067c-5ad2-4408-9111-3bbb3cb88e2e
   status:
     accessModes:
     - ReadWriteOnce
     capacity:
-      storage: 80Gi
+      storage: 2Gi
     phase: Bound
 kind: List
 metadata:

@@ -1,0 +1,112 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"prometheus.io/scrape":"true"},"labels":{"app.kubernetes.io/created-by":"resource-stack","app.kubernetes.io/managed-by":"Lens","app.kubernetes.io/name":"lens-metrics","name":"kube-state-metrics"},"name":"kube-state-metrics","namespace":"lens-metrics"},"spec":{"ports":[{"name":"metrics","port":8080,"protocol":"TCP","targetPort":8080}],"selector":{"name":"kube-state-metrics"}}}
+      prometheus.io/scrape: "true"
+    creationTimestamp: "2024-09-19T20:04:39Z"
+    labels:
+      app.kubernetes.io/created-by: resource-stack
+      app.kubernetes.io/managed-by: Lens
+      app.kubernetes.io/name: lens-metrics
+      name: kube-state-metrics
+    name: kube-state-metrics
+    namespace: lens-metrics
+    resourceVersion: "16209942"
+    uid: 7dcda21d-a210-423e-999f-4549fa691e0f
+  spec:
+    clusterIP: 10.43.105.110
+    clusterIPs:
+    - 10.43.105.110
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: metrics
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      name: kube-state-metrics
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"prometheus.io/scrape":"true"},"labels":{"app.kubernetes.io/created-by":"resource-stack","app.kubernetes.io/managed-by":"Lens","app.kubernetes.io/name":"lens-metrics"},"name":"prometheus","namespace":"lens-metrics"},"spec":{"ports":[{"name":"web","port":80,"protocol":"TCP","targetPort":9090}],"selector":{"name":"prometheus"},"type":"ClusterIP"}}
+      prometheus.io/scrape: "true"
+    creationTimestamp: "2024-09-19T20:04:40Z"
+    labels:
+      app.kubernetes.io/created-by: resource-stack
+      app.kubernetes.io/managed-by: Lens
+      app.kubernetes.io/name: lens-metrics
+    name: prometheus
+    namespace: lens-metrics
+    resourceVersion: "16209947"
+    uid: af20b5cd-62a6-432d-9a54-5175f1c5796b
+  spec:
+    clusterIP: 10.43.28.17
+    clusterIPs:
+    - 10.43.28.17
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: web
+      port: 80
+      protocol: TCP
+      targetPort: 9090
+    selector:
+      name: prometheus
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"prometheus.io/scrape":"true"},"labels":{"app.kubernetes.io/created-by":"resource-stack","app.kubernetes.io/managed-by":"Lens","app.kubernetes.io/name":"lens-metrics"},"name":"node-exporter","namespace":"lens-metrics"},"spec":{"clusterIP":"None","ports":[{"name":"metrics","port":80,"protocol":"TCP","targetPort":9100}],"selector":{"name":"node-exporter","phase":"prod"},"type":"ClusterIP"}}
+      prometheus.io/scrape: "true"
+    creationTimestamp: "2024-09-19T20:04:41Z"
+    labels:
+      app.kubernetes.io/created-by: resource-stack
+      app.kubernetes.io/managed-by: Lens
+      app.kubernetes.io/name: lens-metrics
+    name: node-exporter
+    namespace: lens-metrics
+    resourceVersion: "16209974"
+    uid: 49736271-1616-4cd7-893d-aa3d1a01ea1d
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: metrics
+      port: 80
+      protocol: TCP
+      targetPort: 9100
+    selector:
+      name: node-exporter
+      phase: prod
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

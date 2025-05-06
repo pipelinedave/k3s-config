@@ -1,0 +1,15 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: gotify
+  namespace: flux-system
+spec:
+  targetNamespace: gotify
+  interval: 5m
+  path: ./kustomize/gotify
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  timeout: 2m

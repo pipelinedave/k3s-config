@@ -1,0 +1,67 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"labels":{"app":"firefly-iii"},"name":"firefly-iii-db-mysql","namespace":"firefly"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"20Gi"}},"volumeName":"pvc-6773d645-95aa-4e28-85d5-4c193d5bf44a"}}
+      pv.kubernetes.io/bind-completed: "yes"
+    creationTimestamp: "2023-08-10T10:38:03Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: firefly-iii
+    name: firefly-iii-db-mysql
+    namespace: firefly
+    resourceVersion: "615802"
+    uid: eee30575-cf2e-4389-90e1-91053f360d49
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 20Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-6773d645-95aa-4e28-85d5-4c193d5bf44a
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 20Gi
+    phase: Bound
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"labels":{"app":"firefly-iii"},"name":"firefly-iii-upload","namespace":"firefly"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"10Gi"}},"volumeName":"pvc-1c99e9fc-df85-437c-87de-07da7119bad0"}}
+      pv.kubernetes.io/bind-completed: "yes"
+    creationTimestamp: "2023-08-10T11:06:47Z"
+    finalizers:
+    - kubernetes.io/pvc-protection
+    labels:
+      app: firefly-iii
+    name: firefly-iii-upload
+    namespace: firefly
+    resourceVersion: "616442"
+    uid: 8cfd73c5-7c5b-4d5f-8021-99564d16b72f
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 10Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-1c99e9fc-df85-437c-87de-07da7119bad0
+  status:
+    accessModes:
+    - ReadWriteOnce
+    capacity:
+      storage: 10Gi
+    phase: Bound
+kind: List
+metadata:
+  resourceVersion: ""

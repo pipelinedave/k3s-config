@@ -1,0 +1,65 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"grocy","namespace":"grocy"},"spec":{"ports":[{"name":"http","port":80,"targetPort":80}],"selector":{"name":"grocy"}}}
+    creationTimestamp: "2023-12-28T11:52:01Z"
+    name: grocy
+    namespace: grocy
+    resourceVersion: "5988952"
+    uid: 820d16eb-23cc-45f5-9410-eedae908b541
+  spec:
+    clusterIP: 10.43.158.127
+    clusterIPs:
+    - 10.43.158.127
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      name: grocy
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"barcodebuddy","namespace":"grocy"},"spec":{"ports":[{"name":"http","port":80,"targetPort":80}],"selector":{"name":"barcodebuddy"}}}
+    creationTimestamp: "2023-12-28T12:36:11Z"
+    name: barcodebuddy
+    namespace: grocy
+    resourceVersion: "5990347"
+    uid: 07ec55a5-7af2-47d1-ab7a-e9b2bcff7102
+  spec:
+    clusterIP: 10.43.17.116
+    clusterIPs:
+    - 10.43.17.116
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      name: barcodebuddy
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

@@ -1,0 +1,39 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"kubernetes.io/ingress.class":"traefik","traefik.ingress.kubernetes.io/router.entrypoints":"web","traefik.ingress.kubernetes.io/router.priority":"10"},"labels":{"app.kubernetes.io/instance":"pingpong-dev"},"name":"pingpong-app-ingress","namespace":"pingpong-dev"},"spec":{"ingressClassName":"traefik","rules":[{"host":"pingpong-dev.stillon.top","http":{"paths":[{"backend":{"service":{"name":"pingpong-app-service","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}]}}
+      kubernetes.io/ingress.class: traefik
+      traefik.ingress.kubernetes.io/router.entrypoints: web
+      traefik.ingress.kubernetes.io/router.priority: "10"
+    creationTimestamp: "2024-10-23T16:41:59Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/instance: pingpong-dev
+    name: pingpong-app-ingress
+    namespace: pingpong-dev
+    resourceVersion: "17640559"
+    uid: a68ed380-ce87-4eb7-94f0-f53b79b35347
+  spec:
+    ingressClassName: traefik
+    rules:
+    - host: pingpong-dev.stillon.top
+      http:
+        paths:
+        - backend:
+            service:
+              name: pingpong-app-service
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer:
+      ingress:
+      - ip: 161.97.88.129
+kind: List
+metadata:
+  resourceVersion: ""

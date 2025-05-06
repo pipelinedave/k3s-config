@@ -1,0 +1,55 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIBdzCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
+      dmVyLWNhQDE2ODk5NjA3OTAwHhcNMjMwNzIxMTczMzEwWhcNMzMwNzE4MTczMzEw
+      WjAjMSEwHwYDVQQDDBhrM3Mtc2VydmVyLWNhQDE2ODk5NjA3OTAwWTATBgcqhkjO
+      PQIBBggqhkjOPQMBBwNCAAR7NQhnFyp79vxKp7wbW1v5fwZswpWO0/kh7QOOAvDv
+      vVYBRyRMVuXkGeZ4GcuoBgtdHmAgRVas1WQDvCqsZCvQo0IwQDAOBgNVHQ8BAf8E
+      BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUBIzTiEtNs0URYBu9Khwu
+      p+gg8YMwCgYIKoZIzj0EAwIDSAAwRQIhAOZhB97tfI252ApBxBbAYLdJA48bGxF6
+      zfzWqDk1PpryAiAr05Sqa21IgbZw1zV1HpRF5IgnPMMRrbt/UD/ckXFy8A==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2023-12-15T15:11:05Z"
+    name: kube-root-ca.crt
+    namespace: grafana
+    resourceVersion: "5462509"
+    uid: 4480c8e3-2ffd-4def-839f-7277e442625a
+- apiVersion: v1
+  data:
+    datasources.yaml: |
+      apiVersion: 1
+      datasources:
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki.loki:3100
+        editable: true
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus.prometheus:9090
+        editable: true
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"datasources.yaml":"apiVersion: 1\ndatasources:\n- name: Loki\n  type: loki\n  access: proxy\n  url: http://loki.loki:3100\n  editable: true\n- name: Prometheus\n  type: prometheus\n  access: proxy\n  url: http://prometheus.prometheus:9090\n  editable: true\n"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"grafana-config","namespace":"grafana"}}
+    creationTimestamp: "2023-12-15T15:11:05Z"
+    name: grafana-config
+    namespace: grafana
+    resourceVersion: "5585100"
+    uid: 1ae42a77-ef86-425e-b0f8-74b0020a640a
+kind: List
+metadata:
+  resourceVersion: ""

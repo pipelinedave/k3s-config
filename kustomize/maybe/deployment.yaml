@@ -1,0 +1,214 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"postgres"},"name":"postgres","namespace":"maybe"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"postgres"}},"template":{"metadata":{"labels":{"app":"postgres"}},"spec":{"containers":[{"env":[{"name":"POSTGRES_USER","valueFrom":{"secretKeyRef":{"key":"POSTGRES_USER","name":"maybe-db-secret-mm5286cg8k"}}},{"name":"POSTGRES_PASSWORD","valueFrom":{"secretKeyRef":{"key":"POSTGRES_PASSWORD","name":"maybe-db-secret-mm5286cg8k"}}},{"name":"POSTGRES_DB","valueFrom":{"secretKeyRef":{"key":"POSTGRES_DB","name":"maybe-db-secret-mm5286cg8k"}}}],"image":"postgres:16","name":"postgres","ports":[{"containerPort":5432}],"volumeMounts":[{"mountPath":"/var/lib/postgresql/data","name":"postgres-data"}]}],"volumes":[{"name":"postgres-data","persistentVolumeClaim":{"claimName":"postgres-data"}}]}}}}
+    creationTimestamp: "2024-05-19T15:02:51Z"
+    generation: 1
+    labels:
+      app: postgres
+    name: postgres
+    namespace: maybe
+    resourceVersion: "20144964"
+    uid: 1fdfc54a-6303-4586-ae88-16ea71c6fc9f
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: postgres
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: postgres
+      spec:
+        containers:
+        - env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_USER
+                name: maybe-db-secret-mm5286cg8k
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_PASSWORD
+                name: maybe-db-secret-mm5286cg8k
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_DB
+                name: maybe-db-secret-mm5286cg8k
+          image: postgres:16
+          imagePullPolicy: IfNotPresent
+          name: postgres
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgres-data
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: postgres-data
+          persistentVolumeClaim:
+            claimName: postgres-data
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-05-19T15:02:51Z"
+      lastUpdateTime: "2024-05-19T15:03:55Z"
+      message: ReplicaSet "postgres-5c69987955" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2024-12-15T01:11:49Z"
+      lastUpdateTime: "2024-12-15T01:11:49Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "8"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"maybe"},"name":"maybe","namespace":"maybe"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"maybe"}},"template":{"metadata":{"labels":{"app":"maybe"}},"spec":{"containers":[{"env":[{"name":"SELF_HOSTING_ENABLED","value":"true"},{"name":"APP_DOMAIN","value":"maybe.stillon.top"},{"name":"SMTP_ADDRESS","value":"smtp.gmail.com"},{"name":"SMTP_PORT","value":"465"},{"name":"SMTP_USERNAME","value":"kingovi@gmail.com"},{"name":"SMTP_PASSWORD","value":"koyn gmsu znhm gldc"},{"name":"REQUIRE_INVITE_CODE","value":"true"},{"name":"DB_HOST","value":"postgres"},{"name":"RAILS_FORCE_SSL","value":"false"},{"name":"RAILS_ASSUME_SSL","value":"false"},{"name":"POSTGRES_USER","valueFrom":{"secretKeyRef":{"key":"POSTGRES_USER","name":"maybe-db-secret-mm5286cg8k"}}},{"name":"POSTGRES_PASSWORD","valueFrom":{"secretKeyRef":{"key":"POSTGRES_PASSWORD","name":"maybe-db-secret-mm5286cg8k"}}},{"name":"POSTGRES_DB","valueFrom":{"secretKeyRef":{"key":"POSTGRES_DB","name":"maybe-db-secret-mm5286cg8k"}}},{"name":"GOOD_JOB_EXECUTION_MODE","value":"async"},{"name":"SECRET_KEY_BASE","valueFrom":{"secretKeyRef":{"key":"SECRET_KEY_BASE","name":"maybe-secret-f8bk488f6g"}}}],"image":"ghcr.io/maybe-finance/maybe:latest","name":"maybe","ports":[{"containerPort":3000}],"volumeMounts":[{"mountPath":"/rails/storage","name":"storage"}]}],"volumes":[{"name":"storage","persistentVolumeClaim":{"claimName":"maybe-storage"}}]}}}}
+    creationTimestamp: "2024-05-19T15:02:50Z"
+    generation: 8
+    labels:
+      app: maybe
+    name: maybe
+    namespace: maybe
+    resourceVersion: "20145051"
+    uid: 3298ca3a-0133-4a90-b16c-2d6143419d45
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: maybe
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        annotations:
+          kubectl.kubernetes.io/restartedAt: "2024-05-25T20:30:06+02:00"
+        creationTimestamp: null
+        labels:
+          app: maybe
+      spec:
+        containers:
+        - env:
+          - name: SELF_HOSTING_ENABLED
+            value: "true"
+          - name: APP_DOMAIN
+            value: maybe.stillon.top
+          - name: SMTP_ADDRESS
+            value: smtp.gmail.com
+          - name: SMTP_PORT
+            value: "465"
+          - name: SMTP_USERNAME
+            value: kingovi@gmail.com
+          - name: SMTP_PASSWORD
+            value: koyn gmsu znhm gldc
+          - name: REQUIRE_INVITE_CODE
+            value: "true"
+          - name: DB_HOST
+            value: postgres
+          - name: RAILS_FORCE_SSL
+            value: "false"
+          - name: RAILS_ASSUME_SSL
+            value: "false"
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_USER
+                name: maybe-db-secret-mm5286cg8k
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_PASSWORD
+                name: maybe-db-secret-mm5286cg8k
+          - name: POSTGRES_DB
+            valueFrom:
+              secretKeyRef:
+                key: POSTGRES_DB
+                name: maybe-db-secret-mm5286cg8k
+          - name: GOOD_JOB_EXECUTION_MODE
+            value: async
+          - name: SECRET_KEY_BASE
+            valueFrom:
+              secretKeyRef:
+                key: SECRET_KEY_BASE
+                name: maybe-secret-f8bk488f6g
+          image: ghcr.io/maybe-finance/maybe:latest
+          imagePullPolicy: Always
+          name: maybe
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /rails/storage
+            name: storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: maybe-storage
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-05-19T15:02:50Z"
+      lastUpdateTime: "2024-05-25T18:30:12Z"
+      message: ReplicaSet "maybe-55f7dc6b4f" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2024-12-15T01:11:51Z"
+      lastUpdateTime: "2024-12-15T01:11:51Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 8
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

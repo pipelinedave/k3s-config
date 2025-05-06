@@ -1,0 +1,47 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIBdzCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
+      dmVyLWNhQDE2ODk5NjA3OTAwHhcNMjMwNzIxMTczMzEwWhcNMzMwNzE4MTczMzEw
+      WjAjMSEwHwYDVQQDDBhrM3Mtc2VydmVyLWNhQDE2ODk5NjA3OTAwWTATBgcqhkjO
+      PQIBBggqhkjOPQMBBwNCAAR7NQhnFyp79vxKp7wbW1v5fwZswpWO0/kh7QOOAvDv
+      vVYBRyRMVuXkGeZ4GcuoBgtdHmAgRVas1WQDvCqsZCvQo0IwQDAOBgNVHQ8BAf8E
+      BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUBIzTiEtNs0URYBu9Khwu
+      p+gg8YMwCgYIKoZIzj0EAwIDSAAwRQIhAOZhB97tfI252ApBxBbAYLdJA48bGxF6
+      zfzWqDk1PpryAiAr05Sqa21IgbZw1zV1HpRF5IgnPMMRrbt/UD/ckXFy8A==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2023-09-02T22:45:38Z"
+    name: kube-root-ca.crt
+    namespace: memodawg
+    resourceVersion: "1417592"
+    uid: d3c9b977-759c-4a4f-9bda-fd1ccf3f24e3
+- apiVersion: v1
+  data:
+    AZURE_REGION: germanywestcentral
+    AZURE_STT_URL: https://germanywestcentral.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1
+    AZURE_TOKEN_URL: https://germanywestcentral.api.cognitive.microsoft.com/sts/v1.0/issuetoken
+    GOTIFY_URL: http://gotify.gotify.svc.cluster.local/message
+    TEMP_AUDIO_FILE: /tmp/audio.wav
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"AZURE_REGION":"germanywestcentral","AZURE_STT_URL":"https://germanywestcentral.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1","AZURE_TOKEN_URL":"https://germanywestcentral.api.cognitive.microsoft.com/sts/v1.0/issuetoken","GOTIFY_URL":"http://gotify.gotify.svc.cluster.local/message","TEMP_AUDIO_FILE":"/tmp/audio.wav"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"memodawg-config","namespace":"memodawg"}}
+    creationTimestamp: "2023-09-03T08:17:24Z"
+    name: memodawg-config
+    namespace: memodawg
+    resourceVersion: "1432481"
+    uid: 704aa232-587d-4fb8-88fb-f3fb61d44b02
+kind: List
+metadata:
+  resourceVersion: ""

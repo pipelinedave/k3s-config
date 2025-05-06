@@ -1,0 +1,15 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: firefly
+  namespace: flux-system
+spec:
+  targetNamespace: firefly
+  interval: 5m
+  path: ./kustomize/firefly
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  timeout: 2m

@@ -1,0 +1,403 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIBdzCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
+      dmVyLWNhQDE2ODk5NjA3OTAwHhcNMjMwNzIxMTczMzEwWhcNMzMwNzE4MTczMzEw
+      WjAjMSEwHwYDVQQDDBhrM3Mtc2VydmVyLWNhQDE2ODk5NjA3OTAwWTATBgcqhkjO
+      PQIBBggqhkjOPQMBBwNCAAR7NQhnFyp79vxKp7wbW1v5fwZswpWO0/kh7QOOAvDv
+      vVYBRyRMVuXkGeZ4GcuoBgtdHmAgRVas1WQDvCqsZCvQo0IwQDAOBgNVHQ8BAf8E
+      BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUBIzTiEtNs0URYBu9Khwu
+      p+gg8YMwCgYIKoZIzj0EAwIDSAAwRQIhAOZhB97tfI252ApBxBbAYLdJA48bGxF6
+      zfzWqDk1PpryAiAr05Sqa21IgbZw1zV1HpRF5IgnPMMRrbt/UD/ckXFy8A==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2025-01-01T05:04:52Z"
+    name: kube-root-ca.crt
+    namespace: vanessa-choremane
+    resourceVersion: "20907477"
+    uid: aa012737-f47f-4479-b0f6-9fb9f440cd71
+- apiVersion: v1
+  data:
+    BACKEND_IMAGE: pipelinedave/choremane-backend:af69051bdc32d5eb419cfc15e4ed0e74c24a85a1
+    FRONTEND_IMAGE: pipelinedave/choremane-frontend:af69051bdc32d5eb419cfc15e4ed0e74c24a85a1
+    VERSION_TAG: main
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"BACKEND_IMAGE":"pipelinedave/choremane-backend:af69051bdc32d5eb419cfc15e4ed0e74c24a85a1","FRONTEND_IMAGE":"pipelinedave/choremane-frontend:af69051bdc32d5eb419cfc15e4ed0e74c24a85a1","VERSION_TAG":"main"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app.kubernetes.io/instance":"vanessa-choremane"},"name":"choremane-version","namespace":"vanessa-choremane"}}
+    creationTimestamp: "2025-01-01T05:04:55Z"
+    labels:
+      app.kubernetes.io/instance: vanessa-choremane
+    name: choremane-version
+    namespace: vanessa-choremane
+    resourceVersion: "20907479"
+    uid: f8c7bbca-d5f7-49fd-bbdd-ff89c0799eee
+- apiVersion: v1
+  data:
+    db.schema: |
+      -- Table for chores
+      CREATE TABLE IF NOT EXISTS chores (
+          id SERIAL PRIMARY KEY,
+          name VARCHAR(255) NOT NULL,
+          interval_days INT NOT NULL,
+          due_date DATE NOT NULL,
+          done BOOLEAN DEFAULT FALSE,
+          done_by VARCHAR(255),
+          archived BOOLEAN DEFAULT FALSE
+      );
+
+      -- Table for chore logs
+      CREATE TABLE IF NOT EXISTS chore_logs (
+          id SERIAL PRIMARY KEY,
+          chore_id INT NOT NULL,
+          done_by VARCHAR(255),
+          done_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          action_type VARCHAR(50) NOT NULL, -- 'created', 'updated', 'archived', 'marked_done', 'undone'
+          action_details JSON DEFAULT NULL, -- JSON to store previous state for undo
+          FOREIGN KEY (chore_id) REFERENCES chores (id) ON DELETE CASCADE
+      );
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"db.schema":"-- Table for chores\nCREATE TABLE IF NOT EXISTS chores (\n    id SERIAL PRIMARY KEY,\n    name VARCHAR(255) NOT NULL,\n    interval_days INT NOT NULL,\n    due_date DATE NOT NULL,\n    done BOOLEAN DEFAULT FALSE,\n    done_by VARCHAR(255),\n    archived BOOLEAN DEFAULT FALSE\n);\n\n-- Table for chore logs\nCREATE TABLE IF NOT EXISTS chore_logs (\n    id SERIAL PRIMARY KEY,\n    chore_id INT NOT NULL,\n    done_by VARCHAR(255),\n    done_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    action_type VARCHAR(50) NOT NULL, -- 'created', 'updated', 'archived', 'marked_done', 'undone'\n    action_details JSON DEFAULT NULL, -- JSON to store previous state for undo\n    FOREIGN KEY (chore_id) REFERENCES chores (id) ON DELETE CASCADE\n);\n"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app.kubernetes.io/component":"database","app.kubernetes.io/instance":"vanessa-choremane","app.kubernetes.io/name":"choremane"},"name":"db-schema-config","namespace":"vanessa-choremane"}}
+    creationTimestamp: "2025-01-01T05:04:55Z"
+    labels:
+      app.kubernetes.io/component: database
+      app.kubernetes.io/instance: vanessa-choremane
+      app.kubernetes.io/name: choremane
+    name: db-schema-config
+    namespace: vanessa-choremane
+    resourceVersion: "20907480"
+    uid: 05984cbe-5acc-47fb-99f5-92d591caf2d7
+- apiVersion: v1
+  data:
+    backup.sql: "--\n-- PostgreSQL database dump\n--\n\n-- Dumped from database version
+      14.13 (Debian 14.13-1.pgdg120+1)\n-- Dumped by pg_dump version 15.6\n\nSET statement_timeout
+      = 0;\nSET lock_timeout = 0;\nSET idle_in_transaction_session_timeout = 0;\nSET
+      client_encoding = 'UTF8';\nSET standard_conforming_strings = on;\nSELECT pg_catalog.set_config('search_path',
+      '', false);\nSET check_function_bodies = false;\nSET xmloption = content;\nSET
+      client_min_messages = warning;\nSET row_security = off;\n\n--\n-- Name: public;
+      Type: SCHEMA; Schema: -; Owner: admin\n--\n\n-- *not* creating schema, since
+      initdb creates it\n\n\nALTER SCHEMA public OWNER TO admin;\n\nSET default_tablespace
+      = '';\n\nSET default_table_access_method = heap;\n\n--\n-- Name: chore_logs;
+      Type: TABLE; Schema: public; Owner: admin\n--\n\nCREATE TABLE public.chore_logs
+      (\n    id integer NOT NULL,\n    chore_id integer NOT NULL,\n    done_by character
+      varying(255),\n    done_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\n
+      \   action_type character varying(50) NOT NULL,\n    action_details json\n);\n\n\nALTER
+      TABLE public.chore_logs OWNER TO admin;\n\n--\n-- Name: chore_logs_id_seq; Type:
+      SEQUENCE; Schema: public; Owner: admin\n--\n\nCREATE SEQUENCE public.chore_logs_id_seq\n
+      \   AS integer\n    START WITH 1\n    INCREMENT BY 1\n    NO MINVALUE\n    NO
+      MAXVALUE\n    CACHE 1;\n\n\nALTER TABLE public.chore_logs_id_seq OWNER TO admin;\n\n--\n--
+      Name: chore_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin\n--\n\nALTER
+      SEQUENCE public.chore_logs_id_seq OWNED BY public.chore_logs.id;\n\n\n--\n--
+      Name: chores; Type: TABLE; Schema: public; Owner: admin\n--\n\nCREATE TABLE
+      public.chores (\n    id integer NOT NULL,\n    name character varying(255) NOT
+      NULL,\n    interval_days integer NOT NULL,\n    due_date date NOT NULL,\n    done
+      boolean DEFAULT false,\n    done_by character varying(255),\n    archived boolean
+      DEFAULT false\n);\n\n\nALTER TABLE public.chores OWNER TO admin;\n\n--\n-- Name:
+      chores_id_seq; Type: SEQUENCE; Schema: public; Owner: admin\n--\n\nCREATE SEQUENCE
+      public.chores_id_seq\n    AS integer\n    START WITH 1\n    INCREMENT BY 1\n
+      \   NO MINVALUE\n    NO MAXVALUE\n    CACHE 1;\n\n\nALTER TABLE public.chores_id_seq
+      OWNER TO admin;\n\n--\n-- Name: chores_id_seq; Type: SEQUENCE OWNED BY; Schema:
+      public; Owner: admin\n--\n\nALTER SEQUENCE public.chores_id_seq OWNED BY public.chores.id;\n\n\n--\n--
+      Name: chore_logs id; Type: DEFAULT; Schema: public; Owner: admin\n--\n\nALTER
+      TABLE ONLY public.chore_logs ALTER COLUMN id SET DEFAULT nextval('public.chore_logs_id_seq'::regclass);\n\n\n--\n--
+      Name: chores id; Type: DEFAULT; Schema: public; Owner: admin\n--\n\nALTER TABLE
+      ONLY public.chores ALTER COLUMN id SET DEFAULT nextval('public.chores_id_seq'::regclass);\n\n\n--\n--
+      Data for Name: chore_logs; Type: TABLE DATA; Schema: public; Owner: admin\n--\n\nCOPY
+      public.chore_logs (id, chore_id, done_by, done_at, action_type, action_details)
+      FROM stdin;\n1\t4\t\\N\t2024-11-26 19:20:41.869536\tcreated\t{\"id\": null,
+      \"name\": \"sdasdada\", \"interval_days\": 1, \"due_date\": \"2024-11-26\",
+      \"done\": false, \"done_by\": null, \"archived\": false}\n2\t1\t\\N\t2024-11-26
+      19:21:02.19762\tarchived\t{}\n3\t1\t\\N\t2024-11-26 19:21:02.290216\tarchived\t{}\n4\t5\t\\N\t2024-11-26
+      19:21:17.340872\tcreated\t{\"id\": null, \"name\": \"lkn\", \"interval_days\":
+      9, \"due_date\": \"2024-12-07\", \"done\": false, \"done_by\": null, \"archived\":
+      false}\n5\t6\t\\N\t2024-11-26 19:21:32.184775\tcreated\t{\"id\": null, \"name\":
+      \"jbhkjb\", \"interval_days\": 3, \"due_date\": \"2024-11-27\", \"done\": false,
+      \"done_by\": null, \"archived\": false}\n6\t7\t\\N\t2024-11-26 19:23:46.002788\tcreated\t{\"id\":
+      null, \"name\": \"testmann\", \"interval_days\": 5, \"due_date\": \"2024-12-06\",
+      \"done\": false, \"done_by\": null, \"archived\": false}\n7\t6\tanonymous\t2024-11-26
+      19:25:37.786516\tmarked_done\t{}\n8\t4\tanonymous\t2024-11-26 19:25:43.908288\tmarked_done\t{}\n9\t7\tanonymous\t2024-11-26
+      19:25:48.447531\tmarked_done\t{}\n10\t5\t\\N\t2024-11-26 19:30:16.423693\tarchived\t{}\n11\t5\t\\N\t2024-11-26
+      19:30:16.512766\tarchived\t{}\n12\t8\t\\N\t2024-11-26 19:30:31.075594\tcreated\t{\"id\":
+      null, \"name\": \"wahdawdwada\", \"interval_days\": 2, \"due_date\": \"2024-11-29\",
+      \"done\": false, \"done_by\": null, \"archived\": false}\n13\t8\t\\N\t2024-11-26
+      19:30:47.975558\tupdated\t{\"previous_state\": {\"id\": 8, \"name\": \"wahdawdwada\",
+      \"interval_days\": 2, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\":
+      null, \"archived\": false}}\n14\t8\t\\N\t2024-11-26 19:30:48.065747\tupdated\t{\"previous_state\":
+      {\"id\": 8, \"name\": \"wahdawdwada\", \"interval_days\": 3, \"due_date\": \"2024-11-29\",
+      \"done\": false, \"done_by\": null, \"archived\": false}}\n15\t8\t\\N\t2024-11-26
+      19:30:52.678395\tupdated\t{\"previous_state\": {\"id\": 8, \"name\": \"wahdawdwada\",
+      \"interval_days\": 3, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\":
+      null, \"archived\": false}}\n16\t8\t\\N\t2024-11-26 19:30:52.773288\tupdated\t{\"previous_state\":
+      {\"id\": 8, \"name\": \"wahdawdwada\", \"interval_days\": 5, \"due_date\": \"2024-11-29\",
+      \"done\": false, \"done_by\": null, \"archived\": false}}\n17\t8\tanonymous\t2024-11-26
+      19:30:55.52265\tmarked_done\t{}\n18\t8\tanonymous\t2024-11-26 19:31:03.866378\tmarked_done\t{}\n19\t8\tanonymous\t2024-11-26
+      19:31:05.254578\tmarked_done\t{}\n20\t7\t\\N\t2024-11-26 19:31:21.284939\tupdated\t{\"previous_state\":
+      {\"id\": 7, \"name\": \"testmann\", \"interval_days\": 5, \"due_date\": \"2024-12-11\",
+      \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n21\t7\t\\N\t2024-11-26
+      19:31:21.383946\tupdated\t{\"previous_state\": {\"id\": 7, \"name\": \"testmann\",
+      \"interval_days\": 5, \"due_date\": \"2024-11-26\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n22\t6\tanonymous\t2024-11-26 19:37:17.78443\tmarked_done\t{}\n23\t4\t\\N\t2024-11-26
+      19:37:24.960593\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"sdasdada\",
+      \"interval_days\": 1, \"due_date\": \"2024-11-27\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n24\t4\t\\N\t2024-11-26 19:37:25.071933\tupdated\t{\"previous_state\":
+      {\"id\": 4, \"name\": \"sdasdada\", \"interval_days\": 2, \"due_date\": \"2024-11-27\",
+      \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n25\t6\t\\N\t2024-11-26
+      19:37:54.051785\tarchived\t{}\n26\t6\t\\N\t2024-11-26 19:37:54.138841\tarchived\t{}\n27\t9\t\\N\t2024-11-26
+      19:38:10.33602\tcreated\t{\"id\": null, \"name\": \"restmuell\", \"interval_days\":
+      3, \"due_date\": \"2024-11-26\", \"done\": false, \"done_by\": null, \"archived\":
+      false}\n28\t7\tanonymous\t2024-11-26 19:38:12.837518\tmarked_done\t{}\n29\t9\tanonymous\t2024-11-26
+      19:40:51.514403\tmarked_done\t{}\n30\t10\t\\N\t2024-11-26 19:42:00.785335\tcreated\t{\"id\":
+      null, \"name\": \"gelber sack\", \"interval_days\": 4, \"due_date\": \"2024-11-26\",
+      \"done\": false, \"done_by\": null, \"archived\": false}\n31\t4\tanonymous\t2024-11-26
+      19:42:31.086886\tmarked_done\t{}\n32\t9\tanonymous\t2024-11-26 19:46:41.539322\tmarked_done\t{\"chore_id\":
+      9, \"new_due_date\": \"2024-12-02\"}\n33\t9\tanonymous\t2024-11-26 19:46:47.009196\tmarked_done\t{\"chore_id\":
+      9, \"new_due_date\": \"2024-12-05\"}\n34\t4\tanonymous\t2024-11-26 19:47:56.218797\tmarked_done\t{\"chore_id\":
+      4, \"new_due_date\": \"2024-12-01\"}\n35\t9\tanonymous\t2024-11-26 19:48:13.322855\tmarked_done\t{\"chore_id\":
+      9, \"new_due_date\": \"2024-12-08\"}\n36\t4\t\\N\t2024-11-26 19:48:30.903006\tupdated\t{\"previous_state\":
+      {\"id\": 4, \"name\": \"sdasdada\", \"interval_days\": 2, \"due_date\": \"2024-12-01\",
+      \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n37\t4\t\\N\t2024-11-26
+      19:48:31.001473\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"sdasdada\",
+      \"interval_days\": 3, \"due_date\": \"2024-11-29\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n38\t7\tanonymous\t2024-11-26 19:51:18.399416\tmarked_done\t{\"chore_id\":
+      7, \"new_due_date\": \"2024-12-06\"}\n40\t10\tanonymous\t2024-11-26 19:53:39.999841\tmarked_done\t{\"chore_id\":
+      10, \"new_due_date\": \"2024-11-30\"}\n41\t11\t\\N\t2024-11-26 21:02:57.956715\tcreated\t{\"id\":
+      null, \"name\": \"Staubsaugen Treppe Oben\", \"interval_days\": 5, \"due_date\":
+      \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}\n42\t10\tanonymous\t2024-11-26
+      21:03:05.706824\tmarked_done\t{\"chore_id\": 10, \"new_due_date\": \"2024-12-04\"}\n43\t8\t\\N\t2024-11-26
+      21:03:29.456754\tarchived\t{}\n44\t8\t\\N\t2024-11-26 21:03:29.628967\tarchived\t{}\n45\t9\t\\N\t2024-11-26
+      21:03:45.526819\tupdated\t{\"previous_state\": {\"id\": 9, \"name\": \"restmuell\",
+      \"interval_days\": 3, \"due_date\": \"2024-12-08\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n46\t9\t\\N\t2024-11-26 21:03:45.651217\tupdated\t{\"previous_state\":
+      {\"id\": 9, \"name\": \"restmuell\", \"interval_days\": 3, \"due_date\": \"2024-11-27\",
+      \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n47\t9\t\\N\t2024-11-26
+      21:05:22.860951\tupdated\t{\"previous_state\": {\"id\": 9, \"name\": \"restmuell\",
+      \"interval_days\": 3, \"due_date\": \"2024-11-27\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n48\t9\t\\N\t2024-11-26 21:05:22.963778\tupdated\t{\"previous_state\":
+      {\"id\": 9, \"name\": \"Restm\\\\u00fcll\", \"interval_days\": 3, \"due_date\":
+      \"2024-11-27\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n49\t4\t\\N\t2024-11-26
+      21:05:48.64858\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"sdasdada\",
+      \"interval_days\": 3, \"due_date\": \"2024-11-29\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n50\t4\t\\N\t2024-11-26 21:05:48.763916\tupdated\t{\"previous_state\":
+      {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\":
+      \"2024-11-26\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n51\t10\t\\N\t2024-11-26
+      21:27:42.644915\tupdated\t{\"previous_state\": {\"id\": 10, \"name\": \"gelber
+      sack\", \"interval_days\": 4, \"due_date\": \"2024-12-04\", \"done\": true,
+      \"done_by\": \"anonymous\", \"archived\": false}}\n52\t10\t\\N\t2024-11-26 21:27:42.781093\tupdated\t{\"previous_state\":
+      {\"id\": 10, \"name\": \"Gelber Sack\", \"interval_days\": 4, \"due_date\":
+      \"2024-12-04\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n53\t12\t\\N\t2024-11-26
+      21:28:03.582647\tcreated\t{\"id\": null, \"name\": \"Staubsaugen Wohnzimmer
+      und K\\\\u00fcche \", \"interval_days\": 3, \"due_date\": \"2024-11-27\", \"done\":
+      false, \"done_by\": null, \"archived\": false}\n54\t13\t\\N\t2024-11-26 21:28:46.905962\tcreated\t{\"id\":
+      null, \"name\": \"Staubsaugen Galerie, Bad und Balkon \", \"interval_days\":
+      3, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\":
+      false}\n55\t14\t\\N\t2024-11-26 21:29:06.763421\tcreated\t{\"id\": null, \"name\":
+      \"Staubsaugen Treppe Unten\", \"interval_days\": 5, \"due_date\": \"2024-11-28\",
+      \"done\": false, \"done_by\": null, \"archived\": false}\n56\t15\t\\N\t2024-11-26
+      21:29:45.568576\tcreated\t{\"id\": null, \"name\": \"Klo putzen\", \"interval_days\":
+      5, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\":
+      false}\n58\t4\tanonymous\t2024-11-26 22:23:24.682144\tmarked_done\t{\"chore_id\":
+      4, \"new_due_date\": \"2024-11-30\"}\n59\t4\tanonymous\t2024-11-26 22:29:26.420349\tmarked_done\t{\"chore_id\":
+      4, \"new_due_date\": \"2024-12-04\"}\n60\t4\t\\N\t2024-11-26 22:29:33.38531\tupdated\t{\"previous_state\":
+      {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\":
+      \"2024-12-04\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n61\t4\t\\N\t2024-11-26
+      22:29:33.492201\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\",
+      \"interval_days\": 4, \"due_date\": \"2024-11-26\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n62\t10\tanonymous\t2024-11-26 22:36:36.568095\tmarked_done\t{\"chore_id\":
+      10, \"new_due_date\": \"2024-11-30\"}\n63\t7\tanonymous\t2024-11-26 22:36:41.414905\tmarked_done\t{\"chore_id\":
+      7, \"new_due_date\": \"2024-12-01\"}\n64\t7\t\\N\t2024-11-26 22:36:50.411775\tupdated\t{\"previous_state\":
+      {\"id\": 7, \"name\": \"testmann\", \"interval_days\": 5, \"due_date\": \"2024-12-01\",
+      \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n65\t7\t\\N\t2024-11-26
+      22:36:50.508203\tupdated\t{\"previous_state\": {\"id\": 7, \"name\": \"testmann\",
+      \"interval_days\": 5, \"due_date\": \"2024-12-19\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n66\t12\tanonymous\t2024-11-26 22:37:00.243924\tmarked_done\t{\"chore_id\":
+      12, \"new_due_date\": \"2024-11-29\"}\n67\t14\tanonymous\t2024-11-26 22:37:08.175836\tmarked_done\t{\"chore_id\":
+      14, \"new_due_date\": \"2024-12-01\"}\n68\t10\tanonymous\t2024-11-26 22:37:16.345494\tmarked_done\t{\"chore_id\":
+      10, \"new_due_date\": \"2024-11-30\"}\n69\t10\tanonymous\t2024-11-26 22:37:23.495904\tmarked_done\t{\"chore_id\":
+      10, \"new_due_date\": \"2024-11-30\"}\n70\t10\t\\N\t2024-11-26 22:37:42.702121\tupdated\t{\"previous_state\":
+      {\"id\": 10, \"name\": \"Gelber Sack\", \"interval_days\": 4, \"due_date\":
+      \"2024-11-30\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n71\t10\t\\N\t2024-11-26
+      22:37:42.796078\tupdated\t{\"previous_state\": {\"id\": 10, \"name\": \"Gelber
+      Sack\", \"interval_days\": 4, \"due_date\": \"2024-11-27\", \"done\": true,
+      \"done_by\": \"anonymous\", \"archived\": false}}\n72\t9\tanonymous\t2024-11-26
+      22:37:51.079498\tmarked_done\t{\"chore_id\": 9, \"new_due_date\": \"2024-11-29\"}\n73\t9\tanonymous\t2024-11-26
+      22:37:53.807559\tmarked_done\t{\"chore_id\": 9, \"new_due_date\": \"2024-11-29\"}\n74\t12\tanonymous\t2024-11-26
+      22:40:56.366766\tmarked_done\t{\"chore_id\": 12, \"new_due_date\": \"2024-11-29\"}\n75\t14\tanonymous\t2024-11-26
+      22:41:06.100328\tmarked_done\t{\"chore_id\": 14, \"new_due_date\": \"2024-12-01\"}\n76\t12\t\\N\t2024-11-26
+      22:41:31.424321\tupdated\t{\"previous_state\": {\"id\": 12, \"name\": \"Staubsaugen
+      Wohnzimmer und K\\\\u00fcche \", \"interval_days\": 3, \"due_date\": \"2024-11-29\",
+      \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n77\t12\t\\N\t2024-11-26
+      22:41:31.533873\tupdated\t{\"previous_state\": {\"id\": 12, \"name\": \"Staubsaugen
+      Wohnzimmer und K\\\\u00fcche \", \"interval_days\": 4, \"due_date\": \"2024-11-29\",
+      \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n78\t12\tanonymous\t2024-11-26
+      22:41:33.279776\tmarked_done\t{\"chore_id\": 12, \"new_due_date\": \"2024-11-30\"}\n79\t15\tanonymous\t2024-11-26
+      22:41:44.219671\tmarked_done\t{\"chore_id\": 15, \"new_due_date\": \"2024-12-01\"}\n80\t14\tanonymous\t2024-11-26
+      22:42:53.291216\tmarked_done\t{\"chore_id\": 14, \"new_due_date\": \"2024-12-01\"}\n81\t15\tanonymous\t2024-11-26
+      22:42:54.806123\tmarked_done\t{\"chore_id\": 15, \"new_due_date\": \"2024-12-01\"}\n82\t12\tanonymous\t2024-11-26
+      22:42:56.30472\tmarked_done\t{\"chore_id\": 12, \"new_due_date\": \"2024-11-30\"}\n83\t4\tanonymous\t2024-11-26
+      22:46:14.84047\tmarked_done\t{\"chore_id\": 4, \"new_due_date\": \"2024-11-30\"}\n84\t4\t\\N\t2024-11-26
+      22:46:23.586326\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\",
+      \"interval_days\": 4, \"due_date\": \"2024-11-30\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n85\t4\t\\N\t2024-11-26 22:46:23.705744\tupdated\t{\"previous_state\":
+      {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\":
+      \"2024-11-26\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n86\t11\tanonymous\t2024-11-26
+      22:46:41.571797\tmarked_done\t{\"chore_id\": 11, \"new_due_date\": \"2024-12-01\"}\n87\t11\t\\N\t2024-11-26
+      22:46:54.523838\tupdated\t{\"previous_state\": {\"id\": 11, \"name\": \"Staubsaugen
+      Treppe Oben\", \"interval_days\": 5, \"due_date\": \"2024-12-01\", \"done\":
+      true, \"done_by\": \"anonymous\", \"archived\": false}}\n88\t11\t\\N\t2024-11-26
+      22:46:54.637301\tupdated\t{\"previous_state\": {\"id\": 11, \"name\": \"Staubsaugen
+      Treppe Oben\", \"interval_days\": 5, \"due_date\": \"2024-11-27\", \"done\":
+      true, \"done_by\": \"anonymous\", \"archived\": false}}\n89\t16\t\\N\t2024-11-26
+      22:47:30.97516\tcreated\t{\"id\": null, \"name\": \"Wasserkocher entkalken\",
+      \"interval_days\": 90, \"due_date\": \"2024-12-17\", \"done\": false, \"done_by\":
+      null, \"archived\": false}\n90\t17\t\\N\t2024-11-26 22:48:37.240795\tcreated\t{\"id\":
+      null, \"name\": \"Wohnzimmertisch wischen\", \"interval_days\": 3, \"due_date\":
+      \"2024-11-26\", \"done\": false, \"done_by\": null, \"archived\": false}\n91\t18\t\\N\t2024-11-26
+      22:50:00.40365\tcreated\t{\"id\": null, \"name\": \"Kaffeemaschine leeren\",
+      \"interval_days\": 4, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\":
+      null, \"archived\": false}\n92\t19\t\\N\t2024-11-26 22:51:35.091862\tcreated\t{\"id\":
+      null, \"name\": \"Bad Waschbecken wischen\", \"interval_days\": 5, \"due_date\":
+      \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}\n93\t20\t\\N\t2024-11-26
+      22:52:44.05452\tcreated\t{\"id\": null, \"name\": \"Mikrowelle reinigen \",
+      \"interval_days\": 21, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\":
+      null, \"archived\": false}\n94\t21\t\\N\t2024-11-26 22:53:31.325453\tcreated\t{\"id\":
+      null, \"name\": \"Staubwischen Wohnzimmer\", \"interval_days\": 6, \"due_date\":
+      \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}\n95\t22\t\\N\t2024-11-26
+      22:53:50.898543\tcreated\t{\"id\": null, \"name\": \"Staubwischen Bad\", \"interval_days\":
+      6, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\":
+      false}\n96\t23\t\\N\t2024-11-26 22:54:29.993154\tcreated\t{\"id\": null, \"name\":
+      \"Dunstabzugshaube reinigen \", \"interval_days\": 180, \"due_date\": \"2024-12-12\",
+      \"done\": false, \"done_by\": null, \"archived\": false}\n97\t24\t\\N\t2024-11-26
+      22:55:00.486866\tcreated\t{\"id\": null, \"name\": \"Gefrierfach enteisen\",
+      \"interval_days\": 180, \"due_date\": \"2024-12-20\", \"done\": false, \"done_by\":
+      null, \"archived\": false}\n98\t25\t\\N\t2024-11-26 22:55:48.348077\tcreated\t{\"id\":
+      null, \"name\": \"K\\\\u00fcchenfronten abwischen \", \"interval_days\": 30,
+      \"due_date\": \"2024-11-30\", \"done\": false, \"done_by\": null, \"archived\":
+      false}\n99\t26\t\\N\t2024-11-26 23:28:40.069883\tcreated\t{\"id\": null, \"name\":
+      \"Sp\\\\u00fclbecken wischen\", \"interval_days\": 8, \"due_date\": \"2024-12-02\",
+      \"done\": false, \"done_by\": null, \"archived\": false}\n100\t27\t\\N\t2024-11-26
+      23:29:33.14108\tcreated\t{\"id\": null, \"name\": \"Pflanzen gie\\\\u00dfen
+      \", \"interval_days\": 4, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\":
+      null, \"archived\": false}\n101\t4\tanonymous\t2024-11-26 23:29:53.207914\tmarked_done\t{\"chore_id\":
+      4, \"new_due_date\": \"2024-11-30\"}\n102\t4\t\\N\t2024-11-26 23:30:06.286711\tupdated\t{\"previous_state\":
+      {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\":
+      \"2024-11-30\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n103\t4\t\\N\t2024-11-26
+      23:30:06.392988\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\",
+      \"interval_days\": 4, \"due_date\": \"2024-11-25\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n104\t28\t\\N\t2024-11-26 23:31:47.896996\tcreated\t{\"id\":
+      null, \"name\": \"Treppenhaus staubsaugen \", \"interval_days\": 14, \"due_date\":
+      \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}\n105\t29\t\\N\t2024-11-26
+      23:32:39.877001\tcreated\t{\"id\": null, \"name\": \"K\\\\u00fchlschrank aufr\\\\u00e4umen
+      \", \"interval_days\": 7, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\":
+      null, \"archived\": false}\n106\t30\t\\N\t2024-11-26 23:32:57.546387\tcreated\t{\"id\":
+      null, \"name\": \"Altglas wegbringen \", \"interval_days\": 7, \"due_date\":
+      \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}\n107\t18\tanonymous\t2024-11-26
+      23:33:08.700899\tmarked_done\t{\"chore_id\": 18, \"new_due_date\": \"2024-11-30\"}\n108\t29\t\\N\t2024-11-26
+      23:33:35.171803\tupdated\t{\"previous_state\": {\"id\": 29, \"name\": \"K\\\\u00fchlschrank
+      aufr\\\\u00e4umen \", \"interval_days\": 7, \"due_date\": \"2024-11-28\", \"done\":
+      false, \"done_by\": null, \"archived\": false}}\n109\t29\t\\N\t2024-11-26 23:33:35.275493\tupdated\t{\"previous_state\":
+      {\"id\": 29, \"name\": \"K\\\\u00fchlschrank aufr\\\\u00e4umen \", \"interval_days\":
+      7, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\":
+      false}}\n110\t7\t\\N\t2024-11-26 23:34:05.996083\tarchived\t{}\n111\t7\t\\N\t2024-11-26
+      23:34:06.131329\tarchived\t{}\n112\t31\t\\N\t2024-11-26 23:36:28.270525\tcreated\t{\"id\":
+      null, \"name\": \"Spiegel Bad putzen\", \"interval_days\": 6, \"due_date\":
+      \"2024-11-26\", \"done\": false, \"done_by\": null, \"archived\": false}\n113\t32\t\\N\t2024-11-26
+      23:38:27.069745\tcreated\t{\"id\": null, \"name\": \"Abtropfding K\\\\u00fcche
+      reinigen \", \"interval_days\": 12, \"due_date\": \"2024-11-27\", \"done\":
+      false, \"done_by\": null, \"archived\": false}\n114\t33\t\\N\t2024-11-26 23:41:01.02104\tcreated\t{\"id\":
+      null, \"name\": \"Staubwischen Galerie\", \"interval_days\": 10, \"due_date\":
+      \"2024-12-03\", \"done\": false, \"done_by\": null, \"archived\": false}\n115\t34\t\\N\t2024-11-26
+      23:41:24.038094\tcreated\t{\"id\": null, \"name\": \"Staubwischen Bad\", \"interval_days\":
+      8, \"due_date\": \"2024-12-05\", \"done\": false, \"done_by\": null, \"archived\":
+      false}\n116\t35\t\\N\t2024-11-26 23:42:42.74223\tcreated\t{\"id\": null, \"name\":
+      \"Dusche putzen\", \"interval_days\": 60, \"due_date\": \"2024-12-07\", \"done\":
+      false, \"done_by\": null, \"archived\": false}\n117\t36\t\\N\t2024-11-26 23:43:08.887691\tcreated\t{\"id\":
+      null, \"name\": \"Handt\\\\u00fccher waschen \", \"interval_days\": 8, \"due_date\":
+      \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}\n118\t31\tanonymous\t2024-11-27
+      16:18:42.151231\tmarked_done\t{\"chore_id\": 31, \"new_due_date\": \"2024-12-03\"}\n119\t19\tanonymous\t2024-11-27
+      16:19:12.82217\tmarked_done\t{\"chore_id\": 19, \"new_due_date\": \"2024-12-02\"}\n120\t27\tanonymous\t2024-11-27
+      20:28:59.812326\tmarked_done\t{\"chore_id\": 27, \"new_due_date\": \"2024-12-01\"}\n121\t4\tanonymous\t2024-11-27
+      20:34:00.434318\tmarked_done\t{\"chore_id\": 4, \"new_due_date\": \"2024-12-01\"}\n122\t4\t\\N\t2024-11-27
+      20:35:33.222305\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\",
+      \"interval_days\": 4, \"due_date\": \"2024-12-01\", \"done\": true, \"done_by\":
+      \"anonymous\", \"archived\": false}}\n123\t4\t\\N\t2024-11-27 20:35:33.3817\tupdated\t{\"previous_state\":
+      {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\":
+      \"2024-11-27\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n124\t30\t\\N\t2024-11-27
+      20:35:56.416611\tupdated\t{\"previous_state\": {\"id\": 30, \"name\": \"Altglas
+      wegbringen \", \"interval_days\": 7, \"due_date\": \"2024-11-27\", \"done\":
+      false, \"done_by\": null, \"archived\": false}}\n125\t30\t\\N\t2024-11-27 20:35:56.506848\tupdated\t{\"previous_state\":
+      {\"id\": 30, \"name\": \"Altglas wegbringen \", \"interval_days\": 7, \"due_date\":
+      \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}}\n126\t11\tanonymous\t2024-11-29
+      12:46:51.94968\tmarked_done\t{\"chore_id\": 11, \"new_due_date\": \"2024-12-04\"}\n127\t28\t\\N\t2024-11-29
+      12:47:17.033145\tupdated\t{\"previous_state\": {\"id\": 28, \"name\": \"Treppenhaus
+      staubsaugen \", \"interval_days\": 14, \"due_date\": \"2024-11-29\", \"done\":
+      false, \"done_by\": null, \"archived\": false}}\n128\t28\t\\N\t2024-11-29 12:47:17.140509\tupdated\t{\"previous_state\":
+      {\"id\": 28, \"name\": \"Treppenhaus staubsaugen \", \"interval_days\": 14,
+      \"due_date\": \"2024-11-30\", \"done\": false, \"done_by\": null, \"archived\":
+      false}}\n129\t13\tanonymous\t2024-11-29 13:07:36.028135\tmarked_done\t{\"chore_id\":
+      13, \"new_due_date\": \"2024-12-02\"}\n130\t12\tanonymous\t2024-11-29 13:37:02.549488\tmarked_done\t{\"chore_id\":
+      12, \"new_due_date\": \"2024-12-03\"}\n131\t9\tanonymous\t2024-11-29 14:02:30.426229\tmarked_done\t{\"chore_id\":
+      9, \"new_due_date\": \"2024-12-02\"}\n132\t4\tanonymous\t2024-11-29 14:02:33.519475\tmarked_done\t{\"chore_id\":
+      4, \"new_due_date\": \"2024-12-03\"}\n133\t10\tanonymous\t2024-11-29 14:02:35.395774\tmarked_done\t{\"chore_id\":
+      10, \"new_due_date\": \"2024-12-03\"}\n134\t30\tanonymous\t2024-11-29 14:02:40.845744\tmarked_done\t{\"chore_id\":
+      30, \"new_due_date\": \"2024-12-06\"}\n135\t17\tanonymous\t2024-11-29 14:24:48.869843\tmarked_done\t{\"chore_id\":
+      17, \"new_due_date\": \"2024-12-02\"}\n136\t21\tanonymous\t2024-11-29 14:24:50.742688\tmarked_done\t{\"chore_id\":
+      21, \"new_due_date\": \"2024-12-05\"}\n\\.\n\n\n--\n-- Data for Name: chores;
+      Type: TABLE DATA; Schema: public; Owner: admin\n--\n\nCOPY public.chores (id,
+      name, interval_days, due_date, done, done_by, archived) FROM stdin;\n13\tStaubsaugen
+      Galerie, Bad und Balkon \t3\t2024-12-02\tt\tanonymous\tf\n2\ttest2\t1\t2024-11-26\tf\t\\N\tt\n12\tStaubsaugen
+      Wohnzimmer und Küche \t4\t2024-12-03\tt\tanonymous\tf\n9\tRestmüll\t3\t2024-12-02\tt\tanonymous\tf\n4\tPapiermüll\t4\t2024-12-03\tt\tanonymous\tf\n3\ttest3\t10\t2024-12-07\tf\t\\N\tt\n10\tGelber
+      Sack\t4\t2024-12-03\tt\tanonymous\tf\n30\tAltglas wegbringen \t7\t2024-12-06\tt\tanonymous\tf\n17\tWohnzimmertisch
+      wischen\t3\t2024-12-02\tt\tanonymous\tf\n21\tStaubwischen Wohnzimmer\t6\t2024-12-05\tt\tanonymous\tf\n1\ttest1\t5\t2024-11-27\tf\t\\N\tt\n5\tlkn\t9\t2024-12-07\tf\t\\N\tt\n6\tjbhkjb\t4\t2024-12-01\tt\tanonymous\tt\n14\tStaubsaugen
+      Treppe Unten\t5\t2024-12-01\tt\tanonymous\tf\n15\tKlo putzen\t5\t2024-12-01\tt\tanonymous\tf\n16\tWasserkocher
+      entkalken\t90\t2024-12-17\tf\t\\N\tf\n8\twahdawdwada\t5\t2024-12-14\tt\tanonymous\tt\n20\tMikrowelle
+      reinigen \t21\t2024-11-28\tf\t\\N\tf\n22\tStaubwischen Bad\t6\t2024-11-29\tf\t\\N\tf\n23\tDunstabzugshaube
+      reinigen \t180\t2024-12-12\tf\t\\N\tf\n24\tGefrierfach enteisen\t180\t2024-12-20\tf\t\\N\tf\n25\tKüchenfronten
+      abwischen \t30\t2024-11-30\tf\t\\N\tf\n26\tSpülbecken wischen\t8\t2024-12-02\tf\t\\N\tf\n18\tKaffeemaschine
+      leeren\t4\t2024-11-30\tt\tanonymous\tf\n29\tKühlschrank aufräumen \t7\t2024-11-27\tf\t\\N\tf\n7\ttestmann\t5\t2024-12-19\tt\tanonymous\tt\n32\tAbtropfding
+      Küche reinigen \t12\t2024-11-27\tf\t\\N\tf\n33\tStaubwischen Galerie\t10\t2024-12-03\tf\t\\N\tf\n34\tStaubwischen
+      Bad\t8\t2024-12-05\tf\t\\N\tf\n35\tDusche putzen\t60\t2024-12-07\tf\t\\N\tf\n36\tHandtücher
+      waschen \t8\t2024-11-29\tf\t\\N\tf\n31\tSpiegel Bad putzen\t6\t2024-12-03\tt\tanonymous\tf\n19\tBad
+      Waschbecken wischen\t5\t2024-12-02\tt\tanonymous\tf\n27\tPflanzen gießen \t4\t2024-12-01\tt\tanonymous\tf\n11\tStaubsaugen
+      Treppe Oben\t5\t2024-12-04\tt\tanonymous\tf\n28\tTreppenhaus staubsaugen \t14\t2024-11-30\tf\t\\N\tf\n\\.\n\n\n--\n--
+      Name: chore_logs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin\n--\n\nSELECT
+      pg_catalog.setval('public.chore_logs_id_seq', 136, true);\n\n\n--\n-- Name:
+      chores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin\n--\n\nSELECT
+      pg_catalog.setval('public.chores_id_seq', 36, true);\n\n\n--\n-- Name: chore_logs
+      chore_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: admin\n--\n\nALTER
+      TABLE ONLY public.chore_logs\n    ADD CONSTRAINT chore_logs_pkey PRIMARY KEY
+      (id);\n\n\n--\n-- Name: chores chores_pkey; Type: CONSTRAINT; Schema: public;
+      Owner: admin\n--\n\nALTER TABLE ONLY public.chores\n    ADD CONSTRAINT chores_pkey
+      PRIMARY KEY (id);\n\n\n--\n-- Name: chore_logs chore_logs_chore_id_fkey; Type:
+      FK CONSTRAINT; Schema: public; Owner: admin\n--\n\nALTER TABLE ONLY public.chore_logs\n
+      \   ADD CONSTRAINT chore_logs_chore_id_fkey FOREIGN KEY (chore_id) REFERENCES
+      public.chores(id) ON DELETE CASCADE;\n\n\n--\n-- Name: SCHEMA public; Type:
+      ACL; Schema: -; Owner: admin\n--\n\nREVOKE USAGE ON SCHEMA public FROM PUBLIC;\nGRANT
+      ALL ON SCHEMA public TO PUBLIC;\n\n\n--\n-- PostgreSQL database dump complete\n--\n"
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"backup.sql":"--\n-- PostgreSQL database dump\n--\n\n-- Dumped from database version 14.13 (Debian 14.13-1.pgdg120+1)\n-- Dumped by pg_dump version 15.6\n\nSET statement_timeout = 0;\nSET lock_timeout = 0;\nSET idle_in_transaction_session_timeout = 0;\nSET client_encoding = 'UTF8';\nSET standard_conforming_strings = on;\nSELECT pg_catalog.set_config('search_path', '', false);\nSET check_function_bodies = false;\nSET xmloption = content;\nSET client_min_messages = warning;\nSET row_security = off;\n\n--\n-- Name: public; Type: SCHEMA; Schema: -; Owner: admin\n--\n\n-- *not* creating schema, since initdb creates it\n\n\nALTER SCHEMA public OWNER TO admin;\n\nSET default_tablespace = '';\n\nSET default_table_access_method = heap;\n\n--\n-- Name: chore_logs; Type: TABLE; Schema: public; Owner: admin\n--\n\nCREATE TABLE public.chore_logs (\n    id integer NOT NULL,\n    chore_id integer NOT NULL,\n    done_by character varying(255),\n    done_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,\n    action_type character varying(50) NOT NULL,\n    action_details json\n);\n\n\nALTER TABLE public.chore_logs OWNER TO admin;\n\n--\n-- Name: chore_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: admin\n--\n\nCREATE SEQUENCE public.chore_logs_id_seq\n    AS integer\n    START WITH 1\n    INCREMENT BY 1\n    NO MINVALUE\n    NO MAXVALUE\n    CACHE 1;\n\n\nALTER TABLE public.chore_logs_id_seq OWNER TO admin;\n\n--\n-- Name: chore_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin\n--\n\nALTER SEQUENCE public.chore_logs_id_seq OWNED BY public.chore_logs.id;\n\n\n--\n-- Name: chores; Type: TABLE; Schema: public; Owner: admin\n--\n\nCREATE TABLE public.chores (\n    id integer NOT NULL,\n    name character varying(255) NOT NULL,\n    interval_days integer NOT NULL,\n    due_date date NOT NULL,\n    done boolean DEFAULT false,\n    done_by character varying(255),\n    archived boolean DEFAULT false\n);\n\n\nALTER TABLE public.chores OWNER TO admin;\n\n--\n-- Name: chores_id_seq; Type: SEQUENCE; Schema: public; Owner: admin\n--\n\nCREATE SEQUENCE public.chores_id_seq\n    AS integer\n    START WITH 1\n    INCREMENT BY 1\n    NO MINVALUE\n    NO MAXVALUE\n    CACHE 1;\n\n\nALTER TABLE public.chores_id_seq OWNER TO admin;\n\n--\n-- Name: chores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: admin\n--\n\nALTER SEQUENCE public.chores_id_seq OWNED BY public.chores.id;\n\n\n--\n-- Name: chore_logs id; Type: DEFAULT; Schema: public; Owner: admin\n--\n\nALTER TABLE ONLY public.chore_logs ALTER COLUMN id SET DEFAULT nextval('public.chore_logs_id_seq'::regclass);\n\n\n--\n-- Name: chores id; Type: DEFAULT; Schema: public; Owner: admin\n--\n\nALTER TABLE ONLY public.chores ALTER COLUMN id SET DEFAULT nextval('public.chores_id_seq'::regclass);\n\n\n--\n-- Data for Name: chore_logs; Type: TABLE DATA; Schema: public; Owner: admin\n--\n\nCOPY public.chore_logs (id, chore_id, done_by, done_at, action_type, action_details) FROM stdin;\n1\t4\t\\N\t2024-11-26 19:20:41.869536\tcreated\t{\"id\": null, \"name\": \"sdasdada\", \"interval_days\": 1, \"due_date\": \"2024-11-26\", \"done\": false, \"done_by\": null, \"archived\": false}\n2\t1\t\\N\t2024-11-26 19:21:02.19762\tarchived\t{}\n3\t1\t\\N\t2024-11-26 19:21:02.290216\tarchived\t{}\n4\t5\t\\N\t2024-11-26 19:21:17.340872\tcreated\t{\"id\": null, \"name\": \"lkn\", \"interval_days\": 9, \"due_date\": \"2024-12-07\", \"done\": false, \"done_by\": null, \"archived\": false}\n5\t6\t\\N\t2024-11-26 19:21:32.184775\tcreated\t{\"id\": null, \"name\": \"jbhkjb\", \"interval_days\": 3, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}\n6\t7\t\\N\t2024-11-26 19:23:46.002788\tcreated\t{\"id\": null, \"name\": \"testmann\", \"interval_days\": 5, \"due_date\": \"2024-12-06\", \"done\": false, \"done_by\": null, \"archived\": false}\n7\t6\tanonymous\t2024-11-26 19:25:37.786516\tmarked_done\t{}\n8\t4\tanonymous\t2024-11-26 19:25:43.908288\tmarked_done\t{}\n9\t7\tanonymous\t2024-11-26 19:25:48.447531\tmarked_done\t{}\n10\t5\t\\N\t2024-11-26 19:30:16.423693\tarchived\t{}\n11\t5\t\\N\t2024-11-26 19:30:16.512766\tarchived\t{}\n12\t8\t\\N\t2024-11-26 19:30:31.075594\tcreated\t{\"id\": null, \"name\": \"wahdawdwada\", \"interval_days\": 2, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}\n13\t8\t\\N\t2024-11-26 19:30:47.975558\tupdated\t{\"previous_state\": {\"id\": 8, \"name\": \"wahdawdwada\", \"interval_days\": 2, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}}\n14\t8\t\\N\t2024-11-26 19:30:48.065747\tupdated\t{\"previous_state\": {\"id\": 8, \"name\": \"wahdawdwada\", \"interval_days\": 3, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}}\n15\t8\t\\N\t2024-11-26 19:30:52.678395\tupdated\t{\"previous_state\": {\"id\": 8, \"name\": \"wahdawdwada\", \"interval_days\": 3, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}}\n16\t8\t\\N\t2024-11-26 19:30:52.773288\tupdated\t{\"previous_state\": {\"id\": 8, \"name\": \"wahdawdwada\", \"interval_days\": 5, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}}\n17\t8\tanonymous\t2024-11-26 19:30:55.52265\tmarked_done\t{}\n18\t8\tanonymous\t2024-11-26 19:31:03.866378\tmarked_done\t{}\n19\t8\tanonymous\t2024-11-26 19:31:05.254578\tmarked_done\t{}\n20\t7\t\\N\t2024-11-26 19:31:21.284939\tupdated\t{\"previous_state\": {\"id\": 7, \"name\": \"testmann\", \"interval_days\": 5, \"due_date\": \"2024-12-11\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n21\t7\t\\N\t2024-11-26 19:31:21.383946\tupdated\t{\"previous_state\": {\"id\": 7, \"name\": \"testmann\", \"interval_days\": 5, \"due_date\": \"2024-11-26\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n22\t6\tanonymous\t2024-11-26 19:37:17.78443\tmarked_done\t{}\n23\t4\t\\N\t2024-11-26 19:37:24.960593\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"sdasdada\", \"interval_days\": 1, \"due_date\": \"2024-11-27\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n24\t4\t\\N\t2024-11-26 19:37:25.071933\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"sdasdada\", \"interval_days\": 2, \"due_date\": \"2024-11-27\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n25\t6\t\\N\t2024-11-26 19:37:54.051785\tarchived\t{}\n26\t6\t\\N\t2024-11-26 19:37:54.138841\tarchived\t{}\n27\t9\t\\N\t2024-11-26 19:38:10.33602\tcreated\t{\"id\": null, \"name\": \"restmuell\", \"interval_days\": 3, \"due_date\": \"2024-11-26\", \"done\": false, \"done_by\": null, \"archived\": false}\n28\t7\tanonymous\t2024-11-26 19:38:12.837518\tmarked_done\t{}\n29\t9\tanonymous\t2024-11-26 19:40:51.514403\tmarked_done\t{}\n30\t10\t\\N\t2024-11-26 19:42:00.785335\tcreated\t{\"id\": null, \"name\": \"gelber sack\", \"interval_days\": 4, \"due_date\": \"2024-11-26\", \"done\": false, \"done_by\": null, \"archived\": false}\n31\t4\tanonymous\t2024-11-26 19:42:31.086886\tmarked_done\t{}\n32\t9\tanonymous\t2024-11-26 19:46:41.539322\tmarked_done\t{\"chore_id\": 9, \"new_due_date\": \"2024-12-02\"}\n33\t9\tanonymous\t2024-11-26 19:46:47.009196\tmarked_done\t{\"chore_id\": 9, \"new_due_date\": \"2024-12-05\"}\n34\t4\tanonymous\t2024-11-26 19:47:56.218797\tmarked_done\t{\"chore_id\": 4, \"new_due_date\": \"2024-12-01\"}\n35\t9\tanonymous\t2024-11-26 19:48:13.322855\tmarked_done\t{\"chore_id\": 9, \"new_due_date\": \"2024-12-08\"}\n36\t4\t\\N\t2024-11-26 19:48:30.903006\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"sdasdada\", \"interval_days\": 2, \"due_date\": \"2024-12-01\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n37\t4\t\\N\t2024-11-26 19:48:31.001473\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"sdasdada\", \"interval_days\": 3, \"due_date\": \"2024-11-29\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n38\t7\tanonymous\t2024-11-26 19:51:18.399416\tmarked_done\t{\"chore_id\": 7, \"new_due_date\": \"2024-12-06\"}\n40\t10\tanonymous\t2024-11-26 19:53:39.999841\tmarked_done\t{\"chore_id\": 10, \"new_due_date\": \"2024-11-30\"}\n41\t11\t\\N\t2024-11-26 21:02:57.956715\tcreated\t{\"id\": null, \"name\": \"Staubsaugen Treppe Oben\", \"interval_days\": 5, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}\n42\t10\tanonymous\t2024-11-26 21:03:05.706824\tmarked_done\t{\"chore_id\": 10, \"new_due_date\": \"2024-12-04\"}\n43\t8\t\\N\t2024-11-26 21:03:29.456754\tarchived\t{}\n44\t8\t\\N\t2024-11-26 21:03:29.628967\tarchived\t{}\n45\t9\t\\N\t2024-11-26 21:03:45.526819\tupdated\t{\"previous_state\": {\"id\": 9, \"name\": \"restmuell\", \"interval_days\": 3, \"due_date\": \"2024-12-08\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n46\t9\t\\N\t2024-11-26 21:03:45.651217\tupdated\t{\"previous_state\": {\"id\": 9, \"name\": \"restmuell\", \"interval_days\": 3, \"due_date\": \"2024-11-27\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n47\t9\t\\N\t2024-11-26 21:05:22.860951\tupdated\t{\"previous_state\": {\"id\": 9, \"name\": \"restmuell\", \"interval_days\": 3, \"due_date\": \"2024-11-27\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n48\t9\t\\N\t2024-11-26 21:05:22.963778\tupdated\t{\"previous_state\": {\"id\": 9, \"name\": \"Restm\\\\u00fcll\", \"interval_days\": 3, \"due_date\": \"2024-11-27\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n49\t4\t\\N\t2024-11-26 21:05:48.64858\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"sdasdada\", \"interval_days\": 3, \"due_date\": \"2024-11-29\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n50\t4\t\\N\t2024-11-26 21:05:48.763916\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\": \"2024-11-26\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n51\t10\t\\N\t2024-11-26 21:27:42.644915\tupdated\t{\"previous_state\": {\"id\": 10, \"name\": \"gelber sack\", \"interval_days\": 4, \"due_date\": \"2024-12-04\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n52\t10\t\\N\t2024-11-26 21:27:42.781093\tupdated\t{\"previous_state\": {\"id\": 10, \"name\": \"Gelber Sack\", \"interval_days\": 4, \"due_date\": \"2024-12-04\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n53\t12\t\\N\t2024-11-26 21:28:03.582647\tcreated\t{\"id\": null, \"name\": \"Staubsaugen Wohnzimmer und K\\\\u00fcche \", \"interval_days\": 3, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}\n54\t13\t\\N\t2024-11-26 21:28:46.905962\tcreated\t{\"id\": null, \"name\": \"Staubsaugen Galerie, Bad und Balkon \", \"interval_days\": 3, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}\n55\t14\t\\N\t2024-11-26 21:29:06.763421\tcreated\t{\"id\": null, \"name\": \"Staubsaugen Treppe Unten\", \"interval_days\": 5, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}\n56\t15\t\\N\t2024-11-26 21:29:45.568576\tcreated\t{\"id\": null, \"name\": \"Klo putzen\", \"interval_days\": 5, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}\n58\t4\tanonymous\t2024-11-26 22:23:24.682144\tmarked_done\t{\"chore_id\": 4, \"new_due_date\": \"2024-11-30\"}\n59\t4\tanonymous\t2024-11-26 22:29:26.420349\tmarked_done\t{\"chore_id\": 4, \"new_due_date\": \"2024-12-04\"}\n60\t4\t\\N\t2024-11-26 22:29:33.38531\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\": \"2024-12-04\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n61\t4\t\\N\t2024-11-26 22:29:33.492201\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\": \"2024-11-26\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n62\t10\tanonymous\t2024-11-26 22:36:36.568095\tmarked_done\t{\"chore_id\": 10, \"new_due_date\": \"2024-11-30\"}\n63\t7\tanonymous\t2024-11-26 22:36:41.414905\tmarked_done\t{\"chore_id\": 7, \"new_due_date\": \"2024-12-01\"}\n64\t7\t\\N\t2024-11-26 22:36:50.411775\tupdated\t{\"previous_state\": {\"id\": 7, \"name\": \"testmann\", \"interval_days\": 5, \"due_date\": \"2024-12-01\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n65\t7\t\\N\t2024-11-26 22:36:50.508203\tupdated\t{\"previous_state\": {\"id\": 7, \"name\": \"testmann\", \"interval_days\": 5, \"due_date\": \"2024-12-19\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n66\t12\tanonymous\t2024-11-26 22:37:00.243924\tmarked_done\t{\"chore_id\": 12, \"new_due_date\": \"2024-11-29\"}\n67\t14\tanonymous\t2024-11-26 22:37:08.175836\tmarked_done\t{\"chore_id\": 14, \"new_due_date\": \"2024-12-01\"}\n68\t10\tanonymous\t2024-11-26 22:37:16.345494\tmarked_done\t{\"chore_id\": 10, \"new_due_date\": \"2024-11-30\"}\n69\t10\tanonymous\t2024-11-26 22:37:23.495904\tmarked_done\t{\"chore_id\": 10, \"new_due_date\": \"2024-11-30\"}\n70\t10\t\\N\t2024-11-26 22:37:42.702121\tupdated\t{\"previous_state\": {\"id\": 10, \"name\": \"Gelber Sack\", \"interval_days\": 4, \"due_date\": \"2024-11-30\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n71\t10\t\\N\t2024-11-26 22:37:42.796078\tupdated\t{\"previous_state\": {\"id\": 10, \"name\": \"Gelber Sack\", \"interval_days\": 4, \"due_date\": \"2024-11-27\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n72\t9\tanonymous\t2024-11-26 22:37:51.079498\tmarked_done\t{\"chore_id\": 9, \"new_due_date\": \"2024-11-29\"}\n73\t9\tanonymous\t2024-11-26 22:37:53.807559\tmarked_done\t{\"chore_id\": 9, \"new_due_date\": \"2024-11-29\"}\n74\t12\tanonymous\t2024-11-26 22:40:56.366766\tmarked_done\t{\"chore_id\": 12, \"new_due_date\": \"2024-11-29\"}\n75\t14\tanonymous\t2024-11-26 22:41:06.100328\tmarked_done\t{\"chore_id\": 14, \"new_due_date\": \"2024-12-01\"}\n76\t12\t\\N\t2024-11-26 22:41:31.424321\tupdated\t{\"previous_state\": {\"id\": 12, \"name\": \"Staubsaugen Wohnzimmer und K\\\\u00fcche \", \"interval_days\": 3, \"due_date\": \"2024-11-29\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n77\t12\t\\N\t2024-11-26 22:41:31.533873\tupdated\t{\"previous_state\": {\"id\": 12, \"name\": \"Staubsaugen Wohnzimmer und K\\\\u00fcche \", \"interval_days\": 4, \"due_date\": \"2024-11-29\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n78\t12\tanonymous\t2024-11-26 22:41:33.279776\tmarked_done\t{\"chore_id\": 12, \"new_due_date\": \"2024-11-30\"}\n79\t15\tanonymous\t2024-11-26 22:41:44.219671\tmarked_done\t{\"chore_id\": 15, \"new_due_date\": \"2024-12-01\"}\n80\t14\tanonymous\t2024-11-26 22:42:53.291216\tmarked_done\t{\"chore_id\": 14, \"new_due_date\": \"2024-12-01\"}\n81\t15\tanonymous\t2024-11-26 22:42:54.806123\tmarked_done\t{\"chore_id\": 15, \"new_due_date\": \"2024-12-01\"}\n82\t12\tanonymous\t2024-11-26 22:42:56.30472\tmarked_done\t{\"chore_id\": 12, \"new_due_date\": \"2024-11-30\"}\n83\t4\tanonymous\t2024-11-26 22:46:14.84047\tmarked_done\t{\"chore_id\": 4, \"new_due_date\": \"2024-11-30\"}\n84\t4\t\\N\t2024-11-26 22:46:23.586326\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\": \"2024-11-30\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n85\t4\t\\N\t2024-11-26 22:46:23.705744\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\": \"2024-11-26\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n86\t11\tanonymous\t2024-11-26 22:46:41.571797\tmarked_done\t{\"chore_id\": 11, \"new_due_date\": \"2024-12-01\"}\n87\t11\t\\N\t2024-11-26 22:46:54.523838\tupdated\t{\"previous_state\": {\"id\": 11, \"name\": \"Staubsaugen Treppe Oben\", \"interval_days\": 5, \"due_date\": \"2024-12-01\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n88\t11\t\\N\t2024-11-26 22:46:54.637301\tupdated\t{\"previous_state\": {\"id\": 11, \"name\": \"Staubsaugen Treppe Oben\", \"interval_days\": 5, \"due_date\": \"2024-11-27\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n89\t16\t\\N\t2024-11-26 22:47:30.97516\tcreated\t{\"id\": null, \"name\": \"Wasserkocher entkalken\", \"interval_days\": 90, \"due_date\": \"2024-12-17\", \"done\": false, \"done_by\": null, \"archived\": false}\n90\t17\t\\N\t2024-11-26 22:48:37.240795\tcreated\t{\"id\": null, \"name\": \"Wohnzimmertisch wischen\", \"interval_days\": 3, \"due_date\": \"2024-11-26\", \"done\": false, \"done_by\": null, \"archived\": false}\n91\t18\t\\N\t2024-11-26 22:50:00.40365\tcreated\t{\"id\": null, \"name\": \"Kaffeemaschine leeren\", \"interval_days\": 4, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}\n92\t19\t\\N\t2024-11-26 22:51:35.091862\tcreated\t{\"id\": null, \"name\": \"Bad Waschbecken wischen\", \"interval_days\": 5, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}\n93\t20\t\\N\t2024-11-26 22:52:44.05452\tcreated\t{\"id\": null, \"name\": \"Mikrowelle reinigen \", \"interval_days\": 21, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}\n94\t21\t\\N\t2024-11-26 22:53:31.325453\tcreated\t{\"id\": null, \"name\": \"Staubwischen Wohnzimmer\", \"interval_days\": 6, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}\n95\t22\t\\N\t2024-11-26 22:53:50.898543\tcreated\t{\"id\": null, \"name\": \"Staubwischen Bad\", \"interval_days\": 6, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}\n96\t23\t\\N\t2024-11-26 22:54:29.993154\tcreated\t{\"id\": null, \"name\": \"Dunstabzugshaube reinigen \", \"interval_days\": 180, \"due_date\": \"2024-12-12\", \"done\": false, \"done_by\": null, \"archived\": false}\n97\t24\t\\N\t2024-11-26 22:55:00.486866\tcreated\t{\"id\": null, \"name\": \"Gefrierfach enteisen\", \"interval_days\": 180, \"due_date\": \"2024-12-20\", \"done\": false, \"done_by\": null, \"archived\": false}\n98\t25\t\\N\t2024-11-26 22:55:48.348077\tcreated\t{\"id\": null, \"name\": \"K\\\\u00fcchenfronten abwischen \", \"interval_days\": 30, \"due_date\": \"2024-11-30\", \"done\": false, \"done_by\": null, \"archived\": false}\n99\t26\t\\N\t2024-11-26 23:28:40.069883\tcreated\t{\"id\": null, \"name\": \"Sp\\\\u00fclbecken wischen\", \"interval_days\": 8, \"due_date\": \"2024-12-02\", \"done\": false, \"done_by\": null, \"archived\": false}\n100\t27\t\\N\t2024-11-26 23:29:33.14108\tcreated\t{\"id\": null, \"name\": \"Pflanzen gie\\\\u00dfen \", \"interval_days\": 4, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}\n101\t4\tanonymous\t2024-11-26 23:29:53.207914\tmarked_done\t{\"chore_id\": 4, \"new_due_date\": \"2024-11-30\"}\n102\t4\t\\N\t2024-11-26 23:30:06.286711\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\": \"2024-11-30\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n103\t4\t\\N\t2024-11-26 23:30:06.392988\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\": \"2024-11-25\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n104\t28\t\\N\t2024-11-26 23:31:47.896996\tcreated\t{\"id\": null, \"name\": \"Treppenhaus staubsaugen \", \"interval_days\": 14, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}\n105\t29\t\\N\t2024-11-26 23:32:39.877001\tcreated\t{\"id\": null, \"name\": \"K\\\\u00fchlschrank aufr\\\\u00e4umen \", \"interval_days\": 7, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}\n106\t30\t\\N\t2024-11-26 23:32:57.546387\tcreated\t{\"id\": null, \"name\": \"Altglas wegbringen \", \"interval_days\": 7, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}\n107\t18\tanonymous\t2024-11-26 23:33:08.700899\tmarked_done\t{\"chore_id\": 18, \"new_due_date\": \"2024-11-30\"}\n108\t29\t\\N\t2024-11-26 23:33:35.171803\tupdated\t{\"previous_state\": {\"id\": 29, \"name\": \"K\\\\u00fchlschrank aufr\\\\u00e4umen \", \"interval_days\": 7, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}}\n109\t29\t\\N\t2024-11-26 23:33:35.275493\tupdated\t{\"previous_state\": {\"id\": 29, \"name\": \"K\\\\u00fchlschrank aufr\\\\u00e4umen \", \"interval_days\": 7, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}}\n110\t7\t\\N\t2024-11-26 23:34:05.996083\tarchived\t{}\n111\t7\t\\N\t2024-11-26 23:34:06.131329\tarchived\t{}\n112\t31\t\\N\t2024-11-26 23:36:28.270525\tcreated\t{\"id\": null, \"name\": \"Spiegel Bad putzen\", \"interval_days\": 6, \"due_date\": \"2024-11-26\", \"done\": false, \"done_by\": null, \"archived\": false}\n113\t32\t\\N\t2024-11-26 23:38:27.069745\tcreated\t{\"id\": null, \"name\": \"Abtropfding K\\\\u00fcche reinigen \", \"interval_days\": 12, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}\n114\t33\t\\N\t2024-11-26 23:41:01.02104\tcreated\t{\"id\": null, \"name\": \"Staubwischen Galerie\", \"interval_days\": 10, \"due_date\": \"2024-12-03\", \"done\": false, \"done_by\": null, \"archived\": false}\n115\t34\t\\N\t2024-11-26 23:41:24.038094\tcreated\t{\"id\": null, \"name\": \"Staubwischen Bad\", \"interval_days\": 8, \"due_date\": \"2024-12-05\", \"done\": false, \"done_by\": null, \"archived\": false}\n116\t35\t\\N\t2024-11-26 23:42:42.74223\tcreated\t{\"id\": null, \"name\": \"Dusche putzen\", \"interval_days\": 60, \"due_date\": \"2024-12-07\", \"done\": false, \"done_by\": null, \"archived\": false}\n117\t36\t\\N\t2024-11-26 23:43:08.887691\tcreated\t{\"id\": null, \"name\": \"Handt\\\\u00fccher waschen \", \"interval_days\": 8, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}\n118\t31\tanonymous\t2024-11-27 16:18:42.151231\tmarked_done\t{\"chore_id\": 31, \"new_due_date\": \"2024-12-03\"}\n119\t19\tanonymous\t2024-11-27 16:19:12.82217\tmarked_done\t{\"chore_id\": 19, \"new_due_date\": \"2024-12-02\"}\n120\t27\tanonymous\t2024-11-27 20:28:59.812326\tmarked_done\t{\"chore_id\": 27, \"new_due_date\": \"2024-12-01\"}\n121\t4\tanonymous\t2024-11-27 20:34:00.434318\tmarked_done\t{\"chore_id\": 4, \"new_due_date\": \"2024-12-01\"}\n122\t4\t\\N\t2024-11-27 20:35:33.222305\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\": \"2024-12-01\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n123\t4\t\\N\t2024-11-27 20:35:33.3817\tupdated\t{\"previous_state\": {\"id\": 4, \"name\": \"Papierm\\\\u00fcll\", \"interval_days\": 4, \"due_date\": \"2024-11-27\", \"done\": true, \"done_by\": \"anonymous\", \"archived\": false}}\n124\t30\t\\N\t2024-11-27 20:35:56.416611\tupdated\t{\"previous_state\": {\"id\": 30, \"name\": \"Altglas wegbringen \", \"interval_days\": 7, \"due_date\": \"2024-11-27\", \"done\": false, \"done_by\": null, \"archived\": false}}\n125\t30\t\\N\t2024-11-27 20:35:56.506848\tupdated\t{\"previous_state\": {\"id\": 30, \"name\": \"Altglas wegbringen \", \"interval_days\": 7, \"due_date\": \"2024-11-28\", \"done\": false, \"done_by\": null, \"archived\": false}}\n126\t11\tanonymous\t2024-11-29 12:46:51.94968\tmarked_done\t{\"chore_id\": 11, \"new_due_date\": \"2024-12-04\"}\n127\t28\t\\N\t2024-11-29 12:47:17.033145\tupdated\t{\"previous_state\": {\"id\": 28, \"name\": \"Treppenhaus staubsaugen \", \"interval_days\": 14, \"due_date\": \"2024-11-29\", \"done\": false, \"done_by\": null, \"archived\": false}}\n128\t28\t\\N\t2024-11-29 12:47:17.140509\tupdated\t{\"previous_state\": {\"id\": 28, \"name\": \"Treppenhaus staubsaugen \", \"interval_days\": 14, \"due_date\": \"2024-11-30\", \"done\": false, \"done_by\": null, \"archived\": false}}\n129\t13\tanonymous\t2024-11-29 13:07:36.028135\tmarked_done\t{\"chore_id\": 13, \"new_due_date\": \"2024-12-02\"}\n130\t12\tanonymous\t2024-11-29 13:37:02.549488\tmarked_done\t{\"chore_id\": 12, \"new_due_date\": \"2024-12-03\"}\n131\t9\tanonymous\t2024-11-29 14:02:30.426229\tmarked_done\t{\"chore_id\": 9, \"new_due_date\": \"2024-12-02\"}\n132\t4\tanonymous\t2024-11-29 14:02:33.519475\tmarked_done\t{\"chore_id\": 4, \"new_due_date\": \"2024-12-03\"}\n133\t10\tanonymous\t2024-11-29 14:02:35.395774\tmarked_done\t{\"chore_id\": 10, \"new_due_date\": \"2024-12-03\"}\n134\t30\tanonymous\t2024-11-29 14:02:40.845744\tmarked_done\t{\"chore_id\": 30, \"new_due_date\": \"2024-12-06\"}\n135\t17\tanonymous\t2024-11-29 14:24:48.869843\tmarked_done\t{\"chore_id\": 17, \"new_due_date\": \"2024-12-02\"}\n136\t21\tanonymous\t2024-11-29 14:24:50.742688\tmarked_done\t{\"chore_id\": 21, \"new_due_date\": \"2024-12-05\"}\n\\.\n\n\n--\n-- Data for Name: chores; Type: TABLE DATA; Schema: public; Owner: admin\n--\n\nCOPY public.chores (id, name, interval_days, due_date, done, done_by, archived) FROM stdin;\n13\tStaubsaugen Galerie, Bad und Balkon \t3\t2024-12-02\tt\tanonymous\tf\n2\ttest2\t1\t2024-11-26\tf\t\\N\tt\n12\tStaubsaugen Wohnzimmer und Küche \t4\t2024-12-03\tt\tanonymous\tf\n9\tRestmüll\t3\t2024-12-02\tt\tanonymous\tf\n4\tPapiermüll\t4\t2024-12-03\tt\tanonymous\tf\n3\ttest3\t10\t2024-12-07\tf\t\\N\tt\n10\tGelber Sack\t4\t2024-12-03\tt\tanonymous\tf\n30\tAltglas wegbringen \t7\t2024-12-06\tt\tanonymous\tf\n17\tWohnzimmertisch wischen\t3\t2024-12-02\tt\tanonymous\tf\n21\tStaubwischen Wohnzimmer\t6\t2024-12-05\tt\tanonymous\tf\n1\ttest1\t5\t2024-11-27\tf\t\\N\tt\n5\tlkn\t9\t2024-12-07\tf\t\\N\tt\n6\tjbhkjb\t4\t2024-12-01\tt\tanonymous\tt\n14\tStaubsaugen Treppe Unten\t5\t2024-12-01\tt\tanonymous\tf\n15\tKlo putzen\t5\t2024-12-01\tt\tanonymous\tf\n16\tWasserkocher entkalken\t90\t2024-12-17\tf\t\\N\tf\n8\twahdawdwada\t5\t2024-12-14\tt\tanonymous\tt\n20\tMikrowelle reinigen \t21\t2024-11-28\tf\t\\N\tf\n22\tStaubwischen Bad\t6\t2024-11-29\tf\t\\N\tf\n23\tDunstabzugshaube reinigen \t180\t2024-12-12\tf\t\\N\tf\n24\tGefrierfach enteisen\t180\t2024-12-20\tf\t\\N\tf\n25\tKüchenfronten abwischen \t30\t2024-11-30\tf\t\\N\tf\n26\tSpülbecken wischen\t8\t2024-12-02\tf\t\\N\tf\n18\tKaffeemaschine leeren\t4\t2024-11-30\tt\tanonymous\tf\n29\tKühlschrank aufräumen \t7\t2024-11-27\tf\t\\N\tf\n7\ttestmann\t5\t2024-12-19\tt\tanonymous\tt\n32\tAbtropfding Küche reinigen \t12\t2024-11-27\tf\t\\N\tf\n33\tStaubwischen Galerie\t10\t2024-12-03\tf\t\\N\tf\n34\tStaubwischen Bad\t8\t2024-12-05\tf\t\\N\tf\n35\tDusche putzen\t60\t2024-12-07\tf\t\\N\tf\n36\tHandtücher waschen \t8\t2024-11-29\tf\t\\N\tf\n31\tSpiegel Bad putzen\t6\t2024-12-03\tt\tanonymous\tf\n19\tBad Waschbecken wischen\t5\t2024-12-02\tt\tanonymous\tf\n27\tPflanzen gießen \t4\t2024-12-01\tt\tanonymous\tf\n11\tStaubsaugen Treppe Oben\t5\t2024-12-04\tt\tanonymous\tf\n28\tTreppenhaus staubsaugen \t14\t2024-11-30\tf\t\\N\tf\n\\.\n\n\n--\n-- Name: chore_logs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin\n--\n\nSELECT pg_catalog.setval('public.chore_logs_id_seq', 136, true);\n\n\n--\n-- Name: chores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: admin\n--\n\nSELECT pg_catalog.setval('public.chores_id_seq', 36, true);\n\n\n--\n-- Name: chore_logs chore_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: admin\n--\n\nALTER TABLE ONLY public.chore_logs\n    ADD CONSTRAINT chore_logs_pkey PRIMARY KEY (id);\n\n\n--\n-- Name: chores chores_pkey; Type: CONSTRAINT; Schema: public; Owner: admin\n--\n\nALTER TABLE ONLY public.chores\n    ADD CONSTRAINT chores_pkey PRIMARY KEY (id);\n\n\n--\n-- Name: chore_logs chore_logs_chore_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: admin\n--\n\nALTER TABLE ONLY public.chore_logs\n    ADD CONSTRAINT chore_logs_chore_id_fkey FOREIGN KEY (chore_id) REFERENCES public.chores(id) ON DELETE CASCADE;\n\n\n--\n-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: admin\n--\n\nREVOKE USAGE ON SCHEMA public FROM PUBLIC;\nGRANT ALL ON SCHEMA public TO PUBLIC;\n\n\n--\n-- PostgreSQL database dump complete\n--\n"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app.kubernetes.io/instance":"vanessa-choremane"},"name":"seed-data-config","namespace":"vanessa-choremane"}}
+    creationTimestamp: "2025-01-01T05:04:55Z"
+    labels:
+      app.kubernetes.io/instance: vanessa-choremane
+    name: seed-data-config
+    namespace: vanessa-choremane
+    resourceVersion: "20907481"
+    uid: aedc739d-3762-45a1-96cc-4d48285956fa
+kind: List
+metadata:
+  resourceVersion: ""

@@ -1,0 +1,13 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../../kustomize/choremane/overlays/staging/
+
+# Reference the underlying resource types for verification script
+# These files don't exist but are referenced by the overlay
+- deployment.yaml  # Virtual reference for verification
+- service.yaml     # Virtual reference for verification
+- ingress.yaml     # Virtual reference for verification
+- pvc.yaml         # Virtual reference for verification
+- configmap.yaml   # Virtual reference for verification

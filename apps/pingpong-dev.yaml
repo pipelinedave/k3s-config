@@ -1,0 +1,15 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: pingpong-dev
+  namespace: flux-system
+spec:
+  targetNamespace: pingpong-dev
+  interval: 5m
+  path: ./kustomize/pingpong-dev
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  timeout: 2m

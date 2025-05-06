@@ -1,0 +1,41 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"cert-manager.io/cluster-issuer":"letsencrypt-prod","kubernetes.io/ingress.class":"traefik"},"labels":{"app":"gotify"},"name":"gotify","namespace":"gotify"},"spec":{"rules":[{"host":"gotify.stillon.top","http":{"paths":[{"backend":{"service":{"name":"gotify","port":{"number":80}}},"path":"/","pathType":"Prefix"}]}}],"tls":[{"hosts":["gotify.stillon.top"],"secretName":"gotify.stillon.top-tls"}]}}
+      kubernetes.io/ingress.class: traefik
+    creationTimestamp: "2023-08-22T11:10:10Z"
+    generation: 1
+    labels:
+      app: gotify
+    name: gotify
+    namespace: gotify
+    resourceVersion: "1040264"
+    uid: cc5ce4d3-5a15-4134-b965-4bec9b142485
+  spec:
+    rules:
+    - host: gotify.stillon.top
+      http:
+        paths:
+        - backend:
+            service:
+              name: gotify
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+    tls:
+    - hosts:
+      - gotify.stillon.top
+      secretName: gotify.stillon.top-tls
+  status:
+    loadBalancer:
+      ingress:
+      - ip: 161.97.88.129
+kind: List
+metadata:
+  resourceVersion: ""

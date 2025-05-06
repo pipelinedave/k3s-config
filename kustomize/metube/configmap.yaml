@@ -1,0 +1,45 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIBdzCCAR2gAwIBAgIBADAKBggqhkjOPQQDAjAjMSEwHwYDVQQDDBhrM3Mtc2Vy
+      dmVyLWNhQDE2ODk5NjA3OTAwHhcNMjMwNzIxMTczMzEwWhcNMzMwNzE4MTczMzEw
+      WjAjMSEwHwYDVQQDDBhrM3Mtc2VydmVyLWNhQDE2ODk5NjA3OTAwWTATBgcqhkjO
+      PQIBBggqhkjOPQMBBwNCAAR7NQhnFyp79vxKp7wbW1v5fwZswpWO0/kh7QOOAvDv
+      vVYBRyRMVuXkGeZ4GcuoBgtdHmAgRVas1WQDvCqsZCvQo0IwQDAOBgNVHQ8BAf8E
+      BAMCAqQwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUBIzTiEtNs0URYBu9Khwu
+      p+gg8YMwCgYIKoZIzj0EAwIDSAAwRQIhAOZhB97tfI252ApBxBbAYLdJA48bGxF6
+      zfzWqDk1PpryAiAr05Sqa21IgbZw1zV1HpRF5IgnPMMRrbt/UD/ckXFy8A==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2024-10-30T19:26:21Z"
+    name: kube-root-ca.crt
+    namespace: metube
+    resourceVersion: "17983658"
+    uid: 4f0103ff-0cd6-4c10-aa32-7540ffc31136
+- apiVersion: v1
+  data:
+    cookies.txt: "# Netscape HTTP Cookie File\n# http://curl.haxx.se/rfc/cookie_spec.html\n#
+      This is a generated file!  Do not edit.\n\n.patreon.com\tTRUE\t/\tFALSE\t1761331535\tpatreon_device_id\t0d5803d6-fe0d-4aa4-8390-30d30ebedcfc\n.patreon.com\tTRUE\t/\tTRUE\t1764874664\tpatreon_locale_code\ten-US\n.www.patreon.com\tTRUE\t/\tFALSE\t1758307596\t__stripe_mid\t4be0c337-8eea-4644-8bcf-256624e5d5d597fd33\n.patreon.com\tTRUE\t/\tTRUE\t1761331598\tgroup_id\t16b50e63435c6fb4cd7081b860c1158dd56ac5b9688f46b0b916a769048056c9\n.patreon.com\tTRUE\t/\tTRUE\t1758307605\tsession_id\thFlgJ_kOk4FVFkHvM9wNIYgYW-Mb8eZtBtj62bzmvZE\n.patreon.com\tTRUE\t/\tTRUE\t1730316463\t__cf_bm\tZp.HCZWI1sG5KJ0C7W09cN9XD.RXuNQp_3cDbx5WeH8-1730314663-1.0.1.1-lDvGHK1Yxk3SxCu6KboHHcq0hpA23_vdn3C4hSe_0GNMLvtVhv2VgOFarXukAGuwPDekYO75wQhXdddVI9QDeUbbErYb1GJ1RmtF8eQw49I\n.youtube.com\tTRUE\t/\tTRUE\t0\tYSC\tZTh80b5_uBY\n.youtube.com\tTRUE\t/\tTRUE\t1745770378\tLOGIN_INFO\tAFmmF2swRAIgNSRAHJPQsW92HA4xh2DpaBbnfHl0o_mRHzxjISDPzYsCIGmJyCatyrrKeJOcM-ZivPMr06FPxl7_rzatACuMt3gO:QUQ3MjNmenpDR3JlMHlOcDJiQU1JLWJtNWNQUzJDQjhUTVYyelJvU1dNb2RCRFN0ZVBxaTQybDFhc1hSeVJuSEhtNFNRSDUwU2ZfSmVFSDcwMU5rb0lweG4zRGU4MUxxN2FQVGc3dWFMem9zYklZdjNJY25yUFlBM01laG1WWTlFVjQ0Z2NGNXBaVEFKU1VkVkQxenRpR25Eby1UWWJtbEd3\n.youtube.com\tTRUE\t/\tTRUE\t1745338380\tVISITOR_PRIVACY_METADATA\tCgJERRIEEgAgIw%3D%3D\n.youtube.com\tTRUE\t/\tFALSE\t1764709023\tHSID\tAXsFsXAxtocKYzUvR\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\tSSID\tAUoChdroCG_qCIX6e\n.youtube.com\tTRUE\t/\tFALSE\t1764709023\tAPISID\tBzdwAbZKIJw-Txzz/AqWwhDZoPBi7yBwRc\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\tSAPISID\tLrvxW7Avht93LJJR/AXOkWhHuWbsdXPa4e\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\t__Secure-1PAPISID\tLrvxW7Avht93LJJR/AXOkWhHuWbsdXPa4e\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\t__Secure-3PAPISID\tLrvxW7Avht93LJJR/AXOkWhHuWbsdXPa4e\n.youtube.com\tTRUE\t/\tTRUE\t1764879344\tPREF\tf6=80&f7=4100&tz=Europe.Amsterdam&f5=30000\n.youtube.com\tTRUE\t/\tFALSE\t1764709023\tSID\tg.a000pghPwkvYvZ3OrdOcaPkXGXp269s_gyCDVjx-nvFHrN38SF6g4w5qnBPnfUW9fxdoR11VugACgYKAScSARESFQHGX2MipzmaGpjt1WWjHmDeO-qdNBoVAUF8yKqLtSHGzWmWqWhLQHhBaw6T0076\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\t__Secure-1PSID\tg.a000pghPwkvYvZ3OrdOcaPkXGXp269s_gyCDVjx-nvFHrN38SF6gOYR5eUbWanISSHhXxeTGdwACgYKAeQSARESFQHGX2MiSlQuYFgfgFP9sj6EofbIZBoVAUF8yKqdKI-Vu1j2hzFnwkAv2xLD0076\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\t__Secure-3PSID\tg.a000pghPwkvYvZ3OrdOcaPkXGXp269s_gyCDVjx-nvFHrN38SF6gHrqzSEmcg2eW1fVd9-oqgQACgYKAbISARESFQHGX2MiwnVP8MBOIHR1g9dDU56MNRoVAUF8yKrAqKVYRz22UhFQUq-aPQxt0076\n.youtube.com\tTRUE\t/\tFALSE\t0\twide\t0\n.youtube.com\tTRUE\t/\tTRUE\t1730319943\tCONSISTENCY\tAKreu9vSeDEnINGQdDVOdLdSNMLtptdaz8IArkP8B2PVeIHEcBedkZGmhm7Qr9NsFFZbyWUYTRfkRrqirv81XGRLuiIXC1-u0JwYbtLlwceSSwU4ZxCBm3TX_21B4iT2xPDti0FdvMi5cKoK1yN3upU6\n.youtube.com\tTRUE\t/\tTRUE\t1761855347\t__Secure-1PSIDTS\tsidts-CjEBQT4rX5T_uosIgR8Yp1MIzbYjEfLNoCuCy48vsxIlS5LXQfvOh6NCknXsi6RKqU9TEAA\n.youtube.com\tTRUE\t/\tTRUE\t1761855347\t__Secure-3PSIDTS\tsidts-CjEBQT4rX5T_uosIgR8Yp1MIzbYjEfLNoCuCy48vsxIlS5LXQfvOh6NCknXsi6RKqU9TEAA\n.youtube.com\tTRUE\t/\tTRUE\t1745338377\t__Secure-YEC\tCgtiT1lHSU5EQVotdyj2p4q5BjIKCgJERRIEEgAgIw%3D%3D\n.youtube.com\tTRUE\t/\tFALSE\t1761855351\tSIDCC\tAKEyXzWIDfL6Jkrs6HaPM_pIr3o1EUlhZAd0jCO0S6RCX1DjAQzIwH1N29wneb-wKHJg-7obiw\n.youtube.com\tTRUE\t/\tTRUE\t1761855351\t__Secure-1PSIDCC\tAKEyXzVI63muwzdpfaJgh_zKSVkcytiGz6Rp5H08YHPW3-Ghj1oB5Wpb6K7yR-apB-6-jdu950M\n.youtube.com\tTRUE\t/\tTRUE\t1761855351\t__Secure-3PSIDCC\tAKEyXzVpqyBJKgZ3n-T_xRe77tIGOrORoSlycDyxTy2W9uvAMvrr60-vFsc_fVXHccTm1XAzAXU\n"
+    ytdl_options: '{"cookiefile": "/cookies/cookies.txt"}'
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","data":{"cookies.txt":"# Netscape HTTP Cookie File\n# http://curl.haxx.se/rfc/cookie_spec.html\n# This is a generated file!  Do not edit.\n\n.patreon.com\tTRUE\t/\tFALSE\t1761331535\tpatreon_device_id\t0d5803d6-fe0d-4aa4-8390-30d30ebedcfc\n.patreon.com\tTRUE\t/\tTRUE\t1764874664\tpatreon_locale_code\ten-US\n.www.patreon.com\tTRUE\t/\tFALSE\t1758307596\t__stripe_mid\t4be0c337-8eea-4644-8bcf-256624e5d5d597fd33\n.patreon.com\tTRUE\t/\tTRUE\t1761331598\tgroup_id\t16b50e63435c6fb4cd7081b860c1158dd56ac5b9688f46b0b916a769048056c9\n.patreon.com\tTRUE\t/\tTRUE\t1758307605\tsession_id\thFlgJ_kOk4FVFkHvM9wNIYgYW-Mb8eZtBtj62bzmvZE\n.patreon.com\tTRUE\t/\tTRUE\t1730316463\t__cf_bm\tZp.HCZWI1sG5KJ0C7W09cN9XD.RXuNQp_3cDbx5WeH8-1730314663-1.0.1.1-lDvGHK1Yxk3SxCu6KboHHcq0hpA23_vdn3C4hSe_0GNMLvtVhv2VgOFarXukAGuwPDekYO75wQhXdddVI9QDeUbbErYb1GJ1RmtF8eQw49I\n.youtube.com\tTRUE\t/\tTRUE\t0\tYSC\tZTh80b5_uBY\n.youtube.com\tTRUE\t/\tTRUE\t1745770378\tLOGIN_INFO\tAFmmF2swRAIgNSRAHJPQsW92HA4xh2DpaBbnfHl0o_mRHzxjISDPzYsCIGmJyCatyrrKeJOcM-ZivPMr06FPxl7_rzatACuMt3gO:QUQ3MjNmenpDR3JlMHlOcDJiQU1JLWJtNWNQUzJDQjhUTVYyelJvU1dNb2RCRFN0ZVBxaTQybDFhc1hSeVJuSEhtNFNRSDUwU2ZfSmVFSDcwMU5rb0lweG4zRGU4MUxxN2FQVGc3dWFMem9zYklZdjNJY25yUFlBM01laG1WWTlFVjQ0Z2NGNXBaVEFKU1VkVkQxenRpR25Eby1UWWJtbEd3\n.youtube.com\tTRUE\t/\tTRUE\t1745338380\tVISITOR_PRIVACY_METADATA\tCgJERRIEEgAgIw%3D%3D\n.youtube.com\tTRUE\t/\tFALSE\t1764709023\tHSID\tAXsFsXAxtocKYzUvR\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\tSSID\tAUoChdroCG_qCIX6e\n.youtube.com\tTRUE\t/\tFALSE\t1764709023\tAPISID\tBzdwAbZKIJw-Txzz/AqWwhDZoPBi7yBwRc\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\tSAPISID\tLrvxW7Avht93LJJR/AXOkWhHuWbsdXPa4e\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\t__Secure-1PAPISID\tLrvxW7Avht93LJJR/AXOkWhHuWbsdXPa4e\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\t__Secure-3PAPISID\tLrvxW7Avht93LJJR/AXOkWhHuWbsdXPa4e\n.youtube.com\tTRUE\t/\tTRUE\t1764879344\tPREF\tf6=80\u0026f7=4100\u0026tz=Europe.Amsterdam\u0026f5=30000\n.youtube.com\tTRUE\t/\tFALSE\t1764709023\tSID\tg.a000pghPwkvYvZ3OrdOcaPkXGXp269s_gyCDVjx-nvFHrN38SF6g4w5qnBPnfUW9fxdoR11VugACgYKAScSARESFQHGX2MipzmaGpjt1WWjHmDeO-qdNBoVAUF8yKqLtSHGzWmWqWhLQHhBaw6T0076\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\t__Secure-1PSID\tg.a000pghPwkvYvZ3OrdOcaPkXGXp269s_gyCDVjx-nvFHrN38SF6gOYR5eUbWanISSHhXxeTGdwACgYKAeQSARESFQHGX2MiSlQuYFgfgFP9sj6EofbIZBoVAUF8yKqdKI-Vu1j2hzFnwkAv2xLD0076\n.youtube.com\tTRUE\t/\tTRUE\t1764709023\t__Secure-3PSID\tg.a000pghPwkvYvZ3OrdOcaPkXGXp269s_gyCDVjx-nvFHrN38SF6gHrqzSEmcg2eW1fVd9-oqgQACgYKAbISARESFQHGX2MiwnVP8MBOIHR1g9dDU56MNRoVAUF8yKrAqKVYRz22UhFQUq-aPQxt0076\n.youtube.com\tTRUE\t/\tFALSE\t0\twide\t0\n.youtube.com\tTRUE\t/\tTRUE\t1730319943\tCONSISTENCY\tAKreu9vSeDEnINGQdDVOdLdSNMLtptdaz8IArkP8B2PVeIHEcBedkZGmhm7Qr9NsFFZbyWUYTRfkRrqirv81XGRLuiIXC1-u0JwYbtLlwceSSwU4ZxCBm3TX_21B4iT2xPDti0FdvMi5cKoK1yN3upU6\n.youtube.com\tTRUE\t/\tTRUE\t1761855347\t__Secure-1PSIDTS\tsidts-CjEBQT4rX5T_uosIgR8Yp1MIzbYjEfLNoCuCy48vsxIlS5LXQfvOh6NCknXsi6RKqU9TEAA\n.youtube.com\tTRUE\t/\tTRUE\t1761855347\t__Secure-3PSIDTS\tsidts-CjEBQT4rX5T_uosIgR8Yp1MIzbYjEfLNoCuCy48vsxIlS5LXQfvOh6NCknXsi6RKqU9TEAA\n.youtube.com\tTRUE\t/\tTRUE\t1745338377\t__Secure-YEC\tCgtiT1lHSU5EQVotdyj2p4q5BjIKCgJERRIEEgAgIw%3D%3D\n.youtube.com\tTRUE\t/\tFALSE\t1761855351\tSIDCC\tAKEyXzWIDfL6Jkrs6HaPM_pIr3o1EUlhZAd0jCO0S6RCX1DjAQzIwH1N29wneb-wKHJg-7obiw\n.youtube.com\tTRUE\t/\tTRUE\t1761855351\t__Secure-1PSIDCC\tAKEyXzVI63muwzdpfaJgh_zKSVkcytiGz6Rp5H08YHPW3-Ghj1oB5Wpb6K7yR-apB-6-jdu950M\n.youtube.com\tTRUE\t/\tTRUE\t1761855351\t__Secure-3PSIDCC\tAKEyXzVpqyBJKgZ3n-T_xRe77tIGOrORoSlycDyxTy2W9uvAMvrr60-vFsc_fVXHccTm1XAzAXU\n","ytdl_options":"{\"cookiefile\": \"/cookies/cookies.txt\"}"},"kind":"ConfigMap","metadata":{"annotations":{},"name":"metube-config","namespace":"metube"}}
+    creationTimestamp: "2024-10-30T19:26:24Z"
+    name: metube-config
+    namespace: metube
+    resourceVersion: "17985674"
+    uid: 5c105c98-862c-4ab8-9d93-9d865a1a9b8a
+kind: List
+metadata:
+  resourceVersion: ""

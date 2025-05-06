@@ -5,33 +5,33 @@ items:
   metadata:
     annotations:
       kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"picoshare-pvc","namespace":"picoshare"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"80Gi"}},"storageClassName":"local-path"}}
+        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"rclone-data","namespace":"rclone"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"10Gi"}}}}
       pv.kubernetes.io/bind-completed: "yes"
       pv.kubernetes.io/bound-by-controller: "yes"
       volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
       volume.kubernetes.io/selected-node: bigboi
       volume.kubernetes.io/storage-provisioner: rancher.io/local-path
-    creationTimestamp: "2025-02-21T17:02:24Z"
+    creationTimestamp: "2024-09-23T18:10:41Z"
     finalizers:
     - kubernetes.io/pvc-protection
-    name: picoshare-pvc
-    namespace: picoshare
-    resourceVersion: "26442430"
-    uid: c6ef8b42-137b-4863-ba14-cb07830bb611
+    name: rclone-data
+    namespace: rclone
+    resourceVersion: "16371051"
+    uid: a622b99e-8ea2-4aa9-bde9-b48ba732ef76
   spec:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 80Gi
+        storage: 10Gi
     storageClassName: local-path
     volumeMode: Filesystem
-    volumeName: pvc-c6ef8b42-137b-4863-ba14-cb07830bb611
+    volumeName: pvc-a622b99e-8ea2-4aa9-bde9-b48ba732ef76
   status:
     accessModes:
     - ReadWriteOnce
     capacity:
-      storage: 80Gi
+      storage: 10Gi
     phase: Bound
 kind: List
 metadata:

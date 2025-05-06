@@ -1,0 +1,51 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"networking.k8s.io/v1","kind":"Ingress","metadata":{"annotations":{"cert-manager.io/cluster-issuer":"letsencrypt-prod","kubernetes.io/ingress.class":"traefik","nginx.ingress.kubernetes.io/rewrite-target":"/"},"labels":{"app.kubernetes.io/component":"frontend","app.kubernetes.io/instance":"vanessa-choremane","app.kubernetes.io/name":"choremane"},"name":"frontend-ingress","namespace":"vanessa-choremane"},"spec":{"rules":[{"host":"vanessa-chores.stillon.top","http":{"paths":[{"backend":{"service":{"name":"frontend-service","port":{"number":80}}},"path":"/","pathType":"Prefix"},{"backend":{"service":{"name":"backend-service","port":{"number":80}}},"path":"/api","pathType":"Prefix"}]}}],"tls":[{"hosts":["vanessa-chores.stillon.top"],"secretName":"vanessa-chores-stillon-top-tls"}]}}
+      kubernetes.io/ingress.class: traefik
+      nginx.ingress.kubernetes.io/rewrite-target: /
+    creationTimestamp: "2025-01-01T05:04:55Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/component: frontend
+      app.kubernetes.io/instance: vanessa-choremane
+      app.kubernetes.io/name: choremane
+    name: frontend-ingress
+    namespace: vanessa-choremane
+    resourceVersion: "20907545"
+    uid: 9486ba98-b96c-4559-96fa-565fedf7dfd5
+  spec:
+    rules:
+    - host: vanessa-chores.stillon.top
+      http:
+        paths:
+        - backend:
+            service:
+              name: frontend-service
+              port:
+                number: 80
+          path: /
+          pathType: Prefix
+        - backend:
+            service:
+              name: backend-service
+              port:
+                number: 80
+          path: /api
+          pathType: Prefix
+    tls:
+    - hosts:
+      - vanessa-chores.stillon.top
+      secretName: vanessa-chores-stillon-top-tls
+  status:
+    loadBalancer:
+      ingress:
+      - ip: 161.97.88.129
+kind: List
+metadata:
+  resourceVersion: ""

@@ -1,0 +1,120 @@
+apiVersion: v1
+items:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "2"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"rclone"},"name":"rclone","namespace":"rclone"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"rclone"}},"template":{"metadata":{"labels":{"app":"rclone"}},"spec":{"containers":[{"args":["rcd","--rc-web-gui","--rc-web-gui-update","--rc-addr=:5572","--rc-user=$(RC_USER)","--rc-pass=$(RC_PASS)"],"env":[{"name":"RCLONE_CONFIG","value":"/config/rclone.conf"},{"name":"RC_USER","valueFrom":{"secretKeyRef":{"key":"rc-user","name":"rclone-secret"}}},{"name":"RC_PASS","valueFrom":{"secretKeyRef":{"key":"rc-pass","name":"rclone-secret"}}}],"image":"rclone/rclone:latest","name":"rclone","volumeMounts":[{"mountPath":"/config","name":"config"},{"mountPath":"/data","name":"data"}]}],"initContainers":[{"command":["sh","-c","cp /config-secret/rclone.conf /config/rclone.conf"],"image":"busybox","name":"init-rclone-config","volumeMounts":[{"mountPath":"/config","name":"config"},{"mountPath":"/config-secret","name":"config-secret"}]}],"volumes":[{"emptyDir":{},"name":"config"},{"name":"config-secret","secret":{"secretName":"rclone-config"}},{"name":"data","persistentVolumeClaim":{"claimName":"rclone-data"}}]}}}}
+    creationTimestamp: "2024-09-23T18:10:41Z"
+    generation: 2
+    labels:
+      app: rclone
+    name: rclone
+    namespace: rclone
+    resourceVersion: "20145138"
+    uid: 70057cf8-6410-41fa-b880-4b5ba85aac58
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: rclone
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: rclone
+      spec:
+        containers:
+        - args:
+          - rcd
+          - --rc-web-gui
+          - --rc-web-gui-update
+          - --rc-addr=:5572
+          - --rc-user=$(RC_USER)
+          - --rc-pass=$(RC_PASS)
+          env:
+          - name: RCLONE_CONFIG
+            value: /config/rclone.conf
+          - name: RC_USER
+            valueFrom:
+              secretKeyRef:
+                key: rc-user
+                name: rclone-secret
+          - name: RC_PASS
+            valueFrom:
+              secretKeyRef:
+                key: rc-pass
+                name: rclone-secret
+          image: rclone/rclone:latest
+          imagePullPolicy: Always
+          name: rclone
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /config
+            name: config
+          - mountPath: /data
+            name: data
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - cp /config-secret/rclone.conf /config/rclone.conf
+          image: busybox
+          imagePullPolicy: Always
+          name: init-rclone-config
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /config
+            name: config
+          - mountPath: /config-secret
+            name: config-secret
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - emptyDir: {}
+          name: config
+        - name: config-secret
+          secret:
+            defaultMode: 420
+            secretName: rclone-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: rclone-data
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2024-09-23T18:10:41Z"
+      lastUpdateTime: "2024-09-23T18:30:39Z"
+      message: ReplicaSet "rclone-b557c669" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2024-12-15T01:11:52Z"
+      lastUpdateTime: "2024-12-15T01:11:52Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""

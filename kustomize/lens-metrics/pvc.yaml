@@ -4,34 +4,34 @@ items:
   kind: PersistentVolumeClaim
   metadata:
     annotations:
-      kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"v1","kind":"PersistentVolumeClaim","metadata":{"annotations":{},"name":"picoshare-pvc","namespace":"picoshare"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"80Gi"}},"storageClassName":"local-path"}}
       pv.kubernetes.io/bind-completed: "yes"
       pv.kubernetes.io/bound-by-controller: "yes"
       volume.beta.kubernetes.io/storage-provisioner: rancher.io/local-path
       volume.kubernetes.io/selected-node: bigboi
       volume.kubernetes.io/storage-provisioner: rancher.io/local-path
-    creationTimestamp: "2025-02-21T17:02:24Z"
+    creationTimestamp: "2024-09-19T20:04:40Z"
     finalizers:
     - kubernetes.io/pvc-protection
-    name: picoshare-pvc
-    namespace: picoshare
-    resourceVersion: "26442430"
-    uid: c6ef8b42-137b-4863-ba14-cb07830bb611
+    labels:
+      name: prometheus
+    name: data-prometheus-0
+    namespace: lens-metrics
+    resourceVersion: "16209986"
+    uid: 8439357d-eef2-427d-88a3-6356192b742b
   spec:
     accessModes:
     - ReadWriteOnce
     resources:
       requests:
-        storage: 80Gi
+        storage: 20Gi
     storageClassName: local-path
     volumeMode: Filesystem
-    volumeName: pvc-c6ef8b42-137b-4863-ba14-cb07830bb611
+    volumeName: pvc-8439357d-eef2-427d-88a3-6356192b742b
   status:
     accessModes:
     - ReadWriteOnce
     capacity:
-      storage: 80Gi
+      storage: 20Gi
     phase: Bound
 kind: List
 metadata:

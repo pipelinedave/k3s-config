@@ -1,0 +1,15 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: memodawg
+  namespace: flux-system
+spec:
+  targetNamespace: memodawg
+  interval: 5m
+  path: ./kustomize/memodawg
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  timeout: 2m

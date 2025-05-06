@@ -1,0 +1,125 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"joex","namespace":"docspell"},"spec":{"ports":[{"name":"http","port":7878,"protocol":"TCP","targetPort":7878}],"selector":{"app":"joex"},"type":"ClusterIP"}}
+    creationTimestamp: "2023-08-11T15:14:47Z"
+    name: joex
+    namespace: docspell
+    resourceVersion: "653641"
+    uid: 146b21a1-ee56-4e3a-9d75-4b81958ee12f
+  spec:
+    clusterIP: 10.43.1.17
+    clusterIPs:
+    - 10.43.1.17
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 7878
+      protocol: TCP
+      targetPort: 7878
+    selector:
+      app: joex
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"postgres","namespace":"docspell"},"spec":{"clusterIP":"None","ports":[{"name":"postgres","port":5432,"targetPort":"postgres"}],"selector":{"app":"postgres"}}}
+    creationTimestamp: "2023-08-11T15:14:47Z"
+    name: postgres
+    namespace: docspell
+    resourceVersion: "653644"
+    uid: 3d1e51fc-43da-4822-a2ba-4a0d1ccd3d6c
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: postgres
+      port: 5432
+      protocol: TCP
+      targetPort: postgres
+    selector:
+      app: postgres
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"restserver","namespace":"docspell"},"spec":{"ports":[{"name":"http","port":7880,"protocol":"TCP","targetPort":7880}],"selector":{"app":"restserver"},"type":"ClusterIP"}}
+    creationTimestamp: "2023-08-11T15:14:47Z"
+    name: restserver
+    namespace: docspell
+    resourceVersion: "653648"
+    uid: 0c732fae-6bd9-4fbd-ab4e-574d5dfd6f9e
+  spec:
+    clusterIP: 10.43.0.253
+    clusterIPs:
+    - 10.43.0.253
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: http
+      port: 7880
+      protocol: TCP
+      targetPort: 7880
+    selector:
+      app: restserver
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"solr","namespace":"docspell"},"spec":{"ports":[{"name":"solr","port":8983,"targetPort":8983}],"selector":{"app":"solr"}}}
+    creationTimestamp: "2023-08-11T15:14:47Z"
+    name: solr
+    namespace: docspell
+    resourceVersion: "653652"
+    uid: 609d2ab8-78bd-43b2-9de4-ad06450c331d
+  spec:
+    clusterIP: 10.43.118.197
+    clusterIPs:
+    - 10.43.118.197
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - name: solr
+      port: 8983
+      protocol: TCP
+      targetPort: 8983
+    selector:
+      app: solr
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

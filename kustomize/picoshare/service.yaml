@@ -1,0 +1,34 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"picoshare","namespace":"picoshare"},"spec":{"ports":[{"port":80,"targetPort":10209}],"selector":{"app":"picoshare"}}}
+    creationTimestamp: "2023-11-05T20:47:39Z"
+    name: picoshare
+    namespace: picoshare
+    resourceVersion: "3832904"
+    uid: b30f4de2-0dfe-470b-83de-93133f318bed
+  spec:
+    clusterIP: 10.43.36.168
+    clusterIPs:
+    - 10.43.36.168
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 10209
+    selector:
+      app: picoshare
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+kind: List
+metadata:
+  resourceVersion: ""

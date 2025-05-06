@@ -5,8 +5,3 @@ items:
   metadata:
     annotations:
       deployment.kubernetes.io/revision: "3"
-  kind: Deployment
-  metadata:
-    annotations:
-      deployment.kubernetes.io/revision: "3"
-metadata:

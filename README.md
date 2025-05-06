@@ -4,11 +4,14 @@ This repository serves as the single source of truth for the configuration of th
 
 ## Repository Structure
 
-- `apps/`: Contains Flux Kustomization resources that reference the kustomize directories for each application
+- `apps/`: Contains Flux Kustomization resources for complete, fully Flux-managed applications
+- `apps-incomplete/`: Contains Flux Kustomization resources for applications that are not fully managed by Flux
 - `flux-system/`: Contains Flux bootstrap configuration
-- `kustomize/`: Contains Kubernetes manifests for each application organized by namespace
+- `kustomize/`: Contains Kubernetes manifests for complete, fully Flux-managed applications
+- `kustomize-incomplete/`: Contains Kubernetes manifests for applications that are not fully managed by Flux
+- `scripts/`: Contains utility scripts for managing the repository and interacting with the cluster
 - `system/`: Contains system-level configurations
-- `test/`: Contains configurations for testing and development purposes
+- `test/`: Contains configurations for testing and development purposes (not committed to the repository)
 
 ## Using this Repository
 
@@ -43,7 +46,7 @@ This repository includes scripts to export and manage resources from namespaces 
 #### Basic Export
 
 ```bash
-./export_namespace.sh <namespace>
+./scripts/export_namespace.sh <namespace>
 ```
 
 This will create a Flux Kustomization resource in the `apps/` directory and export Kubernetes resources to the `kustomize/<namespace>/` directory.
@@ -53,10 +56,11 @@ This will create a Flux Kustomization resource in the `apps/` directory and expo
 For a more secure approach that removes sensitive metadata and seals secrets:
 
 ```bash
-./process_namespace.sh <namespace>
+./scripts/process_namespace.sh <namespace>
 ```
 
 This script will:
+
 1. Export clean versions of resources (deployments, services, etc.)
 2. Identify and seal sensitive ConfigMaps and Secrets using SealedSecrets
 3. Update kustomization.yaml to use these sealed resources
@@ -66,7 +70,7 @@ This script will:
 To process all namespaces in the repository:
 
 ```bash
-./process_all.sh
+./scripts/process_all.sh
 ```
 
 This will run the clean export and secret sealing process for each namespace in the repository.
@@ -76,10 +80,11 @@ This will run the clean export and secret sealing process for each namespace in 
 For a complete workflow that handles all aspects of syncing your repository with the cluster:
 
 ```bash
-./master_sync.sh [--all] [namespace1 namespace2 ...]
+./scripts/master_sync.sh [--all] [namespace1 namespace2 ...]
 ```
 
 This comprehensive script will:
+
 1. Verify which namespaces need updating
 2. Export any missing namespaces
 3. Clean up resources and remove sensitive metadata
@@ -98,7 +103,7 @@ All configurations should be committed to this repository. Flux will automatical
 To check if the repository correctly represents the cluster state:
 
 ```bash
-./verify_cluster.sh [namespace]
+./scripts/verify_cluster.sh [namespace]
 ```
 
 This will:
@@ -127,25 +132,61 @@ This will:
 
 ## Managed Applications
 
-The following applications/namespaces are managed through this repository:
+The following applications are fully Flux-managed and maintained in the `apps/` and `kustomize/` directories:
 
-- actualbudget
-- choremane-prod
-- choremane-staging
+- choremane (prod and staging)
 - docspell
 - firefly
 - gotify
-- grafana
-- grocy
+- memodawg
 - metube
 - miniflux
+- picoshare
+
+The following applications are partially managed or incomplete and are stored in the `apps-incomplete/` and `kustomize-incomplete/` directories:
+
+- actualbudget
+- dex
+- expenseowl
+- grafana
+- grocy
+- lens-metrics
+- maybe
+- mirotalk
 - open-webui
+- pingpong-dev
+- rclone
+- supersecretmessage
+- taskserver
 - uptime-kuma
+- vanessa-choremane
 - vaultwarden
+- xmrig
 
 ## Adding New Applications
 
 1. Create a new namespace for your application: `kubectl create namespace <namespace>`
 2. Deploy your application to the namespace
-3. Export the resources using the export script: `./export_namespace.sh <namespace>`
-4. Commit and push the changes to the repository
+3. Export the resources using the export script: `./scripts/export_namespace.sh <namespace>`
+4. Decide if the application is fully Flux-managed or partially managed:
+   - Fully managed: Keep in `apps/` and `kustomize/` directories
+   - Partially managed: Move to `apps-incomplete/` and `kustomize-incomplete/` directories
+5. Commit and push the changes to the repository
+
+## Repository Workflow Philosophy
+
+This repository follows a GitOps philosophy where:
+
+1. Complete, fully Flux-managed applications are maintained in `apps/` and `kustomize/` 
+   - These applications are fully declarative and can be recreated entirely from the manifests
+   - Flux manages all aspects of these applications
+
+2. Incomplete or partially managed applications are moved to `apps-incomplete/` and `kustomize-incomplete/`
+   - These may be applications that require manual steps or have components not managed by Flux
+   - They're included in the repository for documentation but may need manual intervention
+
+3. Test resources and experiments belong in the `test/` directory
+   - These resources are not committed to the repository
+   - They're primarily for testing and development purposes
+
+All utility scripts are located in the `scripts/` directory for better organization and maintainability.

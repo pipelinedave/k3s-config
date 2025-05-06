@@ -1,0 +1,62 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      helm.sh/resource-policy: keep
+      meta.helm.sh/release-name: vaultwarden
+      meta.helm.sh/release-namespace: vaultwarden
+    labels:
+      app.kubernetes.io/component: vaultwarden
+      app.kubernetes.io/instance: vaultwarden
+      app.kubernetes.io/name: vaultwarden
+    name: vaultwarden-data-vaultwarden-0
+    namespace: vaultwarden
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-d6f9dee5-d1a5-46a9-aa89-13c47dfa49b6
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    annotations:
+      helm.sh/resource-policy: keep
+      meta.helm.sh/release-name: vaultwarden
+      meta.helm.sh/release-namespace: vaultwarden
+    labels:
+      app.kubernetes.io/component: vaultwarden
+      app.kubernetes.io/instance: vaultwarden
+      app.kubernetes.io/name: vaultwarden
+    name: vaultwarden-files-vaultwarden-0
+    namespace: vaultwarden
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-0281c1ad-d9f3-4589-8b2a-0a4b838b5c49
+- apiVersion: v1
+  kind: PersistentVolumeClaim
+  metadata:
+    name: vaultwarden-pvc
+    namespace: vaultwarden
+  spec:
+    accessModes:
+    - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+    storageClassName: local-path
+    volumeMode: Filesystem
+    volumeName: pvc-5ca05298-babc-4254-9ca8-9ec578dd758d
+kind: List
+

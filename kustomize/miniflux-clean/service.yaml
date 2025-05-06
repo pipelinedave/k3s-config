@@ -4,7 +4,3 @@ items:
   kind: Service
   metadata:
     annotations:
-  kind: Service
-  metadata:
-    annotations:
-metadata:

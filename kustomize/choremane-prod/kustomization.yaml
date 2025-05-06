@@ -4,10 +4,5 @@ kind: Kustomization
 resources:
 - ../../kustomize/choremane/overlays/prod/
 
-# Reference the underlying resource types for verification script
-# These files don't exist but are referenced by the overlay
-- deployment.yaml  # Virtual reference for verification
-- service.yaml     # Virtual reference for verification
-- ingress.yaml     # Virtual reference for verification
-- pvc.yaml         # Virtual reference for verification
-- configmap.yaml   # Virtual reference for verification
+# Note: This namespace uses an overlay structure.
+# The actual resources are defined in the base and overlays directories.

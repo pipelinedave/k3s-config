@@ -7,7 +7,7 @@ spec:
   targetNamespace: docspell
   interval: 5m
   path: ./kustomize/docspell
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

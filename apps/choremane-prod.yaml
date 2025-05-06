@@ -7,7 +7,7 @@ spec:
   targetNamespace: choremane-prod
   interval: 5m
   path: ./kustomize/choremane/overlays/prod
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

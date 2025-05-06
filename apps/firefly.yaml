@@ -7,7 +7,7 @@ spec:
   targetNamespace: firefly
   interval: 5m
   path: ./kustomize/firefly
-  prune: true
+  prune: false
   sourceRef:
     kind: GitRepository
     name: flux-system

@@ -1,0 +1,50 @@
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    labels:
+      app: docspell
+    name: docspell-ingress
+    namespace: docspell
+  spec:
+    rules:
+    - host: docspell.stillon.top
+      http:
+        paths:
+        - backend:
+            service:
+              name: restserver
+              port:
+                number: 7880
+          path: /
+          pathType: Prefix
+        - backend:
+            service:
+              name: restserver
+              port:
+                name: http
+          path: /restserver(/|$)(.*)
+          pathType: Prefix
+        - backend:
+            service:
+              name: joex
+              port:
+                name: http
+          path: /joex(/|$)(.*)
+          pathType: Prefix
+        - backend:
+            service:
+              name: solr
+              port:
+                name: solr
+          path: /solr(/|$)(.*)
+          pathType: Prefix
+    tls:
+    - hosts:
+      - docspell.stillon.top
+      secretName: docspell.stillon.top-tls
+kind: List
+

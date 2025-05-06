@@ -1,0 +1,42 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: db-migrations
+  labels:
+    app.kubernetes.io/name: choremane
+    app.kubernetes.io/component: database-migrations
+spec:
+  template:
+    spec:
+      containers:
+        - name: migrations
+          image: postgres:14
+          command: ["/migrations/run-migrations.sh"]
+          env:
+            - name: POSTGRES_HOST
+              value: postgres-service
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: migrations-volume
+              mountPath: /migrations
+      restartPolicy: OnFailure
+      volumes:
+        - name: migrations-volume
+          configMap:
+            name: db-migrations-config
+            defaultMode: 0777  # Make scripts executable
+  backoffLimit: 4

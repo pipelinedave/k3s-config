@@ -5,7 +5,8 @@ metadata:
   namespace: dex
 spec:
   ports:
-    - port: 80
+    - name: https
+      port: 5556
       targetPort: 5556
   selector:
     app: dex

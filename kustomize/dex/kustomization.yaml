@@ -10,3 +10,4 @@ resources:
 - dex-service.yaml
 - dex-ingress.yaml
 - dex-google-credentials-sealed.yaml
+- dex-rbac.yaml

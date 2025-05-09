@@ -11,9 +11,9 @@ data:
       config:
         inCluster: true
     web:
-      http: 0.0.0.0:5556
-      # Add HTTPS configuration
-      httpAddress: 0.0.0.0:5556
+      https: 0.0.0.0:5556
+      tlsCert: /etc/dex/tls/tls.crt
+      tlsKey: /etc/dex/tls/tls.key
       allowedOrigins: ['*']
     staticClients:
       - id: choremane

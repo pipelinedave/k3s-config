@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "4"
+  name: metube
+  namespace: metube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metube
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        kubectl.kubernetes.io/restartedAt: "2024-10-30T21:17:30+01:00"
+      labels:
+        app: metube
+    spec:
+      containers:
+      - env:
+        - name: YTDL_OPTIONS
+          valueFrom:
+            configMapKeyRef:
+              key: ytdl_options
+              name: metube-config
+        image: ghcr.io/alexta69/metube:latest
+        name: metube
+        ports:
+        - containerPort: 8081
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /downloads
+          name: downloads
+        - mountPath: /cookies/cookies.txt
+          name: cookies
+          subPath: cookies.txt
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - cp /cookies-src/cookies.txt /cookies/cookies.txt
+        image: busybox
+        name: init-cookies
+        volumeMounts:
+        - mountPath: /cookies-src
+          name: cookies-src
+        - mountPath: /cookies
+          name: cookies
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: metube-pvc
+      - configMap:
+          defaultMode: 420
+          name: metube-config
+        name: cookies-src
+      - emptyDir: {}
+        name: cookies

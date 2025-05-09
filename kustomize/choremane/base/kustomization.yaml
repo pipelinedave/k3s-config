@@ -5,4 +5,5 @@ resources:
   - backend/
   - frontend/
   - oauth-configmap.yaml
+  - oauth-secret-sealed.yaml
   - oauth-secret.yaml

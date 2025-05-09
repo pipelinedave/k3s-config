@@ -9,6 +9,16 @@ resources:
   - version-configmap.yaml
   - oauth-secret-sealed.yaml
 
+# Exclude the base oauth-secret-sealed.yaml to avoid conflict
+patchesStrategicMerge:
+  - |-
+    apiVersion: bitnami.com/v1alpha1
+    kind: SealedSecret
+    metadata:
+      name: choremane-oauth-secret
+      namespace: choremane-prod
+    $patch: delete
+
 patches:
   - target:
       kind: Deployment

@@ -19,7 +19,7 @@ spec:
           image: ghcr.io/dexidp/dex:v2.30.0
           command: ["/usr/local/bin/dex", "serve", "/etc/dex/cfg/config.yaml"]
           ports:
-            - name: https
+            - name: http
               containerPort: 5556
           env:
             - name: GOOGLE_CLIENT_ID
@@ -41,7 +41,7 @@ spec:
             httpGet:
               path: /healthz
               port: 5556
-              scheme: HTTPS
+              scheme: HTTP
       volumes:
         - name: config
           configMap:
@@ -49,7 +49,4 @@ spec:
             items:
             - key: config.yaml
               path: config.yaml
-        - name: tls
-          secret:
-            secretName: dex-tls
 

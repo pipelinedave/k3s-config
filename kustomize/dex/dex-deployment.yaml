@@ -32,6 +32,9 @@ spec:
                 secretKeyRef:
                   name: dex-google-credentials
                   key: clientSecret
+          volumeMounts:
+            - name: config
+              mountPath: /etc/dex/cfg
           readinessProbe:
             httpGet:
               path: /healthz

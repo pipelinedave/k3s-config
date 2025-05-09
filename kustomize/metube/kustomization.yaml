@@ -5,7 +5,7 @@ namespace: metube
 
 resources:
   - namespace.yaml
-  - configmaps.yaml
-  - deployments.yaml
-  - ingresses.yaml
-  - persistentvolumeclaims.yaml
+  - configmap.yaml
+  - deployment.yaml
+  - ingress.yaml
+  - persistentvolumeclaim.yaml

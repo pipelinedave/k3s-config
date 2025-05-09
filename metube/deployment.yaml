@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: metube
+  namespace: metube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metube
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: metube
+    spec:
+      containers:
+      - env:
+        - name: YTDL_OPTIONS
+          valueFrom:
+            configMapKeyRef:
+              key: ytdl_options
+              name: metube-config
+        image: ghcr.io/alexta69/metube:latest
+        name: metube
+        ports:
+        - containerPort: 8081
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /downloads
+          name: downloads
+        - mountPath: /cookies/cookies.txt
+          name: cookies
+          subPath: cookies.txt
+      initContainers:
+      - command:
+        - /bin/sh
+        - -c
+        - cp /cookies-src/cookies.txt /cookies/cookies.txt
+        image: busybox
+        name: init-cookies
+        volumeMounts:
+        - mountPath: /cookies-src
+          name: cookies-src
+        - mountPath: /cookies
+          name: cookies
+      volumes:
+      - name: downloads
+        persistentVolumeClaim:
+          claimName: metube-pvc
+      - configMap:
+          name: metube-config
+        name: cookies-src
+      - emptyDir: {}
+        name: cookies

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: choremane-oauth-config
+  namespace: choremane
+data:
+  OAUTH_CLIENT_ID: "choremane"
+  DEX_ISSUER_URL: "https://dex.stillon.top"
+  SESSION_SECRET: "choremane-session-secret"  # Change in production
+  FRONTEND_URL: "https://chores.stillon.top"

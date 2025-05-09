@@ -7,9 +7,11 @@ spec:
   targetNamespace: choremane-prod
   interval: 5m
   path: ./kustomize/choremane/overlays/prod
-  prune: false
+  prune: true
   sourceRef:
     kind: GitRepository
     name: flux-system
   wait: true
   timeout: 2m
+  dependsOn:
+    - name: dex

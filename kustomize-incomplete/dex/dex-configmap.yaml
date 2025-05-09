@@ -12,7 +12,13 @@ data:
         inCluster: true
     web:
       http: 0.0.0.0:5556
-    staticClients: []
+    staticClients:
+      - id: choremane
+        redirectURIs:
+        - 'https://chores.stillon.top/api/auth/callback'
+        - 'http://localhost:8080/api/auth/callback'  # For local development
+        name: 'Choremane'
+        secret: 'choremane-secret'
     connectors:
       - type: google
         id: google

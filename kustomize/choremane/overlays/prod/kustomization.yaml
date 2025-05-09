@@ -17,3 +17,7 @@ patches:
       kind: Deployment
       name: frontend-deployment
     path: frontend-deployment-patch.yaml
+  - target:
+      kind: Deployment
+      name: backend-deployment
+    path: backend-auth-patch.yaml

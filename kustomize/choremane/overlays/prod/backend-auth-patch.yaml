@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: choremane
+spec:
+  template:
+    spec:
+      containers:
+        - name: backend
+          env:
+            - name: OAUTH_CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: choremane-oauth-config
+                  key: OAUTH_CLIENT_ID
+            - name: OAUTH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: choremane-oauth-secret
+                  key: OAUTH_CLIENT_SECRET
+            - name: DEX_ISSUER_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: choremane-oauth-config
+                  key: DEX_ISSUER_URL
+            - name: SESSION_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: choremane-oauth-config
+                  key: SESSION_SECRET
+            - name: FRONTEND_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: choremane-oauth-config
+                  key: FRONTEND_URL

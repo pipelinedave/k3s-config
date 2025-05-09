@@ -4,9 +4,8 @@ metadata:
   name: frontend-ingress
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    nginx.ingress.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: traefik
-    traefik.ingress.kubernetes.io/redirect-regex: "^(?!.*reset\\.html).*"
+    traefik.ingress.kubernetes.io/rewrite-target: /$1
   labels:
     app.kubernetes.io/name: choremane
     app.kubernetes.io/component: frontend

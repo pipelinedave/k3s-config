@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dex-config
+  namespace: dex
+data:
+  config.yaml: |
+    issuer: https://dex.stillon.top
+    storage:
+      type: kubernetes
+      config:
+        inCluster: true
+    web:
+      http: 0.0.0.0:5556
+    staticClients:
+    - id: choremane
+      redirectURIs:
+      - 'https://chores.stillon.top/api/auth/callback'
+      - 'http://localhost:8080/api/auth/callback'  # For local development
+      name: 'Choremane'
+      secret: 'choremane-secret'
+    connectors:
+      - type: google
+        id: google
+        name: Google
+        config:
+          clientID: $GOOGLE_CLIENT_ID
+          clientSecret: $GOOGLE_CLIENT_SECRET
+          redirectURI: https://dex.stillon.top/callback

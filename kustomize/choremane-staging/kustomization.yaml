@@ -1,0 +1,8 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+- ../choremane/overlays/staging/
+
+# Note: This namespace uses an overlay structure.
+# The actual resources are defined in the base and overlays directories.

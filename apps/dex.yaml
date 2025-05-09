@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m0s
-  path: ./kustomize-incomplete/dex
+  path: ./kustomize/dex
   prune: true
   sourceRef:
     kind: GitRepository

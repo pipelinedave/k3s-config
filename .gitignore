@@ -4,6 +4,10 @@ test/
 # Exclude these specific shell scripts from being ignored
 !scripts/seal_secrets.sh
 !scripts/seal-oauth-secret.sh
+# Allow sealed secret files in git
+!*-sealed.yaml
+!*-secret-sealed.yaml
+!*-credentials-sealed.yaml
 version-configmap-dev.yaml
 backup.sql
 default.yaml

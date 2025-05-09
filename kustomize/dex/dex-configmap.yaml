@@ -12,11 +12,14 @@ data:
         inCluster: true
     web:
       http: 0.0.0.0:5556
+      # Add HTTPS configuration
+      httpAddress: 0.0.0.0:5556
+      allowedOrigins: ['*']
     staticClients:
       - id: choremane
         redirectURIs:
         - 'https://chores.stillon.top/api/auth/callback'
-        - 'http://localhost:8080/api/auth/callback'  # For local development
+        - 'http://localhost:8090/auth/callback'  # Updated for local development
         name: 'Choremane'
         secret: 'choremane-secret'
     connectors:

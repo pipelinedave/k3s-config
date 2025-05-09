@@ -1,6 +1,9 @@
 test/
 # Dont be a doofus
 *secret*
+# Exclude these specific shell scripts from being ignored
+!scripts/seal_secrets.sh
+!scripts/seal-oauth-secret.sh
 version-configmap-dev.yaml
 backup.sql
 default.yaml

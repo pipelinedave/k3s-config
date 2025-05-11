@@ -18,6 +18,7 @@ patchesStrategicMerge:
       name: choremane-oauth-secret
       namespace: choremane-staging
     $patch: delete
+  - oauth-configmap-patch.yaml
 
 patches:
   - target:

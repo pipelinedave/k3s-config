@@ -34,8 +34,3 @@ spec:
                 configMapKeyRef:
                   name: choremane-oauth-config
                   key: FRONTEND_URL
-            - name: FRONTEND_URL
-              valueFrom:
-                configMapKeyRef:
-                  name: choremane-oauth-config
-                  key: FRONTEND_URL

@@ -18,6 +18,7 @@ data:
         redirectURIs:
         - 'https://chores.stillon.top/api/auth/callback'
         - 'https://chores-staging.stillon.top/api/auth/callback'  # Added for staging
+        - 'http://chores-staging.stillon.top/api/auth/callback'  # Adding HTTP variant for staging
         - 'http://localhost:8090/auth/callback'  # Updated for local development
         name: 'Choremane'
         secret: 'choremane-secret'

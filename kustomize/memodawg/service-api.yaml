@@ -4,9 +4,6 @@ metadata:
   name: memodawg-api-service
   namespace: memodawg
 spec:
-  clusterIP: 10.43.183.249
-  clusterIPs:
-  - 10.43.183.249
   internalTrafficPolicy: Cluster
   ipFamilies:
   - IPv4
@@ -20,5 +17,3 @@ spec:
     tier: api
   sessionAffinity: None
   type: ClusterIP
-status:
-  loadBalancer: {}

@@ -29,7 +29,3 @@ spec:
   - hosts:
     - memodawg.stillon.top
     secretName: memodawg.stillon.top-tls
-status:
-  loadBalancer:
-    ingress:
-    - ip: 161.97.88.129

@@ -4,9 +4,6 @@ metadata:
   name: memodawg-frontend-service
   namespace: memodawg
 spec:
-  clusterIP: 10.43.185.129
-  clusterIPs:
-  - 10.43.185.129
   internalTrafficPolicy: Cluster
   ipFamilies:
   - IPv4
@@ -20,5 +17,3 @@ spec:
     tier: frontend
   sessionAffinity: None
   type: ClusterIP
-status:
-  loadBalancer: {}

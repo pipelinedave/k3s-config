@@ -16,4 +16,4 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: pipelinedave/choremane-frontend:0c61a569adf32ce329ff22b96fbabe2cb8869519
+          image: pipelinedave/choremane-frontend:4eaa4d05dfb97f7336b71267bdee7e727842abca

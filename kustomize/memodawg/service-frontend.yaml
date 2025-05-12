@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: memodawg-frontend-service
+  namespace: memodawg
+spec:
+  clusterIP: 10.43.185.129
+  clusterIPs:
+  - 10.43.185.129
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: memodawg
+    tier: frontend
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

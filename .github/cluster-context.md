@@ -82,8 +82,8 @@ The following applications are partially managed or incomplete:
 2. Use SealedSecrets for all sensitive data (passwords, tokens, etc.)
 3. Use MCP tools to verify Flux reconciliation and cluster state
 4. Create namespaces manually before adding them to Flux management
-5. Keep documentation updated using the update_documentation.sh script
-6. Follow the GitOps-first approach described in docs/workflow.md
+5. Keep documentation updated via the Copilot-driven auto-documentation process (triggered by significant changes or by asking Copilot to "update cluster documentation").
+6. Follow the GitOps-first approach described in [docs/workflow.md](../docs/workflow.md)
 
 ## Critical Protection Policies
 
@@ -105,10 +105,11 @@ The following applications are partially managed or incomplete:
    - TLS configuration using `cert-manager.io/cluster-issuer: letsencrypt-prod`
    - Consistent annotations for traefik
 
-4. **Documentation Updates**: Only update documentation after:
-   - Changes have been committed and pushed to the repository
-   - Flux has successfully reconciled the changes
-   - Manual verification has confirmed proper operation
+4. **Documentation Updates**: Documentation is updated via a Copilot-driven process.
+   - After significant repository changes, or when explicitly requested, Copilot will propose updates to relevant documentation files (e.g., `docs/README.md`, this file).
+   - Review these proposed changes.
+   - Commit and push the updated documentation.
+   This ensures documentation stays synchronized with the cluster configuration.
 
 ## Key Repository Scripts
 

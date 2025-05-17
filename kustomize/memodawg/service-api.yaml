@@ -3,6 +3,14 @@ kind: Service
 metadata:
   name: memodawg-api-service
   namespace: memodawg
+  labels:
+    app.kubernetes.io/name: memodawg
+    app.kubernetes.io/instance: memodawg-api
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: memodawg
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Service for memodawg API."
 spec:
   internalTrafficPolicy: Cluster
   ipFamilies:

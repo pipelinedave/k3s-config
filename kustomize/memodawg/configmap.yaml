@@ -3,6 +3,14 @@ kind: ConfigMap
 metadata:
   name: memodawg-config
   namespace: memodawg
+  labels:
+    app.kubernetes.io/name: memodawg
+    app.kubernetes.io/instance: memodawg
+    app.kubernetes.io/component: config
+    app.kubernetes.io/part-of: memodawg
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "ConfigMap for memodawg application."
 data:
   AZURE_REGION: germanywestcentral
   AZURE_STT_URL: https://germanywestcentral.stt.speech.microsoft.com/speech/recognition/conversation/cognitiveservices/v1

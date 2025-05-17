@@ -3,6 +3,14 @@ kind: Deployment
 metadata:
   name: memodawg-frontend
   namespace: memodawg
+  labels:
+    app.kubernetes.io/name: memodawg
+    app.kubernetes.io/instance: memodawg-frontend
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: memodawg
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Deployment for memodawg frontend."
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -21,6 +29,10 @@ spec:
       labels:
         app: memodawg
         tier: frontend
+        app.kubernetes.io/name: memodawg
+        app.kubernetes.io/instance: memodawg-frontend
+        app.kubernetes.io/component: frontend
+        app.kubernetes.io/part-of: memodawg
     spec:
       containers:
       - image: pipelinedave/memodawg-frontend:0.1.1

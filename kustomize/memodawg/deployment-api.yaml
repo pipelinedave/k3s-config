@@ -3,6 +3,14 @@ kind: Deployment
 metadata:
   name: memodawg-api
   namespace: memodawg
+  labels:
+    app.kubernetes.io/name: memodawg
+    app.kubernetes.io/instance: memodawg-api
+    app.kubernetes.io/component: api
+    app.kubernetes.io/part-of: memodawg
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Deployment for memodawg API."
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
@@ -21,6 +29,10 @@ spec:
       labels:
         app: memodawg
         tier: api
+        app.kubernetes.io/name: memodawg
+        app.kubernetes.io/instance: memodawg-api
+        app.kubernetes.io/component: api
+        app.kubernetes.io/part-of: memodawg
     spec:
       containers:
       - env:

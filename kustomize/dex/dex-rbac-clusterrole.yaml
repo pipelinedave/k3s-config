@@ -2,6 +2,15 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: dex
+  labels:
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: dex
+    app.kubernetes.io/version: v2.30.0 # Associated with Dex version
+    app.kubernetes.io/component: rbac-clusterrole
+    app.kubernetes.io/part-of: dex
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "ClusterRole for Dex Identity Provider (v2.30.0)."
 rules:
 - apiGroups: ["dex.coreos.com"] # API group created by dex
   resources: ["*"]

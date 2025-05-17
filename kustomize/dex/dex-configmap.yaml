@@ -3,6 +3,15 @@ kind: ConfigMap
 metadata:
   name: dex-config
   namespace: dex
+  labels:
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: dex 
+    app.kubernetes.io/version: v2.30.0 # From associated deployment
+    app.kubernetes.io/component: config
+    app.kubernetes.io/part-of: dex
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Configuration for Dex Identity Provider (v2.30.0)."
 data:
   config.yaml: |
     issuer: https://dex.stillon.top

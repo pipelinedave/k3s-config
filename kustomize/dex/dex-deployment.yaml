@@ -3,15 +3,33 @@ kind: Deployment
 metadata:
   name: dex
   namespace: dex
+  labels:
+    app.kubernetes.io/name: dex
+    app.kubernetes.io/instance: dex # Assuming single instance, can be environment specific if overlays were used
+    app.kubernetes.io/version: v2.30.0
+    app.kubernetes.io/component: identity-provider
+    app.kubernetes.io/part-of: dex
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Dex Identity Provider deployment (v2.30.0)."
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: dex
+      app: dex # Existing selector, will keep as is unless a full relabeling of selectors is intended
+      # Consider standardizing selector labels later if desired: 
+      # app.kubernetes.io/name: dex
+      # app.kubernetes.io/component: identity-provider
   template:
     metadata:
       labels:
-        app: dex
+        app: dex # Existing labels, will keep as is
+        # Consider standardizing template labels later:
+        # app.kubernetes.io/name: dex
+        # app.kubernetes.io/instance: dex
+        # app.kubernetes.io/version: v2.30.0
+        # app.kubernetes.io/component: identity-provider
+        # app.kubernetes.io/part-of: dex
     spec:
       serviceAccountName: dex
       containers:

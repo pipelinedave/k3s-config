@@ -8,8 +8,8 @@
 
 ### High Priority
 <!-- Critical bugs and important features -->
-- #infrastructure Move toward GitOps-first approach - Update all documentation and workflows to prioritize repository changes over direct cluster interaction
-- #documentation Complete MCP server tools documentation - Ensure all available tools are documented with examples
+-   [X] #infrastructure Move toward GitOps-first approach - Update all documentation and workflows to reflect a GitOps-first methodology, emphasizing repository changes over direct cluster modification. Ensure MCP tools are presented as the primary means of interaction for Copilot. (Copilot: Ongoing, major updates to cluster-context.md, docs/README.md, docs/adding-applications.md, docs/mcp-tools.md, docs/mcp-flux-tools.md)
+-   [X] #documentation Complete MCP server tools documentation - Ensure all available tools are documented with examples in `docs/mcp-tools.md` and `docs/mcp-flux-tools.md`. (Copilot: Completed mcp-tools.md and mcp-flux-tools.md)
 
 ### Medium Priority
 <!-- Enhancements and improvements -->
@@ -17,7 +17,6 @@
 - #documentation Create documentation on how to use MCP Flux tools for reconciliation and monitoring
 - #maintenance Update all kustomize manifests with correct labels and annotations - Ensure all manifests in kustomize/ directory (those actively reconciled by flux) have consistent and correct metadata
 - #bug Investigate Traefik dashboard issues - Fix the Traefik dashboard that doesn't load information when accessed via port forwarding (note: using K3S bundled Traefik)
-- #infrastructure Assess namespace.yaml requirements - Determine if namespace.yaml manifests need to be added to all kustomize/ resources for improved portability
 
 ### Low Priority
 <!-- Nice-to-haves and maintenance tasks -->

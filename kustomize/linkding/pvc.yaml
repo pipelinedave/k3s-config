@@ -1,0 +1,14 @@
+# filepath: /home/dave/src/k3s-config/kustomize/linkding/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: linkding-pvc
+  namespace: linkding
+  finalizers:
+  - kubernetes.io/pvc-protection
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,0 +1,14 @@
+# filepath: /home/dave/src/k3s-config/kustomize/linkding/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: linkding
+  namespace: linkding
+spec:
+  selector:
+    app: linkding
+  ports:
+  - port: 80
+    targetPort: 9090
+    protocol: TCP
+  type: ClusterIP

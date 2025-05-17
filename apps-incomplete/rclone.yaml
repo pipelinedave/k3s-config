@@ -1,3 +1,4 @@
+# filepath: /home/dave/src/k3s-config/apps/rclone.yaml
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:

@@ -187,10 +187,13 @@ spec:
 
 ## Step 7: Verify Deployment
 
-1. Verify that your application has been deployed successfully:
+1. Verify that your application has been deployed successfully. You can use `kubectl` or MCP tools for this:
 
    ```bash
    kubectl get all -n my-application
+   # Or using MCP tools via Copilot:
+   # bb7_pods_list_in_namespace namespace=my-application
+   # bb7_resources_get apiVersion=v1 kind=Service name=my-service namespace=my-application
    ```
 
 2. Access your application using its domain name:
@@ -199,20 +202,17 @@ spec:
 
 ## Step 8: Update Documentation
 
-Once the application is successfully deployed and verified:
+Once the application is successfully deployed and verified, ensure the cluster documentation is updated. This is handled by the Copilot-driven auto-documentation process:
 
-1. Run the documentation update script to refresh application lists:
-
-   ```bash
-   ./scripts/update_documentation.sh
-   ```
-
-2. Commit the updated documentation:
+1. If you haven't already, inform Copilot about the new application or significant changes made.
+2. Copilot will scan the repository and propose updates to relevant documentation files (e.g., `docs/README.md`, `.github/cluster-context.md`).
+3. Review the changes proposed by Copilot.
+4. Commit and push the updated documentation:
 
    ```bash
-   git add docs/
-   git commit -m "Update documentation with new application"
+   git add docs/README.md .github/cluster-context.md
+   git commit -m "Update documentation: Add my-application (Copilot)"
    git push
    ```
 
-This completes the GitOps-first deployment process.
+This completes the GitOps-first deployment process, ensuring that both the cluster state and its documentation are synchronized with the repository.

@@ -23,10 +23,10 @@
 
 ### Low Priority
 <!-- Nice-to-haves and maintenance tasks -->
-- #maintenance Deprecate legacy scripts - Move away from script-heavy workflow toward Copilot-managed workflows
 
 ## In Progress
 <!-- Tasks currently being worked on -->
+- #maintenance Deprecate legacy scripts - Move away from script-heavy workflow toward Copilot-managed workflows
 
 ## Completed
 <!-- Finished tasks -->

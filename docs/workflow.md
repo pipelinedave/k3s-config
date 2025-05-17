@@ -203,22 +203,23 @@ All sensitive data should be sealed using SealedSecrets:
 
 ## Documentation Updates
 
-After making significant changes to the cluster:
+After making significant changes to the cluster, the documentation should be updated to reflect the current state. This repository uses a Copilot-driven auto-documentation update feature.
 
-1. Run the update_documentation.sh script:
+When significant changes are made to the repository, or when you explicitly ask Copilot to "update cluster documentation", Copilot will:
 
-   ```bash
-   ./scripts/update_documentation.sh
-   ```
+- Scan the `apps/` and `apps-incomplete/` directories for application changes.
+- Update the "Fully Managed Applications" and "Partially Managed Applications" sections in the documentation.
+- Verify and update the "Repository Structure" and "Key Repository Scripts" sections.
+- Update any changed workflows or best practices.
 
-2. Review the changes made by the script
+This process ensures that the documentation, particularly in `docs/README.md` and `.github/cluster-context.md`, remains synchronized with the cluster configuration.
 
-3. Commit the updated documentation:
+Always review the changes proposed by Copilot and commit them to the repository:
 
-   ```bash
-   git add docs/
-   git commit -m "Update documentation"
-   git push
-   ```
+```bash
+git add docs/README.md .github/cluster-context.md
+git commit -m "Update documentation (Copilot)"
+git push
+```
 
-This keeps documentation in sync with the actual state of the cluster.
+This approach replaces the previous `update_documentation.sh` script, streamlining the documentation process.

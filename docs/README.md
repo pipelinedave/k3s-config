@@ -101,6 +101,7 @@ All applications must follow the standardized domain schema:
 - Consistent annotations for traefik
 
 Example:
+
 ```yaml
 metadata:
   annotations:
@@ -121,6 +122,7 @@ spec:
 ### Documentation Updates
 
 Documentation should only be updated after:
+
 - Changes have been committed and pushed to the repository
 - Flux has successfully reconciled the changes
 - Manual verification has confirmed proper operation

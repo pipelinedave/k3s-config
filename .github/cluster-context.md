@@ -121,36 +121,39 @@ The following applications are partially managed or incomplete:
 
 ## Common Kubernetes Operations
 
-When suggesting operations for this repository, consider these common tasks:
+When suggesting operations for this repository, Copilot should primarily use MCP tools for cluster interaction and verification. The user may perform these common tasks manually if needed, but Copilot's role is to automate and assist using its available tooling.
 
 1. Adding a new application to the cluster (GitOps-first approach):
-   - Create namespace manually: `kubectl create namespace <namespace>`
-   - Create manifests directly in the repository under `kustomize/<namespace>/`
-   - Create Flux Kustomization resource in `apps/<namespace>.yaml`
-   - **Always create namespaces manually, not through Flux** (to protect PVCs)
-      - **Ensure PVCs have protection finalizers added**
-   - **Follow the standard domain schema for ingresses**
-   - Commit and push changes for Flux to apply
+   - Copilot will guide the user in creating manifests in the repository.
+   - User creates namespace manually: `kubectl create namespace <namespace>` (Copilot reminds user of this manual step).
+   - Copilot assists in creating manifests directly in the repository under `kustomize/<namespace>/`.
+   - Copilot assists in creating Flux Kustomization resource in `apps/<namespace>.yaml`.
+   - **Copilot emphasizes: Always create namespaces manually, not through Flux** (to protect PVCs).
+      - **Copilot ensures PVCs have protection finalizers added** by editing the manifests.
+   - **Copilot ensures the standard domain schema for ingresses** by editing the manifests.
+   - User commits and pushes changes for Flux to apply. Copilot can assist with `bb7_git_add` and `bb7_git_commit` if requested.
 
 2. Updating an existing application:
-   - Make changes to manifests in repository
-   - Commit and push changes for Flux to apply
-   - **Wait for Flux reconciliation and verify changes**
+   - Copilot assists in making changes to manifests in the repository.
+   - User commits and pushes changes for Flux to apply. Copilot can assist with `bb7_git_add` and `bb7_git_commit` if requested.
+   - **Copilot waits for Flux reconciliation and verifies changes using MCP tools.**
 
-3. Verifying deployment with MCP tools:
+3. Verifying deployment (Copilot's primary method):
    - Use `bb7_pods_list_in_namespace namespace=<namespace>`
-   - Use `bb7_reconcile_flux_kustomization name=<name> namespace=flux-system`
-   - Check application health using `bb7_resources_get` calls
+   - Use `bb7_get_kubernetes_resources apiVersion=kustomize.toolkit.fluxcd.io/v1 kind=Kustomization name=<kustomization-name> namespace=flux-system` (to check Flux Kustomization status)
+   - Use `bb7_reconcile_flux_kustomization name=<name> namespace=flux-system` (to trigger reconciliation if needed)
+   - Check application health using `bb7_resources_get` calls for Deployments, Services, Pods etc.
+   - Check pod logs using `bb7_pods_log name=<pod_name> namespace=<namespace>`.
 
 4. Handling sensitive data:
-   - Create secrets locally (never commit)
-   - Use kubeseal to encrypt: `kubeseal --format yaml < secret.yaml > sealed-secret.yaml`
-   - Delete unencrypted secrets
-   - Commit only sealed secrets
+   - User creates secrets locally (never commit).
+   - User uses kubeseal to encrypt: `kubeseal --format yaml < secret.yaml > sealed-secret.yaml` (Copilot reminds user of this manual step and can provide the command).
+   - User deletes unencrypted secrets.
+   - User commits only sealed secrets. Copilot can assist with `bb7_git_add` and `bb7_git_commit` if requested.
 
 ## Command Reference
 
-When providing commands for this cluster, use these as a reference:
+This section lists common `kubectl` and `flux` commands. **These are primarily for the user's reference if operating outside of Copilot, or for understanding the underlying operations. Copilot itself should prefer using MCP tools for all cluster interactions and verifications.**
 
 ### Flux Commands
 
@@ -185,11 +188,11 @@ When providing commands for this cluster, use these as a reference:
 - Check failed reconciliations: `flux get all --status-selector ready=false`
 - Debug resource application: `kubectl get events -n <namespace>`
 
-When suggesting solutions, always prefer GitOps approaches (changing repository files) over direct kubectl commands.
+When suggesting solutions, Copilot will always prefer GitOps approaches (changing repository files) over direct cluster modification via MCP tools, unless specifically for exploration or temporary troubleshooting as agreed with the user. MCP tools that modify the cluster will be used with explicit user confirmation.
 
 ## MCP Server Tools for Kubernetes
 
-When analyzing or modifying the cluster directly, these Model Context Protocol (MCP) server tools are available:
+When Copilot needs to analyze or modify the cluster directly, or interact with the repository, these Model Context Protocol (MCP) server tools are available and **should be Copilot's primary method of interaction**:
 
 ### Cluster Information
 

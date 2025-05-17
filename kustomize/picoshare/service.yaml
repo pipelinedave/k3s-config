@@ -3,6 +3,14 @@ kind: Service
 metadata:
   name: picoshare
   namespace: picoshare
+  labels:
+    app.kubernetes.io/name: picoshare
+    app.kubernetes.io/instance: picoshare
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: picoshare
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Service for Picoshare file sharing application."
 spec:
   ports:
   - port: 80

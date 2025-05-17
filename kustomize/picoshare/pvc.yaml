@@ -5,6 +5,14 @@ metadata:
   - kubernetes.io/pvc-protection
   name: picoshare-pvc
   namespace: picoshare
+  labels:
+    app.kubernetes.io/name: picoshare
+    app.kubernetes.io/instance: picoshare
+    app.kubernetes.io/component: storage
+    app.kubernetes.io/part-of: picoshare
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "PersistentVolumeClaim for Picoshare data."
 spec:
   accessModes:
   - ReadWriteOnce

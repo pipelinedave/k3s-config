@@ -3,6 +3,14 @@ kind: Deployment
 metadata:
   name: picoshare
   namespace: picoshare
+  labels:
+    app.kubernetes.io/name: picoshare
+    app.kubernetes.io/instance: picoshare
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: picoshare
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Deployment for Picoshare file sharing application."
 spec:
   replicas: 1
   selector:
@@ -12,6 +20,10 @@ spec:
     metadata:
       labels:
         app: picoshare
+        app.kubernetes.io/name: picoshare
+        app.kubernetes.io/instance: picoshare
+        app.kubernetes.io/component: application
+        app.kubernetes.io/part-of: picoshare
     spec:
       containers:
       - env:

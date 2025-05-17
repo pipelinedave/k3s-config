@@ -3,6 +3,17 @@ kind: Ingress
 metadata:
   name: picoshare
   namespace: picoshare
+  labels:
+    app.kubernetes.io/name: picoshare
+    app.kubernetes.io/instance: picoshare
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/part-of: picoshare
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    description: "Ingress for Picoshare file sharing application."
 spec:
   ingressClassName: traefik
   rules:
@@ -19,8 +30,4 @@ spec:
   tls:
   - hosts:
     - share.stillon.top
-    secretName: share.stillon.top-tls
-status:
-  loadBalancer:
-    ingress:
-    - ip: 161.97.88.129
+    secretName: share.stillon.top-tls # Ensure this matches the host if it's specific, or use a generic name like picoshare-tls

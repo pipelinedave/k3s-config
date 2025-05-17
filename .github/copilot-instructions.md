@@ -53,9 +53,11 @@ The following applications are fully Flux-managed:
 - choremane (prod and staging): Chore management application
 - docspell: Document management system
 - gotify: Notification service
+- linkding: Bookmark management system
 - memodawg: whatsapp-voicemessage transcriber
 - metube: Media downloader
 - picoshare: File sharing solution
+- rclone: File synchronization and backup
 
 ## Partially Managed Applications
 The following applications are partially managed or incomplete:
@@ -70,7 +72,6 @@ The following applications are partially managed or incomplete:
 - mirotalk: Video conferencing
 - open-webui: Web UI for AI tools
 - pingpong-dev: Developer tool
-- rclone: File synchronization
 - taskserver: Task management server
 - uptime-kuma: Uptime monitoring
 - vanessa-choremane: Specialized version of choremane
@@ -82,6 +83,23 @@ The following applications are partially managed or incomplete:
 2. Use SealedSecrets for all sensitive data (passwords, tokens, etc.)
 3. Run verification scripts periodically to ensure repository and cluster are in sync
 4. Process namespaces using provided scripts when changes are needed
+
+## Critical Protection Policies
+1. **PVC Protection**: All PersistentVolumeClaims must include `kubernetes.io/pvc-protection` finalizer to prevent accidental deletion
+   ```yaml
+   metadata:
+     finalizers:
+     - kubernetes.io/pvc-protection
+   ```
+2. **Ingress Domain Schema**: All applications must follow the standardized domain schema:
+   - Format: `<application-name>.stillon.top`
+   - TLS configuration using `cert-manager.io/cluster-issuer: letsencrypt-prod`
+   - Consistent annotations for traefik
+
+3. **Documentation Updates**: Only update documentation after:
+   - Changes have been committed and pushed to the repository
+   - Flux has successfully reconciled the changes
+   - Manual verification has confirmed proper operation
 
 ## Key Repository Scripts
 - `export_namespace.sh`: Exports resources from a namespace to the repository
@@ -97,9 +115,12 @@ When suggesting operations for this repository, consider these common tasks:
    - Deploy application
    - Export resources: `./scripts/export_namespace.sh <namespace>`
    - Decide on Flux management level and place in appropriate directories
+   - **Ensure PVCs have protection finalizers added**
+   - **Follow the standard domain schema for ingresses**
 2. Updating an existing application:
    - Make changes to manifests in repository
    - Commit and push changes for Flux to apply
+   - **Wait for Flux reconciliation and verify changes**
 3. Verifying cluster state:
    - Run `./scripts/verify_cluster.sh [namespace]`
 4. Handling sensitive data:

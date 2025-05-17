@@ -31,22 +31,22 @@ Next, create the necessary Kubernetes manifests in the repository:
 
 1. Create a directory structure for your application:
 
-```bash
-mkdir -p kustomize/my-application
-```
+    ```bash
+    mkdir -p kustomize/my-application
+    ```
 
 2. Create kustomization.yaml (without namespace.yaml to protect the namespace):
 
-```yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: my-application
-resources:
-- deployment.yaml
-- service.yaml
-- ingress.yaml
-- pvc.yaml
-```
+    ```yaml
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+    namespace: my-application
+    resources:
+    - deployment.yaml
+    - service.yaml
+    - ingress.yaml
+    - pvc.yaml
+    ```
 
 ## Step 3: Create Flux Kustomization
 
@@ -76,39 +76,39 @@ If your application requires sensitive data:
 
 1. Create a Secret manifest (temporary, do not commit):
 
-```yaml
-# my-application-secret.yaml (temporary file)
-apiVersion: v1
-kind: Secret
-metadata:
-  name: my-application-secret
-  namespace: my-application
-type: Opaque
-stringData:
-  username: admin
-  password: changeme
-```
+    ```yaml
+    # my-application-secret.yaml (temporary file)
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: my-application-secret
+      namespace: my-application
+    type: Opaque
+    stringData:
+      username: admin
+      password: changeme
+    ```
 
 2. Seal the secret using kubeseal:
 
-```bash
-kubeseal --format yaml < my-application-secret.yaml > my-application-secret-sealed.yaml
-rm my-application-secret.yaml  # Delete the unencrypted file
-```
+    ```bash
+    kubeseal --format yaml < my-application-secret.yaml > my-application-secret-sealed.yaml
+    rm my-application-secret.yaml  # Delete the unencrypted file
+    ```
 
 3. Add the sealed secret to your kustomization.yaml file:
 
-```yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: my-application
-resources:
-- deployment.yaml
-- service.yaml
-- ingress.yaml
-- pvc.yaml
-- my-application-secret-sealed.yaml  # Add the sealed secret
-```
+    ```yaml
+    apiVersion: kustomize.config.k8s.io/v1beta1
+    kind: Kustomization
+    namespace: my-application
+    resources:
+    - deployment.yaml
+    - service.yaml
+    - ingress.yaml
+    - pvc.yaml
+    - my-application-secret-sealed.yaml  # Add the sealed secret
+    ```
 
 ## Step 5: Apply Critical Protection Policies
 
@@ -171,30 +171,30 @@ spec:
 
 1. Commit your changes to the repository:
 
-   ```bash
-   git add .
-   git commit -m "Add my-application"
-   git push
-   ```
+    ```bash
+    git add .
+    git commit -m "Add my-application"
+    git push
+    ```
 
 2. Flux will automatically detect the changes and deploy your application to the cluster.
 
 3. Monitor the deployment status:
 
-   ```bash
-   flux get kustomizations
-   ```
+    ```bash
+    flux get kustomizations
+    ```
 
 ## Step 7: Verify Deployment
 
 1. Verify that your application has been deployed successfully. You can use `kubectl` or MCP tools for this:
 
-   ```bash
-   kubectl get all -n my-application
-   # Or using MCP tools via Copilot:
-   # bb7_pods_list_in_namespace namespace=my-application
-   # bb7_resources_get apiVersion=v1 kind=Service name=my-service namespace=my-application
-   ```
+    ```bash
+    kubectl get all -n my-application
+    # Or using MCP tools via Copilot:
+    # bb7_pods_list_in_namespace namespace=my-application
+    # bb7_resources_get apiVersion=v1 kind=Service name=my-service namespace=my-application
+    ```
 
 2. Access your application using its domain name:
 
@@ -209,10 +209,10 @@ Once the application is successfully deployed and verified, ensure the cluster d
 3. Review the changes proposed by Copilot.
 4. Commit and push the updated documentation:
 
-   ```bash
-   git add docs/README.md .github/cluster-context.md
-   git commit -m "Update documentation: Add my-application (Copilot)"
-   git push
-   ```
+    ```bash
+    git add docs/README.md .github/cluster-context.md
+    git commit -m "Update documentation: Add my-application (Copilot)"
+    git push
+    ```
 
 This completes the GitOps-first deployment process, ensuring that both the cluster state and its documentation are synchronized with the repository.

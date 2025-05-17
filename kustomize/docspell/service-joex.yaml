@@ -3,6 +3,15 @@ kind: Service
 metadata:
   name: joex
   namespace: docspell
+  labels:
+    app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/version: "latest"
+    app.kubernetes.io/component: joex-service
+    app.kubernetes.io/part-of: docspell
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Docspell joex service"
 spec:
   ports:
   - name: http
@@ -11,4 +20,7 @@ spec:
     targetPort: 7878
   selector:
     app: joex
+    app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/component: joex-worker
   type: ClusterIP

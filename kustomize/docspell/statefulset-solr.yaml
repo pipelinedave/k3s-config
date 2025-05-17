@@ -4,8 +4,14 @@ metadata:
   name: solr
   namespace: docspell
   labels:
-    app.kubernetes.io/component: solr-worker
     app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/version: "9"
+    app.kubernetes.io/component: solr-worker
+    app.kubernetes.io/part-of: docspell
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Docspell solr statefulset"
 spec:
   replicas: 1
   selector:
@@ -16,6 +22,9 @@ spec:
     metadata:
       labels:
         app: solr
+        app.kubernetes.io/name: docspell
+        app.kubernetes.io/instance: docspell
+        app.kubernetes.io/component: solr-worker
     spec:
       containers:
       - command:

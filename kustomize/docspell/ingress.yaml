@@ -1,11 +1,17 @@
-
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
+    description: "Docspell ingress"
   labels:
     app: docspell
+    app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/version: "latest"
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/part-of: docspell
+    app.kubernetes.io/managed-by: flux
   name: docspell-ingress
   namespace: docspell
 spec:

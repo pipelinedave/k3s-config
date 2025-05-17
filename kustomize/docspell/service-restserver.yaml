@@ -3,6 +3,15 @@ kind: Service
 metadata:
   name: restserver
   namespace: docspell
+  labels:
+    app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/version: "latest"
+    app.kubernetes.io/component: restserver-service
+    app.kubernetes.io/part-of: docspell
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Docspell restserver service"
 spec:
   ports:
   - name: http
@@ -11,4 +20,7 @@ spec:
     targetPort: 7880
   selector:
     app: restserver
+    app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/component: restserver
   type: ClusterIP

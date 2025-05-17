@@ -4,8 +4,14 @@ metadata:
   name: restserver
   namespace: docspell
   labels:
-    app.kubernetes.io/component: restserver
     app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/version: "latest"
+    app.kubernetes.io/component: restserver
+    app.kubernetes.io/part-of: docspell
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Docspell restserver deployment"
 spec:
   replicas: 1
   selector:
@@ -15,6 +21,9 @@ spec:
     metadata:
       labels:
         app: restserver
+        app.kubernetes.io/name: docspell
+        app.kubernetes.io/instance: docspell
+        app.kubernetes.io/component: restserver
     spec:
       containers:
       - env:

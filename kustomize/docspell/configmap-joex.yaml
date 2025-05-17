@@ -4,7 +4,13 @@ metadata:
   name: joex-config-8t49mc58fh
   namespace: docspell
   labels:
-    app.kubernetes.io/component: joex-config
     app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/version: "latest"
+    app.kubernetes.io/component: joex-config
+    app.kubernetes.io/part-of: docspell
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Docspell joex configmap"
 data:
   DOCSPELL_JOEX_JDBC_USER: docspell

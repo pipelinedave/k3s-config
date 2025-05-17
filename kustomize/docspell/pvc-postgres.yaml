@@ -5,6 +5,14 @@ metadata:
   - kubernetes.io/pvc-protection
   labels:
     app: postgres
+    app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/version: "15.2"
+    app.kubernetes.io/component: postgres-pvc
+    app.kubernetes.io/part-of: docspell
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Docspell postgres PVC"
   name: postgres-data-postgres-0
   namespace: docspell
 spec:

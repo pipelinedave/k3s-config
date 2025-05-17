@@ -5,6 +5,14 @@ metadata:
   - kubernetes.io/pvc-protection
   labels:
     app: solr
+    app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/version: "9"
+    app.kubernetes.io/component: solr-pvc
+    app.kubernetes.io/part-of: docspell
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Docspell solr PVC"
   name: solr-data-solr-0
   namespace: docspell
 spec:

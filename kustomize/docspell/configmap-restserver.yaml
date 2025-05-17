@@ -3,5 +3,14 @@ kind: ConfigMap
 metadata:
   name: restserver-config-fk6475mbhc
   namespace: docspell
+  labels:
+    app.kubernetes.io/name: docspell
+    app.kubernetes.io/instance: docspell
+    app.kubernetes.io/version: "latest"
+    app.kubernetes.io/component: restserver-config
+    app.kubernetes.io/part-of: docspell
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Docspell restserver configmap"
 data:
   DOCSPELL_SERVER_BACKEND_JDBC_USER: docspell

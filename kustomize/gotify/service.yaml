@@ -3,6 +3,15 @@ kind: Service
 metadata:
   name: gotify
   namespace: gotify
+  labels:
+    app.kubernetes.io/name: gotify
+    app.kubernetes.io/instance: gotify
+    app.kubernetes.io/version: "latest" # Assuming latest, derived from deployment
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: gotify
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Service for Gotify server"
 spec:
   ports:
   - port: 80
@@ -10,4 +19,6 @@ spec:
     targetPort: 80
   selector:
     app: gotify
+    app.kubernetes.io/name: gotify # Added to match deployment selector
+    app.kubernetes.io/instance: gotify # Added to match deployment selector
   type: ClusterIP

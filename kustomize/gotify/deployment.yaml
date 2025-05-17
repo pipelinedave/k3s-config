@@ -3,15 +3,28 @@ kind: Deployment
 metadata:
   name: gotify
   namespace: gotify
+  labels:
+    app.kubernetes.io/name: gotify
+    app.kubernetes.io/instance: gotify
+    app.kubernetes.io/version: "latest" # Assuming latest, please specify if different
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: gotify
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Gotify server deployment"
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: gotify
+      app.kubernetes.io/name: gotify
+      app.kubernetes.io/instance: gotify
   template:
     metadata:
       labels:
         app: gotify
+        app.kubernetes.io/name: gotify
+        app.kubernetes.io/instance: gotify
     spec:
       containers:
       - image: gotify/server

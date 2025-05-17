@@ -5,6 +5,15 @@ metadata:
   - kubernetes.io/pvc-protection
   name: gotify-storage
   namespace: gotify
+  labels:
+    app.kubernetes.io/name: gotify
+    app.kubernetes.io/instance: gotify
+    app.kubernetes.io/version: "latest" # Assuming latest, derived from deployment
+    app.kubernetes.io/component: storage
+    app.kubernetes.io/part-of: gotify
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "PersistentVolumeClaim for Gotify server data"
 spec:
   accessModes:
   - ReadWriteOnce

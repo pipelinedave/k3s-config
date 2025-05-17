@@ -4,15 +4,30 @@ kind: Deployment
 metadata:
   name: linkding
   namespace: linkding
+  labels:
+    app.kubernetes.io/name: linkding
+    app.kubernetes.io/instance: linkding
+    app.kubernetes.io/version: "latest" # Assuming latest from sissbruecker/linkding:latest
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: linkding
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Linkding bookmark manager deployment."
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: linkding
+      app: linkding # Existing selector, kept for immutability
   template:
     metadata:
       labels:
-        app: linkding
+        app: linkding # Existing selector label
+        app.kubernetes.io/name: linkding
+        app.kubernetes.io/instance: linkding
+        app.kubernetes.io/version: "latest" # Assuming latest from sissbruecker/linkding:latest
+        app.kubernetes.io/component: application
+        app.kubernetes.io/part-of: linkding
+        app.kubernetes.io/managed-by: flux
     spec:
       containers:
       - name: linkding

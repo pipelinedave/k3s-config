@@ -4,10 +4,17 @@ kind: Ingress
 metadata:
   name: linkding
   namespace: linkding
+  labels:
+    app.kubernetes.io/name: linkding
+    app.kubernetes.io/instance: linkding
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: linkding
+    app.kubernetes.io/managed-by: flux
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
+    description: "Ingress for Linkding bookmark manager."
 spec:
   ingressClassName: traefik
   rules:

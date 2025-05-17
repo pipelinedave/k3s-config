@@ -4,10 +4,11 @@ kind: Kustomization
 namespace: dex
 
 resources:
-- namespace.yaml
 - dex-configmap.yaml
 - dex-deployment.yaml
 - dex-service.yaml
 - dex-ingress.yaml
 - dex-google-credentials-sealed.yaml
-- dex-rbac.yaml
+- dex-rbac-serviceaccount.yaml
+- dex-rbac-clusterrole.yaml
+- dex-rbac-clusterrolebinding.yaml

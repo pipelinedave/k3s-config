@@ -139,6 +139,57 @@ When providing commands for this cluster, use these as a reference:
 
 When suggesting solutions, always prefer GitOps approaches (changing repository files) over direct kubectl commands.
 
+## MCP Server Tools for Kubernetes
+When analyzing or modifying the cluster directly, these Model Context Protocol (MCP) server tools are available:
+
+### Cluster Information
+- View cluster configuration: Use `bb7_configuration_view` 
+- List all namespaces: Use `bb7_namespaces_list`
+- List all events: Use `bb7_events_list`
+
+### Pod Management
+- List all pods: Use `bb7_pods_list`
+- List pods in namespace: Use `bb7_pods_list_in_namespace`
+- Get pod details: Use `bb7_pods_get`
+- Execute command in pod: Use `bb7_pods_exec`
+- View pod logs: Use `bb7_pods_log`
+- Delete pod: Use `bb7_pods_delete`
+- Run new pod: Use `bb7_pods_run`
+
+### Resource Management
+- List resources by kind: Use `bb7_resources_list`
+- Get specific resource: Use `bb7_resources_get`
+- Create/update resource: Use `bb7_resources_create_or_update`
+- Delete resource: Use `bb7_resources_delete`
+
+### Helm Management
+- List Helm releases: Use `bb7_helm_list`
+- Install Helm chart: Use `bb7_helm_install`
+- Uninstall Helm release: Use `bb7_helm_uninstall`
+
+### Repository File Operations
+- List allowed directories: Use `bb7_list_allowed_directories`
+- List directory contents: Use `bb7_list_directory`
+- Get directory tree: Use `bb7_directory_tree`
+- Search for files: Use `bb7_search_files`
+- Read file contents: Use `bb7_read_file`
+- Read multiple files: Use `bb7_read_multiple_files`
+- Create directory: Use `bb7_create_directory`
+- Write file: Use `bb7_write_file`
+- Edit file: Use `bb7_edit_file`
+- Move file: Use `bb7_move_file`
+- Get file info: Use `bb7_get_file_info`
+
+### Git Operations
+- View git status: Use `bb7_git_status`
+- Add files: Use `bb7_git_add`
+- Commit changes: Use `bb7_git_commit` 
+- See differences: Use `bb7_git_diff`
+- View staged changes: Use `bb7_git_diff_staged`
+- View unstaged changes: Use `bb7_git_diff_unstaged`
+
+These tools enable direct interaction with both the Kubernetes cluster and the repository files, making it possible to analyze the cluster state, compare it with the repository, and make informed suggestions about changes or improvements.
+
 ## Context Awareness
 - Automatically analyze the repository structure when providing assistance
 - Consider the GitOps workflow when suggesting changes

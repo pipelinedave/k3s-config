@@ -23,7 +23,6 @@
 
 ### Low Priority
 <!-- Nice-to-haves and maintenance tasks -->
-- #enhancement Modularize copilot-instructions.md
 - #maintenance Deprecate legacy scripts - Move away from script-heavy workflow toward Copilot-managed workflows
 
 ## In Progress
@@ -31,6 +30,7 @@
 
 ## Completed
 <!-- Finished tasks -->
+- #enhancement Modularize copilot-instructions.md
 - #documentation Create self-documenting cluster system - Develop documentation about the cluster using MCP server for Kubernetes, integrate with k3s-config repo knowledge, update copilot-instructions for cluster awareness, and implement auto-documentation updates on repo pushes
 - #security Protect PVC resources from deletion - Implement protections for all PVC resources in the kustomize/ directory
 

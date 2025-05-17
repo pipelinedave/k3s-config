@@ -10,6 +10,4 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: local-path
-  volumeMode: Filesystem
-  volumeName: pvc-dee05398-ccd6-4326-af7d-3756cb10f160
 

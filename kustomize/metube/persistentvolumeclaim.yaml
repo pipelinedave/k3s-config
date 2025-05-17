@@ -3,6 +3,14 @@ kind: PersistentVolumeClaim
 metadata:
   name: metube-pvc
   namespace: metube
+  labels:
+    app.kubernetes.io/name: metube
+    app.kubernetes.io/instance: metube
+    app.kubernetes.io/component: storage
+    app.kubernetes.io/part-of: metube
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "PersistentVolumeClaim for MeTube downloads."
   finalizers:
   - kubernetes.io/pvc-protection
 spec:

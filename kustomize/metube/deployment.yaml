@@ -3,6 +3,14 @@ kind: Deployment
 metadata:
   name: metube
   namespace: metube
+  labels:
+    app.kubernetes.io/name: metube
+    app.kubernetes.io/instance: metube
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: metube
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Deployment for MeTube media downloader."
 spec:
   replicas: 1
   selector:
@@ -17,6 +25,10 @@ spec:
     metadata:
       labels:
         app: metube
+        app.kubernetes.io/name: metube
+        app.kubernetes.io/instance: metube
+        app.kubernetes.io/component: application
+        app.kubernetes.io/part-of: metube
     spec:
       containers:
       - env:

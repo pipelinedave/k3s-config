@@ -6,225 +6,150 @@ This repository serves as the single source of truth for the configuration of th
 
 This repository follows a GitOps-first philosophy:
 
-1. All changes begin in the repository, not the cluster
-2. Flux continuously reconciles the cluster with the repository state
-3. Direct cluster manipulation is avoided in favor of repository updates
-4. Documentation is kept current to reflect the live state
-
-## Repository Structure
-
-- `apps/`: Contains Flux Kustomization resources for complete, fully Flux-managed applications
-- `apps-incomplete/`: Contains Flux Kustomization resources for applications that are not fully managed by Flux
-- `flux-system/`: Contains Flux bootstrap configuration
-- `kustomize/`: Contains Kubernetes manifests for complete, fully Flux-managed applications
-- `kustomize-incomplete/`: Contains Kubernetes manifests for applications that are not fully managed by Flux
-- `scripts/`: Contains utility scripts (legacy support - prefer GitOps approach)
-- `system/`: Contains system-level configurations
-- `test/`: Contains configurations for testing purposes (not committed to the repository)
-- `docs/`: Contains comprehensive documentation for the cluster
+1. All changes begin in the repository, not the cluster.
+2. Flux continuously reconciles the cluster with the repository state.
+3. Direct cluster manipulation is avoided in favor of repository updates.
+4. Documentation is kept current to reflect the live state.
 
 ## Documentation
 
-For detailed documentation on using this repository, see the [docs directory](docs/README.md):
+**The primary and most detailed documentation for this cluster is located in the [`docs/` directory](./docs/README.md).**
 
-- [GitOps Workflow Guidelines](docs/workflow.md)
-- [Adding New Applications](docs/adding-applications.md)
-- [MCP Server Tools](docs/mcp-tools.md)
-- [Scripts Reference](docs/scripts.md)
+This includes:
+
+- Comprehensive cluster overview and setup.
+- Detailed repository structure.
+- Lists of fully and partially managed applications.
+- In-depth workflow guidelines and critical protection policies.
+- Command references and troubleshooting guides.
+
+Key documentation links:
+
+- [**Main Documentation Hub**](./docs/README.md)
+- [GitOps Workflow Guidelines](./docs/workflow.md)
+- [Adding New Applications](./docs/adding-applications.md)
+- [MCP Server Tools](./docs/mcp-tools.md)
+- [Scripts Reference](./docs/scripts.md) (for legacy support and specific scenarios)
+
+## Repository Structure
+
+This repository is organized as follows:
+
+- `apps/`: Flux Kustomizations for fully managed applications.
+- `apps-incomplete/`: Flux Kustomizations for partially managed applications.
+- `flux-system/`: Flux bootstrap configuration.
+- `kustomize/`: Kubernetes manifests for fully managed applications.
+- `kustomize-incomplete/`: Kubernetes manifests for partially managed applications.
+- `scripts/`: Utility scripts (primarily for legacy support).
+- `system/`: System-level configurations.
+- `docs/`: Comprehensive cluster documentation (this is the place to go for details!).
+- `test/`: Configurations for testing (not committed).
+
+For a detailed explanation of the repository structure, please see the [main documentation](./docs/README.md#repository-structure).
 
 ## Quick Start
 
 ### Prerequisites
 
-- kubectl
+- `kubectl`
 - Flux CLI (for bootstrapping)
-- kubeseal (for handling sensitive data)
+- `kubeseal` (for handling sensitive data)
 
 ### Bootstrapping a New Cluster
 
 To bootstrap a new cluster with this configuration:
 
-1. Create a new k3s cluster
+1. Create a new k3s cluster.
 2. Bootstrap Flux:
 
-```bash
-flux bootstrap github \
-  --owner=<your-github-username> \
-  --repository=k3s-config \
-  --branch=main \
-  --path=./ \
-  --personal
-```
+   ```bash
+   flux bootstrap github \
+     --owner=<your-github-username> \
+     --repository=k3s-config \
+     --branch=main \
+     --path=./ \
+     --personal
+   ```
 
-This will install Flux and configure it to sync with this repository.
+   This will install Flux and configure it to sync with this repository.
 
-### Adding a New Application
+### Adding a New Application (GitOps Workflow)
 
-Follow the GitOps-first workflow to add new applications:
+1. **Create Namespace Manually**: `kubectl create namespace <namespace>` (Namespaces are not managed by Flux to protect PVCs).
+2. **Create Manifests**:
+    - Place application manifests in `kustomize/<application-name>/`.
+    - Ensure PVCs have protection finalizers:
 
-1. Create the application directory and manifests:
+      ```yaml
+      metadata:
+        finalizers:
+          - kubernetes.io/pvc-protection
+      ```
 
-```bash
-mkdir -p kustomize/my-application
-```
+    - Follow the standard domain schema for Ingress resources (`<application-name>.stillon.top`, TLS with `letsencrypt-prod`).
+3. **Handle Sensitive Data**:
+    - Create regular Kubernetes Secrets locally (e.g., `my-secret.yaml`).
+    - Seal them using `kubeseal`:
 
-2. Create all necessary manifests following our standards:
-   - Ensure PVCs have protection finalizers
-   - Follow the standardized domain schema for ingress resources
-   - Use SealedSecrets for sensitive data
+      ```bash
+      kubeseal --format yaml < my-secret.yaml > kustomize/<application-name>/my-secret-sealed.yaml
+      ```
 
-3. Create a Flux kustomization in the apps directory:
+    - Commit only the sealed version.
+4. **Create Flux Kustomization**:
+    - Add a YAML file in `apps/<application-name>.yaml`:
 
-```bash
-cat > apps/my-application.yaml << EOF
-apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomization
-metadata:
-  name: my-application
-  namespace: flux-system
-spec:
-  interval: 10m0s
-  path: ./kustomize/my-application
-  prune: true
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-EOF
-```
+      ```yaml
+      apiVersion: kustomize.toolkit.fluxcd.io/v1
+      kind: Kustomization
+      metadata:
+        name: <application-name>
+        namespace: flux-system
+      spec:
+        interval: 10m0s
+        path: ./kustomize/<application-name>
+        prune: true
+        sourceRef:
+          kind: GitRepository
+          name: flux-system
+        targetNamespace: <namespace> # Specify the target namespace for the application
+      ```
 
-4. Commit and push your changes - Flux will automatically deploy the application
+5. **Commit and Push**: Flux will automatically deploy the application.
 
-### Handling Sensitive Data
-
-For sensitive data, always use SealedSecrets:
-
-1. Create a regular Kubernetes Secret
-2. Seal it using kubeseal:
-
-```bash
-kubeseal --format yaml < my-secret.yaml > my-secret-sealed.yaml
-```
-
-3. Commit only the sealed version to the repository
+For more detailed steps, see [Adding New Applications](./docs/adding-applications.md).
 
 ### Using MCP Server Tools
 
-MCP server tools provide an integrated way to interact with the cluster through Copilot. See the [MCP Tools Documentation](docs/mcp-tools.md) for details on available tools and usage examples.
+MCP server tools provide an integrated way to interact with the cluster through Copilot. See the [MCP Tools Documentation](./docs/mcp-tools.md) for details.
 
-### Legacy Scripts (For Reference)
-
-This repository includes legacy scripts that were previously used for manual operations. While our preferred approach is GitOps-first, these scripts remain available for specific scenarios. See the [Scripts Documentation](docs/scripts.md) for details.
 ## Best Practices
 
 ### Critical Protection Policies
 
-1. **PVC Protection**: All PersistentVolumeClaims must include the protection finalizer
-   ```yaml
-   metadata:
-     finalizers:
-     - kubernetes.io/pvc-protection
-   ```
+Adherence to these policies is crucial for cluster stability and security. Detailed explanations and examples are in the [main documentation](./docs/README.md#critical-protection-policies).
 
-2. **Ingress Domain Schema**: All applications must follow the standardized domain schema
-   - Format: `<application-name>.stillon.top`
-   - TLS configuration using `cert-manager.io/cluster-issuer: letsencrypt-prod`
-   - Consistent annotations for traefik
+1. **PVC Protection**: All PersistentVolumeClaims *must* include the `kubernetes.io/pvc-protection` finalizer.
+2. **Ingress Domain Schema**: All applications *must* follow the standardized domain schema (`<application-name>.stillon.top`) and TLS configuration.
+3. **Namespace Management**: Namespaces are created manually (`kubectl create namespace <namespace>`) and are *not* managed by Flux. The `targetNamespace` field in Flux Kustomizations should be used to deploy resources into these pre-existing namespaces.
 
 ### GitOps Workflow
 
-1. **Repository as Source of Truth**:
-   - Make changes to the repository first, then let Flux apply them
-   - Don't use `kubectl apply` directly for changes that should persist
-   - When exploring or testing, use temporary namespaces
-
-2. **Keep Sensitive Data Secure**:
-   - Use SealedSecrets for all sensitive data (passwords, tokens, etc.)
-   - Never commit unencrypted secrets to the repository
-   - Store encryption key backups securely
-
-3. **Documentation as Code**:
-   - Keep documentation updated alongside code changes
-   - Documentation is the key to Copilot's understanding of the cluster
-   - Add contextual comments in critical files
+1. **Repository as Source of Truth**: Make changes to this repository first. Flux applies them. Avoid direct `kubectl apply` for persistent changes.
+2. **Secure Sensitive Data**: Use SealedSecrets for all secrets. Never commit unencrypted secrets.
+3. **Documentation as Code**: Keep documentation, especially in the [`docs/`](./docs/) directory, updated with changes. This is key for Copilot's understanding and effective assistance. Meaningful commit messages are also important.
 
 ## Monitoring & Verification
 
-To monitor Flux reconciliation:
-
-```bash
-flux get kustomizations
-```
-
-To verify specific application deployment:
-
-```bash
-kubectl get all -n my-application
-```
-
-For application-specific verification, check the application at its designated domain:
-https://my-application.stillon.top
-
-4. **Document changes**:
-   - Include meaningful commit messages that explain what changed and why
-   - Update this README if new namespaces or major applications are added
-
-## Managed Applications
-
-The following applications are fully Flux-managed and maintained in the `apps/` and `kustomize/` directories:
-
-- choremane (prod and staging)
-- docspell
-- firefly
-- gotify
-- memodawg
-- metube
-- miniflux
-- picoshare
-
-The following applications are partially managed or incomplete and are stored in the `apps-incomplete/` and `kustomize-incomplete/` directories:
-
-- actualbudget
-- dex
-- expenseowl
-- grafana
-- grocy
-- lens-metrics
-- maybe
-- mirotalk
-- open-webui
-- pingpong-dev
-- rclone
-- supersecretmessage
-- taskserver
-- uptime-kuma
-- vanessa-choremane
-- vaultwarden
-- xmrig
-
-## Adding New Applications
-
-1. Create a new namespace for your application: `kubectl create namespace <namespace>`
-2. Deploy your application to the namespace
-3. Export the resources using the export script: `./scripts/export_namespace.sh <namespace>`
-4. Decide if the application is fully Flux-managed or partially managed:
-   - Fully managed: Keep in `apps/` and `kustomize/` directories
-   - Partially managed: Move to `apps-incomplete/` and `kustomize-incomplete/` directories
-5. Commit and push the changes to the repository
+- Monitor Flux reconciliation: `flux get kustomizations -A`
+- Verify application deployment: `kubectl get all -n <application-namespace>`
+- Check application health via its domain: `https://<application-name>.stillon.top`
 
 ## Repository Workflow Philosophy
 
-This repository follows a GitOps philosophy where:
+- **`apps/` & `kustomize/`**: For complete, fully Flux-managed applications.
+- **`apps-incomplete/` & `kustomize-incomplete/`**: For partially managed applications or those requiring manual steps.
+- **`test/`**: For temporary experiments (not committed).
+- **`scripts/`**: Utility scripts, mainly for legacy operations or specific tasks not covered by pure GitOps.
 
-1. Complete, fully Flux-managed applications are maintained in `apps/` and `kustomize/` 
-   - These applications are fully declarative and can be recreated entirely from the manifests
-   - Flux manages all aspects of these applications
-
-2. Incomplete or partially managed applications are moved to `apps-incomplete/` and `kustomize-incomplete/`
-   - These may be applications that require manual steps or have components not managed by Flux
-   - They're included in the repository for documentation but may need manual intervention
-
-3. Test resources and experiments belong in the `test/` directory
-   - These resources are not committed to the repository
-   - They're primarily for testing and development purposes
-
-All utility scripts are located in the `scripts/` directory for better organization and maintainability.
+---

@@ -13,4 +13,3 @@ spec:
     name: flux-system
   wait: true
   timeout: 2m
-  force: true

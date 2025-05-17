@@ -8,7 +8,6 @@
 
 ### High Priority
 <!-- Critical bugs and important features -->
-- #documentation Create self-documenting cluster system - Develop documentation about the cluster using MCP server for Kubernetes, integrate with k3s-config repo knowledge, update copilot-instructions for cluster awareness, and implement auto-documentation updates on repo pushes
 
 ### Medium Priority
 <!-- Enhancements and improvements -->
@@ -20,11 +19,10 @@
 <!-- Nice-to-haves and maintenance tasks -->
 - #security Protect PVC resources from deletion - Implement protections for all PVC resources in the kustomize/ directory
 
-
 ## In Progress
 <!-- Tasks currently being worked on -->
 
-
 ## Completed
 <!-- Finished tasks -->
+- #documentation Create self-documenting cluster system - Develop documentation about the cluster using MCP server for Kubernetes, integrate with k3s-config repo knowledge, update copilot-instructions for cluster awareness, and implement auto-documentation updates on repo pushes
 

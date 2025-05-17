@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: miniflux
+  namespace: miniflux
+spec:
+  clusterIP: 10.43.22.88
+  clusterIPs:
+  - 10.43.22.88
+  internalTrafficPolicy: Cluster
+  ipFamilies:
+  - IPv4
+  ipFamilyPolicy: SingleStack
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: miniflux
+  sessionAffinity: None
+  type: ClusterIP

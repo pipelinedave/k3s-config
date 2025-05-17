@@ -4,18 +4,10 @@ metadata:
   name: postgres
   namespace: miniflux
 spec:
-  clusterIP: 10.43.233.25
-  clusterIPs:
-  - 10.43.233.25
-  internalTrafficPolicy: Cluster
-  ipFamilies:
-  - IPv4
-  ipFamilyPolicy: SingleStack
   ports:
   - port: 5432
     protocol: TCP
     targetPort: 5432
   selector:
     app: postgres
-  sessionAffinity: None
   type: ClusterIP

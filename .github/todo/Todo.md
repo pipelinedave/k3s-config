@@ -4,6 +4,7 @@
 <!-- Add new tasks here for Copilot to organize -->
 - Update repository documentation structure to reflect GitOps-first approach with comprehensive MCP tools
 - Create documentation on how to use MCP Flux tools for reconciliation and monitoring
+- lets make our copilot-instructions more modular. currently there seems to be instructions and information mixed
 
 ## Organized Tasks
 <!-- Copilot will maintain this section -->

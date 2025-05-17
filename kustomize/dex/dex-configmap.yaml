@@ -17,6 +17,7 @@ data:
       - id: choremane
         redirectURIs:
         - 'https://chores-staging.stillon.top/api/auth/callback'
+        - 'https://chores.stillon.top/api/auth/callback' # Added production URI
         name: 'Choremane'
         secret: 'choremane-secret'
     connectors:

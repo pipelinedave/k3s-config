@@ -25,6 +25,7 @@
 
 ## In Progress
 <!-- Tasks currently being worked on -->
+- #feature Implement Dex authentication for Choremane - Set up Dex as OpenID Connect provider according to the PR plan in docs/pull-requests/dex-choremane-auth.md
 
 ## Completed
 <!-- Finished tasks -->

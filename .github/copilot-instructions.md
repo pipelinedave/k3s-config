@@ -115,7 +115,7 @@ The following applications are partially managed or incomplete:
    - TLS configuration using `cert-manager.io/cluster-issuer: letsencrypt-prod`
    - Consistent annotations for traefik
 
-3. **Documentation Updates**: Only update documentation after:
+4. **Documentation Updates**: Only update documentation after:
    - Changes have been committed and pushed to the repository
    - Flux has successfully reconciled the changes
    - Manual verification has confirmed proper operation

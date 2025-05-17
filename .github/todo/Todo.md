@@ -2,9 +2,6 @@
 
 ## Inbox
 <!-- Add new tasks here for Copilot to organize -->
-- Update repository documentation structure to reflect GitOps-first approach with comprehensive MCP tools
-- Create documentation on how to use MCP Flux tools for reconciliation and monitoring
-- lets make our copilot-instructions more modular. currently there seems to be instructions and information mixed
 
 ## Organized Tasks
 <!-- Copilot will maintain this section -->
@@ -18,12 +15,15 @@
 
 ### Medium Priority
 <!-- Enhancements and improvements -->
+- #documentation Update repository documentation structure to reflect GitOps-first approach with comprehensive MCP tools
+- #documentation Create documentation on how to use MCP Flux tools for reconciliation and monitoring
 - #maintenance Update all kustomize manifests with correct labels and annotations - Ensure all manifests in kustomize/ directory (those actively reconciled by flux) have consistent and correct metadata
 - #bug Investigate Traefik dashboard issues - Fix the Traefik dashboard that doesn't load information when accessed via port forwarding (note: using K3S bundled Traefik)
 - #infrastructure Assess namespace.yaml requirements - Determine if namespace.yaml manifests need to be added to all kustomize/ resources for improved portability
 
 ### Low Priority
 <!-- Nice-to-haves and maintenance tasks -->
+- #enhancement Modularize copilot-instructions.md
 - #maintenance Deprecate legacy scripts - Move away from script-heavy workflow toward Copilot-managed workflows
 
 ## In Progress

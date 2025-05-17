@@ -66,3 +66,9 @@ bb7_resources_list            # List resources of a specific kind
 ```
 
 These tools provide a more integrated experience when working with Copilot to manage your cluster.
+
+## Deprecated Scripts
+
+The following scripts are deprecated and will be removed in the future as their functionality is integrated into Copilot-managed workflows or GitOps best practices:
+
+- `update_documentation.sh`: This script was used to update documentation. This functionality is now handled by Copilot's auto-documentation features.

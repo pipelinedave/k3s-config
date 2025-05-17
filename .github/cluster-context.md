@@ -1,13 +1,16 @@
 \
+
 # GitHub Copilot Context for K3s Cluster Configuration
 
 ## Cluster Overview
+
 - This repository is the single source of truth for a k3s Kubernetes cluster
 - The cluster uses Flux for GitOps-driven continuous deployment
 - SealedSecrets is used for handling sensitive data
 - The cluster follows a GitOps philosophy with this repository as the source of truth
 
 ## Auto-Documentation Update
+
 When I mention "update cluster documentation" or make significant changes to the repository:
 
 1. Update the "Fully Managed Applications" section:
@@ -31,6 +34,7 @@ When I mention "update cluster documentation" or make significant changes to the
 This ensures that Copilot's understanding of the cluster remains current and accurate as the repository evolves.
 
 ## Repository Structure
+
 - `apps/`: Contains Flux Kustomization resources for complete, fully Flux-managed applications
 - `apps-incomplete/`: Contains Flux Kustomization resources that are not fully managed by Flux
 - `flux-system/`: Contains Flux bootstrap configuration
@@ -41,7 +45,9 @@ This ensures that Copilot's understanding of the cluster remains current and acc
 - `test/`: Contains configurations for testing and development purposes (not committed to the repository)
 
 ## Fully Managed Applications
+
 The following applications are fully Flux-managed:
+
 - choremane (prod and staging): Chore management application
 - docspell: Document management system
 - gotify: Notification service
@@ -52,7 +58,9 @@ The following applications are fully Flux-managed:
 - rclone: File synchronization and backup
 
 ## Partially Managed Applications
+
 The following applications are partially managed or incomplete:
+
 - actualbudget: Budgeting application
 - dex: Identity service and OAuth provider
 - expenseowl: Expense tracking
@@ -71,6 +79,7 @@ The following applications are partially managed or incomplete:
 - xmrig: Mining utility
 
 ## Cluster Management Workflow
+
 1. Make changes to this repository first, then let Flux apply them to the cluster
 2. Use SealedSecrets for all sensitive data (passwords, tokens, etc.)
 3. Use MCP tools to verify Flux reconciliation and cluster state
@@ -79,13 +88,15 @@ The following applications are partially managed or incomplete:
 6. Follow the GitOps-first approach described in docs/workflow.md
 
 ## Critical Protection Policies
+
 1. **PVC Protection**: All PersistentVolumeClaims must include `kubernetes.io/pvc-protection` finalizer to prevent accidental deletion
+
    ```yaml
    metadata:
      finalizers:
      - kubernetes.io/pvc-protection
    ```
-   
+
 2. **Namespace Management**: Namespaces should be created manually, not managed by Flux
    - Create namespaces with `kubectl create namespace` or `kubectl apply`
    - Do not include namespace.yaml in kustomization.yaml resources
@@ -102,6 +113,7 @@ The following applications are partially managed or incomplete:
    - Manual verification has confirmed proper operation
 
 ## Key Repository Scripts
+
 - `export_namespace.sh`: Exports resources from a namespace to the repository
 - `process_namespace.sh`: Exports clean versions of resources and seals sensitive data
 - `master_sync.sh`: Comprehensive workflow for syncing repository with the cluster
@@ -109,6 +121,7 @@ The following applications are partially managed or incomplete:
 - `seal_secrets.sh`: Seals sensitive ConfigMaps and Secrets using SealedSecrets
 
 ## Common Kubernetes Operations
+
 When suggesting operations for this repository, consider these common tasks:
 
 1. Adding a new application to the cluster (GitOps-first approach):
@@ -137,9 +150,11 @@ When suggesting operations for this repository, consider these common tasks:
    - Commit only sealed secrets
 
 ## Command Reference
+
 When providing commands for this cluster, use these as a reference:
 
 ### Flux Commands
+
 - Check Flux health: `flux check`
 - List Kustomizations: `flux get kustomizations`
 - Reconcile specific kustomization: `flux reconcile kustomization <name>`
@@ -147,10 +162,12 @@ When providing commands for this cluster, use these as a reference:
 - Trace a resource: `flux trace kustomization <name>`
 
 ### Helm Commands for Flux-managed releases
+
 - List Helm releases: `flux get helmreleases`
 - Reconcile Helm release: `flux reconcile helmrelease <name> -n <namespace>`
 
 ### Kubernetes Management
+
 - Get pods across all namespaces: `kubectl get pods --all-namespaces`
 - Get all resources in a namespace: `kubectl get all -n <namespace>`
 - View resource details: `kubectl describe <resource-type> <resource-name> -n <namespace>`
@@ -158,11 +175,13 @@ When providing commands for this cluster, use these as a reference:
 - Port forward to service: `kubectl port-forward svc/<service-name> <local-port>:<service-port> -n <namespace>`
 
 ### SealedSecrets
+
 - View a current secret: `kubectl get secret <secret-name> -n <namespace> -o yaml`
 - Seal a secret: `kubeseal --format yaml < secret.yaml > sealed-secret.yaml`
 - Re-seal all secrets in namespace: `./scripts/seal_secrets.sh <namespace>`
 
 ### Troubleshooting
+
 - Check Flux logs: `kubectl logs -n flux-system deployment/source-controller`
 - Check failed reconciliations: `flux get all --status-selector ready=false`
 - Debug resource application: `kubectl get events -n <namespace>`
@@ -170,14 +189,17 @@ When providing commands for this cluster, use these as a reference:
 When suggesting solutions, always prefer GitOps approaches (changing repository files) over direct kubectl commands.
 
 ## MCP Server Tools for Kubernetes
+
 When analyzing or modifying the cluster directly, these Model Context Protocol (MCP) server tools are available:
 
 ### Cluster Information
-- View cluster configuration: Use `bb7_configuration_view` 
+
+- View cluster configuration: Use `bb7_configuration_view`
 - List all namespaces: Use `bb7_namespaces_list`
 - List all events: Use `bb7_events_list`
 
 ### Pod Management
+
 - List all pods: Use `bb7_pods_list`
 - List pods in namespace: Use `bb7_pods_list_in_namespace`
 - Get pod details: Use `bb7_pods_get`
@@ -187,17 +209,20 @@ When analyzing or modifying the cluster directly, these Model Context Protocol (
 - Run new pod: Use `bb7_pods_run`
 
 ### Resource Management
+
 - List resources by kind: Use `bb7_resources_list`
 - Get specific resource: Use `bb7_resources_get`
 - Create/update resource: Use `bb7_resources_create_or_update`
 - Delete resource: Use `bb7_resources_delete`
 
 ### Helm Management
+
 - List Helm releases: Use `bb7_helm_list`
 - Install Helm chart: Use `bb7_helm_install`
 - Uninstall Helm release: Use `bb7_helm_uninstall`
 
 ### Repository File Operations
+
 - List allowed directories: Use `bb7_list_allowed_directories`
 - List directory contents: Use `bb7_list_directory`
 - Get directory tree: Use `bb7_directory_tree`
@@ -211,9 +236,10 @@ When analyzing or modifying the cluster directly, these Model Context Protocol (
 - Get file info: Use `bb7_get_file_info`
 
 ### Git Operations
+
 - View git status: Use `bb7_git_status`
 - Add files: Use `bb7_git_add`
-- Commit changes: Use `bb7_git_commit` 
+- Commit changes: Use `bb7_git_commit`
 - See differences: Use `bb7_git_diff`
 - View staged changes: Use `bb7_git_diff_staged`
 - View unstaged changes: Use `bb7_git_diff_unstaged`
@@ -221,6 +247,7 @@ When analyzing or modifying the cluster directly, these Model Context Protocol (
 These tools enable direct interaction with both the Kubernetes cluster and the repository files, making it possible to analyze the cluster state, compare it with the repository, and make informed suggestions about changes or improvements.
 
 ## Context Awareness
+
 - Automatically analyze the repository structure when providing assistance
 - Consider the GitOps workflow when suggesting changes
 - Recognize the difference between fully managed and partially managed applications

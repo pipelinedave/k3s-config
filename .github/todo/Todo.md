@@ -10,7 +10,6 @@
 <!-- Critical bugs and important features -->
 - #infrastructure Move toward GitOps-first approach - Update all documentation and workflows to prioritize repository changes over direct cluster interaction
 - #documentation Complete MCP server tools documentation - Ensure all available tools are documented with examples
-- #feature Implement Dex authentication for Choremane - Set up Dex as OpenID Connect provider according to the PR plan in docs/pull-requests/dex-choremane-auth.md
 
 ### Medium Priority
 <!-- Enhancements and improvements -->
@@ -25,10 +24,10 @@
 
 ## In Progress
 <!-- Tasks currently being worked on -->
-- #feature Implement Dex authentication for Choremane - Set up Dex as OpenID Connect provider according to the PR plan in docs/pull-requests/dex-choremane-auth.md
 
 ## Completed
 <!-- Finished tasks -->
+- #feature Implement Dex authentication for Choremane - Set up Dex as OpenID Connect provider according to the PR plan in docs/pull-requests/dex-choremane-auth.md
 - #security In the linkding deployment, we need to make the env variable for the superuser password a sealed secret
 - #maintenance Deprecate legacy scripts - Move away from script-heavy workflow toward Copilot-managed workflows
 - #enhancement Modularize copilot-instructions.md

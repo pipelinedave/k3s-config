@@ -4,7 +4,7 @@
 
 Whenever I mention "todo", "todos", or ask about my task list in any conversation:
 
-1. Automatically check the `.github/copilot/Todo.md` file for changes
+1. Automatically check the `.github/todo/Todo.md` file for changes
 2. Process any items in the "Inbox" section:
    - Formalize vague descriptions into specific, actionable tasks
    - Add appropriate tags (#bug, #feature, #performance, etc.)

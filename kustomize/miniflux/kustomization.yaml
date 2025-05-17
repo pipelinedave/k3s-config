@@ -7,5 +7,4 @@ resources:
 - miniflux-secrets-sealed.yaml
 - pvc.yaml
 - service-miniflux.yaml
-- service-postgres.yaml 
-
+- service-postgres.yaml

@@ -25,6 +25,10 @@ spec:
         app: gotify
         app.kubernetes.io/name: gotify
         app.kubernetes.io/instance: gotify
+        app.kubernetes.io/version: "latest" # Assuming latest, please specify if different
+        app.kubernetes.io/component: application # Added for consistency
+        app.kubernetes.io/part-of: gotify      # Added for consistency
+        app.kubernetes.io/managed-by: flux     # Added for consistency
     spec:
       containers:
       - image: gotify/server

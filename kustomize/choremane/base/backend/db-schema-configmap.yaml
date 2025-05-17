@@ -3,12 +3,12 @@ kind: ConfigMap
 metadata:
   name: db-schema
   labels:
-    app: choremane
-    component: db
-    environment: base
-    managed-by: kustomize
-    part-of: choremane
-    tier: backend
+    app.kubernetes.io/name: choremane
+    app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: choremane
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: Choremane database schema
 data:
   init-db.sql: |
     -- Table for chores

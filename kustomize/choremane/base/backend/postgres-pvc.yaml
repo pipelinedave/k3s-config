@@ -5,6 +5,12 @@ metadata:
   labels:
     app.kubernetes.io/name: choremane
     app.kubernetes.io/component: database
+    app.kubernetes.io/part-of: choremane
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: Choremane PostgreSQL database PVC
+  finalizers:
+    - kubernetes.io/pvc-protection
 spec:
   accessModes:
     - ReadWriteOnce

@@ -3,6 +3,10 @@ kind: Deployment
 metadata:
   name: backend-deployment
   namespace: choremane
+  labels:
+    app.kubernetes.io/instance: choremane-staging
+  annotations:
+    description: "Patch to configure OAuth environment variables for Choremane backend in staging."
 spec:
   template:
     spec:

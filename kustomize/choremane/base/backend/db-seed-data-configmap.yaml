@@ -2,7 +2,14 @@
 kind: ConfigMap
 metadata:
   name: seed-data-config
-  namespace: choremane
+  namespace: choremane # This will be set by kustomize, but good to note
+  labels:
+    app.kubernetes.io/name: choremane
+    app.kubernetes.io/component: database-seed
+    app.kubernetes.io/part-of: choremane
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: Choremane database seed data
 data:
   backup.sql: |
     --

@@ -6,9 +6,14 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     kubernetes.io/ingress.class: traefik
     traefik.ingress.kubernetes.io/rewrite-target: /$1
+    description: "Ingress for Choremane frontend in staging (commit 6a69a83)."
   labels:
     app.kubernetes.io/name: choremane
-    app.kubernetes.io/component: frontend
+    app.kubernetes.io/component: frontend-ingress # Changed from frontend to frontend-ingress for clarity
+    app.kubernetes.io/part-of: choremane
+    app.kubernetes.io/managed-by: flux
+    app.kubernetes.io/instance: choremane-staging
+    app.kubernetes.io/version: 6a69a83a6fdc3cdff1f006a4983a46d11d09085c
 spec:
   tls:
     - hosts:

@@ -5,6 +5,11 @@ metadata:
   labels:
     app.kubernetes.io/name: choremane
     app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: choremane
+    app.kubernetes.io/managed-by: flux
+    app.kubernetes.io/version: v0.5.3
+  annotations:
+    description: Choremane backend deployment
 spec:
   replicas: 1
   selector:
@@ -16,6 +21,9 @@ spec:
       labels:
         app.kubernetes.io/name: choremane
         app.kubernetes.io/component: backend
+        app.kubernetes.io/part-of: choremane
+        app.kubernetes.io/managed-by: flux
+        app.kubernetes.io/version: v0.5.3
     spec:
       containers:
         - name: backend

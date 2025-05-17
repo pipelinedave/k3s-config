@@ -2,17 +2,25 @@
 kind: Deployment
 metadata:
   name: frontend-deployment
+  labels:
+    app.kubernetes.io/instance: choremane-staging
+    app.kubernetes.io/version: 6a69a83a6fdc3cdff1f006a4983a46d11d09085c
+  annotations:
+    description: "Patch for Choremane frontend deployment in staging (commit 6a69a83)."
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: choremane
       app.kubernetes.io/component: frontend
+      app.kubernetes.io/instance: choremane-staging # Added for specificity in selector
   template:
     metadata:
       labels:
         app.kubernetes.io/name: choremane
         app.kubernetes.io/component: frontend
+        app.kubernetes.io/instance: choremane-staging # Ensure pod labels match selector
+        app.kubernetes.io/version: 6a69a83a6fdc3cdff1f006a4983a46d11d09085c # Added version to pod template
     spec:
       containers:
         - name: frontend

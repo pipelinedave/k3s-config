@@ -3,6 +3,10 @@ kind: Deployment
 metadata:
   name: backend-deployment
   namespace: choremane
+  labels:
+    app.kubernetes.io/instance: choremane-prod
+  annotations:
+    description: "Patch to configure OAuth environment variables for Choremane backend in production."
 spec:
   template:
     spec:

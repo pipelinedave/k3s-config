@@ -6,9 +6,14 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/rewrite-target: /
     kubernetes.io/ingress.class: traefik
+    description: "Ingress for Choremane frontend in production (main branch)."
   labels:
     app.kubernetes.io/name: choremane
-    app.kubernetes.io/component: frontend
+    app.kubernetes.io/component: frontend-ingress # Changed from frontend to frontend-ingress for clarity
+    app.kubernetes.io/part-of: choremane
+    app.kubernetes.io/managed-by: flux
+    app.kubernetes.io/instance: choremane-prod
+    app.kubernetes.io/version: main
 spec:
   tls:
     - hosts:

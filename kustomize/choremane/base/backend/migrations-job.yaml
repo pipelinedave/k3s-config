@@ -5,8 +5,18 @@ metadata:
   labels:
     app.kubernetes.io/name: choremane
     app.kubernetes.io/component: database-migrations
+    app.kubernetes.io/part-of: choremane
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: Choremane database migrations job
 spec:
   template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: choremane
+        app.kubernetes.io/component: database-migrations
+        app.kubernetes.io/part-of: choremane
+        app.kubernetes.io/managed-by: flux
     spec:
       containers:
         - name: migrations

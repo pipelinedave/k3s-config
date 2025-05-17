@@ -6,6 +6,10 @@ metadata:
     app.kubernetes.io/name: choremane
     app.kubernetes.io/component: frontend
     app.kubernetes.io/part-of: choremane
+    app.kubernetes.io/managed-by: flux
+    app.kubernetes.io/version: v0.2
+  annotations:
+    description: Choremane frontend deployment
 spec:
   replicas: 1
   selector:
@@ -17,6 +21,9 @@ spec:
       labels:
         app.kubernetes.io/name: choremane
         app.kubernetes.io/component: frontend
+        app.kubernetes.io/part-of: choremane
+        app.kubernetes.io/managed-by: flux
+        app.kubernetes.io/version: v0.2
     spec:
       containers:
         - name: frontend

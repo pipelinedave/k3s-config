@@ -2,17 +2,25 @@
 kind: Deployment
 metadata:
   name: backend-deployment
+  labels:
+    app.kubernetes.io/instance: choremane-prod
+    app.kubernetes.io/version: main
+  annotations:
+    description: "Patch for Choremane backend deployment in production (main branch)."
 spec:
   replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: choremane
       app.kubernetes.io/component: backend
+      app.kubernetes.io/instance: choremane-prod # Added for specificity in selector
   template:
     metadata:
       labels:
         app.kubernetes.io/name: choremane
         app.kubernetes.io/component: backend
+        app.kubernetes.io/instance: choremane-prod # Ensure pod labels match selector
+        app.kubernetes.io/version: main # Added version to pod template
     spec:
       containers:
         - name: backend

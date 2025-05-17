@@ -13,9 +13,9 @@
 
 ### Medium Priority
 <!-- Enhancements and improvements -->
-- [ ] #documentation Update repository documentation structure to reflect GitOps-first approach with comprehensive MCP tools
+- [X] #documentation Update repository documentation structure to reflect GitOps-first approach with comprehensive MCP tools
 - [ ] #documentation Create documentation on how to use MCP Flux tools for reconciliation and monitoring
-- #maintenance Update all kustomize manifests with correct labels and annotations - Ensure all manifests in kustomize/ directory (those actively reconciled by flux) have consistent and correct metadata
+- [ ] #maintenance Update all kustomize manifests with correct labels and annotations - Ensure all manifests in kustomize/ directory (those actively reconciled by flux) have consistent and correct metadata
 - #bug Investigate Traefik dashboard issues - Fix the Traefik dashboard that doesn't load information when accessed via port forwarding (note: using K3S bundled Traefik)
 
 ### Low Priority

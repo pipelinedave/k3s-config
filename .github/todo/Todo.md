@@ -8,8 +8,8 @@
 
 ### High Priority
 <!-- Critical bugs and important features -->
--   [X] #infrastructure Move toward GitOps-first approach - Update all documentation and workflows to reflect a GitOps-first methodology, emphasizing repository changes over direct cluster modification. Ensure MCP tools are presented as the primary means of interaction for Copilot. (Copilot: Ongoing, major updates to cluster-context.md, docs/README.md, docs/adding-applications.md, docs/mcp-tools.md, docs/mcp-flux-tools.md)
--   [X] #documentation Complete MCP server tools documentation - Ensure all available tools are documented with examples in `docs/mcp-tools.md` and `docs/mcp-flux-tools.md`. (Copilot: Completed mcp-tools.md and mcp-flux-tools.md)
+- [X] #infrastructure Move toward GitOps-first approach - Update all documentation and workflows to reflect a GitOps-first methodology, emphasizing repository changes over direct cluster modification. Ensure MCP tools are presented as the primary means of interaction for Copilot. (Copilot: Ongoing, major updates to cluster-context.md, docs/README.md, docs/adding-applications.md, docs/mcp-tools.md, docs/mcp-flux-tools.md)
+- [X] #documentation Complete MCP server tools documentation - Ensure all available tools are documented with examples in `docs/mcp-tools.md` and `docs/mcp-flux-tools.md`. (Copilot: Completed mcp-tools.md and mcp-flux-tools.md)
 
 ### Medium Priority
 <!-- Enhancements and improvements -->

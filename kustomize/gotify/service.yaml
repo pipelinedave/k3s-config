@@ -1,34 +1,13 @@
 apiVersion: v1
-items:
-- apiVersion: v1
-  kind: Service
-  metadata:
-    annotations:
-      kubectl.kubernetes.io/last-applied-configuration: |
-        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"gotify","namespace":"gotify"},"spec":{"ports":[{"port":80,"targetPort":80}],"selector":{"app":"gotify"}}}
-    creationTimestamp: "2023-08-22T11:10:01Z"
-    name: gotify
-    namespace: gotify
-    resourceVersion: "1039946"
-    uid: b8f908fa-850e-4b52-94a6-6b643b075faa
-  spec:
-    clusterIP: 10.43.132.34
-    clusterIPs:
-    - 10.43.132.34
-    internalTrafficPolicy: Cluster
-    ipFamilies:
-    - IPv4
-    ipFamilyPolicy: SingleStack
-    ports:
-    - port: 80
-      protocol: TCP
-      targetPort: 80
-    selector:
-      app: gotify
-    sessionAffinity: None
-    type: ClusterIP
-  status:
-    loadBalancer: {}
-kind: List
+kind: Service
 metadata:
-  resourceVersion: ""
+  name: gotify
+  namespace: gotify
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: gotify
+  type: ClusterIP

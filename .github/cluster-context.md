@@ -137,6 +137,11 @@ When suggesting operations for this repository, Copilot should primarily use MCP
    - Copilot assists in making changes to manifests in the repository.
    - User commits and pushes changes for Flux to apply. Copilot can assist with `bb7_git_add` and `bb7_git_commit` if requested.
    - **Copilot waits for Flux reconciliation and verifies changes using MCP tools.**
+   - **Note on Immutable Fields**: Be aware that some Kubernetes resource fields (e.g., `spec.selector` in Deployments and StatefulSets) are immutable after creation.
+     - If a change to an immutable field is necessary, Flux may fail to apply the update.
+     - In such cases, as a last resort, you can temporarily add `spec: { force: true }` to the relevant Flux Kustomization resource. This will cause Flux to delete and recreate the resource.
+     - **Important**: `force: true` should be used with extreme caution as it can cause downtime. Remove it from the Kustomization once the issue is resolved to prevent accidental resource recreation in the future.
+     - When adding new labels to Pod templates, consider if they *must* be added to an existing `spec.selector.matchLabels`. If the existing selector is sufficient and unique, avoid changing it to prevent issues with immutability.
 
 3. Verifying deployment (Copilot's primary method):
    - Use `bb7_pods_list_in_namespace namespace=<namespace>`
@@ -187,6 +192,7 @@ This section lists common `kubectl` and `flux` commands. **These are primarily f
 - Check Flux logs: `kubectl logs -n flux-system deployment/source-controller`
 - Check failed reconciliations: `flux get all --status-selector ready=false`
 - Debug resource application: `kubectl get events -n <namespace>`
+- **Immutable Field Errors during Flux Reconciliation**: If Flux fails to apply an update due to an immutable field error (e.g., on `spec.selector`), you may need to temporarily use `force: true` in the Flux Kustomization. See the "Updating an existing application" section for more details. Remember to remove `force: true` after the issue is resolved.
 
 When suggesting solutions, Copilot will always prefer GitOps approaches (changing repository files) over direct cluster modification via MCP tools, unless specifically for exploration or temporary troubleshooting as agreed with the user. MCP tools that modify the cluster will be used with explicit user confirmation.
 

@@ -181,3 +181,38 @@ If a Kustomization or HelmRelease is not becoming healthy:
     Ensure the manifests in your Git repository are valid Kubernetes YAML and that kustomize can build them correctly. If you have local access to the repository and `kustomize` CLI, you can test with `kustomize build <path-to-overlay>`.
 
 By using these MCP tools, you can effectively monitor and manage your Flux deployments directly through a programmatic interface, keeping your operations aligned with GitOps principles.
+
+## Troubleshooting Common Reconciliation Issues
+
+### Immutable Field Errors
+
+Sometimes, a Flux Kustomization may fail to apply if you've changed a field in a manifest that is considered immutable after the resource has been created. A common example is the `spec.selector` field in Deployments or StatefulSets.
+
+**Symptoms:**
+
+- Flux Kustomization shows a `ReconciliationFailed` status.
+- Error messages in the Kustomization status or Flux logs will indicate an "Invalid" or "immutable field" error.
+
+**Solution (Use with Caution):**
+
+1. As a last resort, you can temporarily add `spec: { force: true }` to the Flux Kustomization resource (`apps/<name>.yaml` or `apps-incomplete/<name>.yaml`).
+
+   ```yaml
+   # apps/example-app.yaml
+   apiVersion: kustomize.toolkit.fluxcd.io/v1
+   kind: Kustomization
+   metadata:
+     name: example-app
+     namespace: flux-system
+   spec:
+     # ... other spec fields
+     force: true # Temporarily add this
+   ```
+
+2. Commit this change and let Flux reconcile. This will cause Flux to delete and recreate the affected resource(s), which may lead to brief downtime for the application.
+3. **Crucially, once the reconciliation is successful and the issue is resolved, remove `force: true` from the Kustomization and commit the change.** Leaving `force: true` active can lead to accidental resource recreation in the future.
+
+**Prevention:**
+
+- Avoid changing immutable fields like `spec.selector.matchLabels` on existing Deployments or StatefulSets if possible.
+- If adding new labels to Pod templates, ensure the existing `spec.selector.matchLabels` still correctly and uniquely identifies these Pods. It's not always necessary to add all new Pod labels to the `spec.selector.matchLabels`.

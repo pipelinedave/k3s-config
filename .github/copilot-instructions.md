@@ -33,3 +33,14 @@ This file contains information about:
 - MCP Server Tools for Kubernetes
 - Context Awareness guidelines
 
+## Kubernetes Best Practices & Learnings
+- **Immutable Fields (e.g., `spec.selector`)**:
+    - Be aware that fields like `spec.selector` in Deployments and StatefulSets are immutable after creation.
+    - Avoid changing these fields on existing resources if possible.
+    - If new labels are added to Pod templates, the `spec.selector.matchLabels` does not necessarily need to be updated if the existing selector is still sufficient and unique.
+    - If a change to an immutable field is absolutely necessary and Flux reconciliation fails:
+        - As a last resort, `spec: { force: true }` can be temporarily added to the Flux Kustomization.
+        - This will cause resource recreation and potential downtime.
+        - **Crucially, `force: true` must be removed from the Kustomization and committed once the issue is resolved.**
+- **Standard Labels**: When adding or updating applications, ensure standard Kubernetes labels (`app.kubernetes.io/name`, `app.kubernetes.io/instance`, `app.kubernetes.io/version`, `app.kubernetes.io/component`, `app.kubernetes.io/part-of`, `app.kubernetes.io/managed-by`) are applied consistently to all created resources, including Pod templates within Deployments/StatefulSets.
+

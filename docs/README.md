@@ -18,8 +18,9 @@ This documentation serves as the single source of truth for the configuration an
 This repository follows a GitOps-first approach for managing the cluster:
 
 - [Adding New Applications](adding-applications.md) - Follow this guide to add new applications
-- [Using MCP Server Tools](mcp-tools.md) - Learn how to use Model Context Protocol server tools
-- [Scripts Reference](scripts.md) - Utility scripts when needed
+- [Using MCP Server Tools](mcp-tools.md) - Learn how to use Model Context Protocol server tools for cluster interaction and observation.
+- [Workflow Guidelines](workflow.md) - Detailed explanation of the GitOps workflow, including how to use MCP tools effectively.
+- [Scripts Reference](scripts.md) - Reference for utility scripts (note: many are being deprecated in favor of GitOps/MCP workflows).
 
 ## Cluster Overview
 
@@ -82,6 +83,8 @@ The following applications are partially managed or incomplete:
 
 ## Critical Protection Policies
 
+Refer to the [Workflow Guidelines](workflow.md) for a detailed explanation of critical protection policies, including PVC Protection, Namespace Management, and Ingress Domain Schema.
+
 ### PVC Protection
 
 All PersistentVolumeClaims must include the `kubernetes.io/pvc-protection` finalizer to prevent accidental deletion:
@@ -121,13 +124,19 @@ spec:
 
 ### Documentation Updates
 
-Documentation should only be updated after:
-
-- Changes have been committed and pushed to the repository
-- Flux has successfully reconciled the changes
-- Manual verification has confirmed proper operation
+Documentation is kept current via a Copilot-driven auto-documentation process. When significant changes are made to the repository, or when explicitly requested, Copilot will update relevant documentation sections. Always review and commit these changes.
 
 ## Workflow Guidelines
+
+The [Workflow Guidelines](workflow.md) document provides a comprehensive explanation of how to manage this cluster using GitOps principles. This includes:
+
+- Adding new applications.
+- Updating existing applications.
+- Handling sensitive data with SealedSecrets.
+- Proper use of MCP Server Tools for observation, verification, and troubleshooting.
+- The Copilot-driven documentation update process.
+
+It is crucial to understand and follow these guidelines to maintain the integrity and stability of the cluster.
 
 ### Adding a New Application
 
@@ -146,7 +155,7 @@ Documentation should only be updated after:
 
 ### Verifying Cluster State
 
-Run `./scripts/verify_cluster.sh [namespace]`
+While the `./scripts/verify_cluster.sh` script exists, prefer using Flux and MCP tools for verification as outlined in the [Workflow Guidelines](workflow.md).
 
 ### Handling Sensitive Data
 

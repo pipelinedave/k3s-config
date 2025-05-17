@@ -1,5 +1,3 @@
-\
-
 # GitHub Copilot Context for K3s Cluster Configuration
 
 ## Cluster Overview

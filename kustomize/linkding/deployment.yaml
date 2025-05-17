@@ -24,6 +24,10 @@ spec:
           value: "False"
         - name: LD_DISABLE_URL_VALIDATION
           value: "False"
+        - name: LD_SUPERUSER_NAME
+          value: "admin"
+        - name: LD_SUPERUSER_PASSWORD
+          value: "password"
         volumeMounts:
         - mountPath: /etc/linkding/data
           name: linkding-data

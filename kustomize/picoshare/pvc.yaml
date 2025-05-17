@@ -14,9 +14,3 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: pvc-c6ef8b42-137b-4863-ba14-cb07830bb611
-status:
-  accessModes:
-  - ReadWriteOnce
-  capacity:
-    storage: 80Gi
-  phase: Bound

@@ -14,9 +14,3 @@ spec:
   storageClassName: local-path
   volumeMode: Filesystem
   volumeName: pvc-dbf5067c-5ad2-4408-9111-3bbb3cb88e2e
-status:
-  accessModes:
-  - ReadWriteOnce
-  capacity:
-    storage: 2Gi
-  phase: Bound

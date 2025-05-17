@@ -32,6 +32,11 @@ spec:
                 secretKeyRef:
                   name: dex-google-credentials
                   key: clientSecret
+            - name: CHOREMANE_CLIENT_SECRET # Added Choremane client secret
+              valueFrom:
+                secretKeyRef:
+                  name: choremane-client-secret
+                  key: CHOREMANE_CLIENT_SECRET
           volumeMounts:
             - name: config
               mountPath: /etc/dex/cfg

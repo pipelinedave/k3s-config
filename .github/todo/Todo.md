@@ -1,13 +1,19 @@
 # Project Todo List
 
-## Idea Dump
-<!-- Place for dumping unorganized ideas -->
+## Inbox
+<!-- Add new tasks here for Copilot to organize -->
+- Update repository documentation structure to reflect GitOps-first approach with comprehensive MCP tools
+- Create documentation on how to use MCP Flux tools for reconciliation and monitoring
 
 ## Organized Tasks
 <!-- Copilot will maintain this section -->
 
 ### High Priority
 <!-- Critical bugs and important features -->
+- #security In the linkding deployment, we need to make the env variable for the superuser password a sealed secret
+- #infrastructure Move toward GitOps-first approach - Update all documentation and workflows to prioritize repository changes over direct cluster interaction
+- #documentation Complete MCP server tools documentation - Ensure all available tools are documented with examples
+- #feature Implement Dex authentication for Choremane - Set up Dex as OpenID Connect provider according to the PR plan in docs/pull-requests/dex-choremane-auth.md
 
 ### Medium Priority
 <!-- Enhancements and improvements -->
@@ -17,6 +23,7 @@
 
 ### Low Priority
 <!-- Nice-to-haves and maintenance tasks -->
+- #maintenance Deprecate legacy scripts - Move away from script-heavy workflow toward Copilot-managed workflows
 
 ## In Progress
 <!-- Tasks currently being worked on -->

@@ -1,6 +1,15 @@
 # K3s Cluster Configuration
 
-This repository serves as the single source of truth for the configuration of the k3s cluster. It contains all the manifests and resources needed to recreate the entire cluster state.
+This repository serves as the single source of truth for the configuration of the k3s cluster following GitOps principles. All cluster management is done through changes to this repository, which Flux automatically reconciles with the cluster state.
+
+## GitOps-First Approach
+
+This repository follows a GitOps-first philosophy:
+
+1. All changes begin in the repository, not the cluster
+2. Flux continuously reconciles the cluster with the repository state
+3. Direct cluster manipulation is avoided in favor of repository updates
+4. Documentation is kept current to reflect the live state
 
 ## Repository Structure
 
@@ -9,11 +18,21 @@ This repository serves as the single source of truth for the configuration of th
 - `flux-system/`: Contains Flux bootstrap configuration
 - `kustomize/`: Contains Kubernetes manifests for complete, fully Flux-managed applications
 - `kustomize-incomplete/`: Contains Kubernetes manifests for applications that are not fully managed by Flux
-- `scripts/`: Contains utility scripts for managing the repository and interacting with the cluster
+- `scripts/`: Contains utility scripts (legacy support - prefer GitOps approach)
 - `system/`: Contains system-level configurations
-- `test/`: Contains configurations for testing and development purposes (not committed to the repository)
+- `test/`: Contains configurations for testing purposes (not committed to the repository)
+- `docs/`: Contains comprehensive documentation for the cluster
 
-## Using this Repository
+## Documentation
+
+For detailed documentation on using this repository, see the [docs directory](docs/README.md):
+
+- [GitOps Workflow Guidelines](docs/workflow.md)
+- [Adding New Applications](docs/adding-applications.md)
+- [MCP Server Tools](docs/mcp-tools.md)
+- [Scripts Reference](docs/scripts.md)
+
+## Quick Start
 
 ### Prerequisites
 
@@ -39,92 +58,111 @@ flux bootstrap github \
 
 This will install Flux and configure it to sync with this repository.
 
-### Exporting Resources from the Current Cluster
+### Adding a New Application
 
-This repository includes scripts to export and manage resources from namespaces in the cluster:
+Follow the GitOps-first workflow to add new applications:
 
-#### Basic Export
-
-```bash
-./scripts/export_namespace.sh <namespace>
-```
-
-This will create a Flux Kustomization resource in the `apps/` directory and export Kubernetes resources to the `kustomize/<namespace>/` directory.
-
-#### Clean Export and Secret Sealing
-
-For a more secure approach that removes sensitive metadata and seals secrets:
+1. Create the application directory and manifests:
 
 ```bash
-./scripts/process_namespace.sh <namespace>
+mkdir -p kustomize/my-application
 ```
 
-This script will:
+2. Create all necessary manifests following our standards:
+   - Ensure PVCs have protection finalizers
+   - Follow the standardized domain schema for ingress resources
+   - Use SealedSecrets for sensitive data
 
-1. Export clean versions of resources (deployments, services, etc.)
-2. Identify and seal sensitive ConfigMaps and Secrets using SealedSecrets
-3. Update kustomization.yaml to use these sealed resources
-
-#### Processing All Namespaces
-
-To process all namespaces in the repository:
+3. Create a Flux kustomization in the apps directory:
 
 ```bash
-./scripts/process_all.sh
+cat > apps/my-application.yaml << EOF
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: my-application
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./kustomize/my-application
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+EOF
 ```
 
-This will run the clean export and secret sealing process for each namespace in the repository.
+4. Commit and push your changes - Flux will automatically deploy the application
 
-#### Comprehensive Repository Sync (Recommended)
+### Handling Sensitive Data
 
-For a complete workflow that handles all aspects of syncing your repository with the cluster:
+For sensitive data, always use SealedSecrets:
+
+1. Create a regular Kubernetes Secret
+2. Seal it using kubeseal:
 
 ```bash
-./scripts/master_sync.sh [--all] [namespace1 namespace2 ...]
+kubeseal --format yaml < my-secret.yaml > my-secret-sealed.yaml
 ```
 
-This comprehensive script will:
+3. Commit only the sealed version to the repository
 
-1. Verify which namespaces need updating
-2. Export any missing namespaces
-3. Clean up resources and remove sensitive metadata
-4. Seal sensitive ConfigMaps and Secrets
-5. Properly merge and apply all changes
-6. Perform a final verification
+### Using MCP Server Tools
 
-When run without arguments, it provides an interactive menu to choose which namespaces to process.
+MCP server tools provide an integrated way to interact with the cluster through Copilot. See the [MCP Tools Documentation](docs/mcp-tools.md) for details on available tools and usage examples.
 
-### Managing Configurations
+### Legacy Scripts (For Reference)
 
-All configurations should be committed to this repository. Flux will automatically apply changes to the cluster when they are pushed to the main branch.
-
-### Verifying Repository State
-
-To check if the repository correctly represents the cluster state:
-
-```bash
-./scripts/verify_cluster.sh [namespace]
-```
-
-This will:
-
-1. Identify namespaces in the cluster that are missing from the repository
-2. Check if all resource types in each namespace are represented
-3. Compare repository resources with cluster resources for discrepancies
-
+This repository includes legacy scripts that were previously used for manual operations. While our preferred approach is GitOps-first, these scripts remain available for specific scenarios. See the [Scripts Documentation](docs/scripts.md) for details.
 ## Best Practices
 
-1. **Always use the repository as the source of truth**:
-   - Make changes to the repository first, then let Flux apply them to the cluster
-   - Don't make manual `kubectl apply` changes that aren't reflected in the repository
+### Critical Protection Policies
 
-2. **Keep sensitive data secure**:
+1. **PVC Protection**: All PersistentVolumeClaims must include the protection finalizer
+   ```yaml
+   metadata:
+     finalizers:
+     - kubernetes.io/pvc-protection
+   ```
+
+2. **Ingress Domain Schema**: All applications must follow the standardized domain schema
+   - Format: `<application-name>.stillon.top`
+   - TLS configuration using `cert-manager.io/cluster-issuer: letsencrypt-prod`
+   - Consistent annotations for traefik
+
+### GitOps Workflow
+
+1. **Repository as Source of Truth**:
+   - Make changes to the repository first, then let Flux apply them
+   - Don't use `kubectl apply` directly for changes that should persist
+   - When exploring or testing, use temporary namespaces
+
+2. **Keep Sensitive Data Secure**:
    - Use SealedSecrets for all sensitive data (passwords, tokens, etc.)
    - Never commit unencrypted secrets to the repository
+   - Store encryption key backups securely
 
-3. **Regularly verify and update**:
-   - Run `./verify_cluster.sh` periodically to ensure repository and cluster are in sync
-   - When adding new applications, use the export scripts to ensure complete coverage
+3. **Documentation as Code**:
+   - Keep documentation updated alongside code changes
+   - Documentation is the key to Copilot's understanding of the cluster
+   - Add contextual comments in critical files
+
+## Monitoring & Verification
+
+To monitor Flux reconciliation:
+
+```bash
+flux get kustomizations
+```
+
+To verify specific application deployment:
+
+```bash
+kubectl get all -n my-application
+```
+
+For application-specific verification, check the application at its designated domain:
+https://my-application.stillon.top
 
 4. **Document changes**:
    - Include meaningful commit messages that explain what changed and why

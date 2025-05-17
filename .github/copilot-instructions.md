@@ -6,6 +6,17 @@
 - Maintain the structure of the todo list while allowing me to freely add new items anywhere.
 - Help me prioritize and work on tasks from the todo list.
 
+## Markdown Linting
+- Always ensure all Markdown files follow consistent linting rules:
+  - Use proper heading hierarchy (h1 > h2 > h3)
+  - Include blank lines around headings, code blocks, and lists
+  - Indent nested list items properly
+  - Use backticks for inline code and proper fenced code blocks with language specifiers
+  - No bare URLs (use proper link syntax)
+  - Include a single newline at the end of files
+  - Include proper spacing in lists
+  - Validate that ordered lists have proper sequential numbers
+- When editing documentation, verify markdown lint compliance before committing
 
 # GitHub Copilot Context for K3s Cluster Configuration
 
@@ -81,8 +92,10 @@ The following applications are partially managed or incomplete:
 ## Cluster Management Workflow
 1. Make changes to this repository first, then let Flux apply them to the cluster
 2. Use SealedSecrets for all sensitive data (passwords, tokens, etc.)
-3. Run verification scripts periodically to ensure repository and cluster are in sync
-4. Process namespaces using provided scripts when changes are needed
+3. Use MCP tools to verify Flux reconciliation and cluster state
+4. Create namespaces manually before adding them to Flux management
+5. Keep documentation updated using the update_documentation.sh script
+6. Follow the GitOps-first approach described in docs/workflow.md
 
 ## Critical Protection Policies
 1. **PVC Protection**: All PersistentVolumeClaims must include `kubernetes.io/pvc-protection` finalizer to prevent accidental deletion
@@ -91,7 +104,13 @@ The following applications are partially managed or incomplete:
      finalizers:
      - kubernetes.io/pvc-protection
    ```
-2. **Ingress Domain Schema**: All applications must follow the standardized domain schema:
+   
+2. **Namespace Management**: Namespaces should be created manually, not managed by Flux
+   - Create namespaces with `kubectl create namespace` or `kubectl apply`
+   - Do not include namespace.yaml in kustomization.yaml resources
+   - This prevents accidental namespace deletion during Flux reconciliation
+
+3. **Ingress Domain Schema**: All applications must follow the standardized domain schema:
    - Format: `<application-name>.stillon.top`
    - TLS configuration using `cert-manager.io/cluster-issuer: letsencrypt-prod`
    - Consistent annotations for traefik
@@ -110,22 +129,31 @@ The following applications are partially managed or incomplete:
 
 ## Common Kubernetes Operations
 When suggesting operations for this repository, consider these common tasks:
-1. Adding a new application to the cluster:
-   - Create namespace: `kubectl create namespace <namespace>`
-   - Deploy application
-   - Export resources: `./scripts/export_namespace.sh <namespace>`
-   - Decide on Flux management level and place in appropriate directories
+
+1. Adding a new application to the cluster (GitOps-first approach):
+   - Create namespace manually: `kubectl create namespace <namespace>`
+   - Create manifests directly in the repository under `kustomize/<namespace>/`
+   - Create Flux Kustomization resource in `apps/<namespace>.yaml`
+   - **Always create namespaces manually, not through Flux** (to protect PVCs)
    - **Ensure PVCs have protection finalizers added**
    - **Follow the standard domain schema for ingresses**
+   - Commit and push changes for Flux to apply
+
 2. Updating an existing application:
    - Make changes to manifests in repository
    - Commit and push changes for Flux to apply
    - **Wait for Flux reconciliation and verify changes**
-3. Verifying cluster state:
-   - Run `./scripts/verify_cluster.sh [namespace]`
+
+3. Verifying deployment with MCP tools:
+   - Use `bb7_pods_list_in_namespace namespace=<namespace>`
+   - Use `bb7_reconcile_flux_kustomization name=<name> namespace=flux-system`
+   - Check application health using `bb7_resources_get` calls
+
 4. Handling sensitive data:
-   - Use SealedSecrets for encryption
-   - Run `./scripts/seal_secrets.sh <namespace>` to seal sensitive data
+   - Create secrets locally (never commit)
+   - Use kubeseal to encrypt: `kubeseal --format yaml < secret.yaml > sealed-secret.yaml`
+   - Delete unencrypted secrets
+   - Commit only sealed secrets
 
 ## Command Reference
 When providing commands for this cluster, use these as a reference:

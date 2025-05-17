@@ -34,7 +34,7 @@ This PR implements proper user login and identity management for Choremane using
 
 ## How to Test
 
-1. The Dex deployment will be available at https://dex.stillon.top
+1. The Dex deployment will be available at `https://dex.stillon.top`
 2. Choremane users will be redirected to Dex for authentication
 3. Dex will delegate to Google for actual user authentication
 4. Upon successful login, users will be redirected back to Choremane with proper tokens

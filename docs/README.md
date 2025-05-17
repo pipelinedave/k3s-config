@@ -5,6 +5,9 @@ This documentation serves as the single source of truth for the configuration an
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+- [Cluster Concepts](#cluster-concepts)
+- [Guides](#guides)
+- [Reference](#reference)
 - [Cluster Overview](#cluster-overview)
 - [Repository Structure](#repository-structure)
 - [Fully Managed Applications](#fully-managed-applications)
@@ -15,12 +18,27 @@ This documentation serves as the single source of truth for the configuration an
 
 ## Getting Started
 
-This repository follows a GitOps-first approach for managing the cluster:
+This repository follows a GitOps-first approach for managing the cluster. Key documents to get you started:
 
-- [Adding New Applications](adding-applications.md) - Follow this guide to add new applications
-- [Using MCP Server Tools](mcp-tools.md) - Learn how to use Model Context Protocol server tools for cluster interaction and observation.
-- [Workflow Guidelines](workflow.md) - Detailed explanation of the GitOps workflow, including how to use MCP tools effectively.
-- [Scripts Reference](scripts.md) - Reference for utility scripts (note: many are being deprecated in favor of GitOps/MCP workflows).
+- [Cluster Workflow](concepts/workflow.md) - Understand the core GitOps workflow.
+- [Adding New Applications](guides/adding-applications.md) - Follow this guide to add new applications.
+- [Using MCP Server Tools](reference/mcp-tools.md) - Learn how to use Model Context Protocol server tools for cluster interaction and observation.
+
+## Cluster Concepts
+
+- [Workflow Guidelines](concepts/workflow.md) - Detailed explanation of the GitOps workflow, including how to use MCP tools effectively.
+
+## Guides
+
+- [Adding New Applications](guides/adding-applications.md) - Step-by-step instructions for adding new applications to the cluster.
+- [GitOps Examples](guides/gitops-examples.md) - Practical examples of GitOps practices.
+
+## Reference
+
+- [MCP Server Tools](reference/mcp-tools.md) - Comprehensive reference for all MCP tools.
+- [MCP Flux Tools](reference/mcp-flux-tools.md) - Specific reference for MCP tools related to FluxCD.
+- [MCP Kubernetes Tools](reference/mcp-kubernetes.md) - Specific reference for MCP tools related to Kubernetes.
+- [Scripts Reference](reference/scripts.md) - Reference for utility scripts (note: many are being deprecated in favor of GitOps/MCP workflows).
 
 ## Cluster Overview
 
@@ -41,7 +59,11 @@ This repository is the single source of truth for a k3s Kubernetes cluster:
 - `scripts/`: Contains utility scripts for managing the repository and cluster
 - `system/`: Contains system-level configurations
 - `test/`: Contains configurations for testing and development purposes (not committed to the repository)
-- `docs/`: Contains documentation for the cluster
+- `docs/`: Contains documentation for the cluster, organized into:
+  - `concepts/`: High-level explanations of cluster architecture and workflows.
+  - `guides/`: Step-by-step instructions for common tasks.
+  - `reference/`: Detailed information on tools, scripts, and configurations.
+  - `pull-requests/`: Documentation related to specific pull requests or feature implementations.
 
 ## Fully Managed Applications
 
@@ -83,7 +105,7 @@ The following applications are partially managed or incomplete:
 
 ## Critical Protection Policies
 
-Refer to the [Workflow Guidelines](workflow.md) for a detailed explanation of critical protection policies, including PVC Protection, Namespace Management, and Ingress Domain Schema.
+Refer to the [Workflow Guidelines](concepts/workflow.md) for a detailed explanation of critical protection policies, including PVC Protection, Namespace Management, and Ingress Domain Schema.
 
 ### PVC Protection
 
@@ -128,7 +150,7 @@ Documentation is kept current via a Copilot-driven auto-documentation process. W
 
 ## Workflow Guidelines
 
-The [Workflow Guidelines](workflow.md) document provides a comprehensive explanation of how to manage this cluster using GitOps principles. This includes:
+The [Workflow Guidelines](concepts/workflow.md) document provides a comprehensive explanation of how to manage this cluster using GitOps principles. This includes:
 
 - Adding new applications.
 - Updating existing applications.
@@ -155,7 +177,7 @@ It is crucial to understand and follow these guidelines to maintain the integrit
 
 ### Verifying Cluster State
 
-While the `./scripts/verify_cluster.sh` script exists, prefer using Flux and MCP tools for verification as outlined in the [Workflow Guidelines](workflow.md).
+While the `./scripts/verify_cluster.sh` script exists, prefer using Flux and MCP tools for verification as outlined in the [Workflow Guidelines](concepts/workflow.md).
 
 ### Handling Sensitive Data
 

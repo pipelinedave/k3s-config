@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: docspell
+  labels:
+    app.kubernetes.io/component: postgres
+    app.kubernetes.io/name: docspell
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  serviceName: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - env:
+        - name: POSTGRES_USER
+          valueFrom:
+            configMapKeyRef:
+              key: DOCSPELL_SERVER_BACKEND_JDBC_USER
+              name: restserver-config-fk6475mbhc
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: DOCSPELL_SERVER_BACKEND_JDBC_PASSWORD
+              name: restserver-secrets-gk84cchbbh
+        - name: POSTGRES_DB
+          value: dbname
+        image: postgres:15.2
+        name: postgres
+        ports:
+        - containerPort: 5432
+          name: postgres
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-data
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 1Gi

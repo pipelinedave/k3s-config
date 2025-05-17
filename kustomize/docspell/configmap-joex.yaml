@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: joex-config-8t49mc58fh
+  namespace: docspell
+  labels:
+    app.kubernetes.io/component: joex-config
+    app.kubernetes.io/name: docspell
+data:
+  DOCSPELL_JOEX_JDBC_USER: docspell

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restserver
+  namespace: docspell
+  labels:
+    app.kubernetes.io/component: restserver
+    app.kubernetes.io/name: docspell
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restserver
+  template:
+    metadata:
+      labels:
+        app: restserver
+    spec:
+      containers:
+      - env:
+        - name: DOCSPELL_SERVER_INTERNAL__URL
+          value: http://restserver:7880
+        - name: DOCSPELL_SERVER_BACKEND_JDBC_URL
+          value: jdbc:postgresql://postgres:5432/dbname
+        - name: DOCSPELL_SERVER_BIND_ADDRESS
+          value: 0.0.0.0
+        - name: DOCSPELL_SERVER_FULL__TEXT__SEARCH_ENABLED
+          value: "true"
+        - name: DOCSPELL_SERVER_FULL__TEXT__SEARCH_SOLR_URL
+          value: http://solr:8983/solr/docspell
+        - name: DOCSPELL_SERVER_INTEGRATION__ENDPOINT_ENABLED
+          value: "true"
+        - name: DOCSPELL_SERVER_INTEGRATION__ENDPOINT_HTTP__HEADER_ENABLED
+          value: "true"
+        - name: DOCSPELL_SERVER_BACKEND_SIGNUP_MODE
+          value: open
+        - name: DOCSPELL_SERVER_BACKEND_ADDONS_ENABLED
+          value: "false"
+        envFrom:
+        - configMapRef:
+            name: restserver-config-fk6475mbhc
+        - secretRef:
+            name: restserver-secrets-gk84cchbbh
+        image: docspell/restserver:latest
+        name: restserver
+        ports:
+        - containerPort: 7880

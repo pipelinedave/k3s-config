@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: restserver-config-fk6475mbhc
+  namespace: docspell
+data:
+  DOCSPELL_SERVER_BACKEND_JDBC_USER: docspell

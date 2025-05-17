@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: joex
+  namespace: docspell
+  labels:
+    app.kubernetes.io/component: joex-worker
+    app.kubernetes.io/name: docspell
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: joex
+  template:
+    metadata:
+      labels:
+        app: joex
+    spec:
+      containers:
+      - args:
+        - -J-Xmx3G
+        env:
+        - name: DOCSPELL_JOEX_APP__ID
+          value: joex1
+        - name: DOCSPELL_JOEX_PERIODIC__SCHEDULER_NAME
+          value: joex1
+        - name: DOCSPELL_JOEX_SCHEDULER_NAME
+          value: joex1
+        - name: DOCSPELL_JOEX_BASE__URL
+          value: http://joex:7878
+        - name: DOCSPELL_JOEX_BIND_ADDRESS
+          value: 0.0.0.0
+        - name: DOCSPELL_JOEX_FULL__TEXT__SEARCH_ENABLED
+          value: "true"
+        - name: DOCSPELL_JOEX_FULL__TEXT__SEARCH_SOLR_URL
+          value: http://solr:8983/solr/docspell
+        - name: DOCSPELL_JOEX_JDBC_URL
+          value: jdbc:postgresql://postgres:5432/dbname
+        - name: DOCSPELL_JOEX_ADDONS_EXECUTOR__CONFIG_RUNNER
+          value: docker,trivial
+        - name: DOCSPELL_JOEX_CONVERT_HTML__CONVERTER
+          value: weasyprint
+        envFrom:
+        - configMapRef:
+            name: joex-config-8t49mc58fh
+        - secretRef:
+            name: joex-secrets-fm5th2bg9f
+        image: docspell/joex:latest
+        name: joex
+        ports:
+        - containerPort: 7878

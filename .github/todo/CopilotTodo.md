@@ -14,6 +14,7 @@ Whenever I mention "todo", "todos", or ask about my task list in any conversatio
 5. Always maintain the "Inbox" section so I can freely add new items
 
 When suggesting tasks to work on, prioritize based on:
+
 1. Items marked high priority
 2. Dependencies between tasks
 3. Logical grouping of related work
@@ -21,6 +22,7 @@ When suggesting tasks to work on, prioritize based on:
 Assume I may have added new, unprocessed items to the Inbox section between our conversations.
 
 ## User Preferences
+
 - Username: pipelinedave
 - Never remove or delete any task without explicit confirmation
 - Allow for flexible additions anywhere in the document

@@ -27,7 +27,10 @@ spec:
         - name: LD_SUPERUSER_NAME
           value: "admin"
         - name: LD_SUPERUSER_PASSWORD
-          value: "password"
+          valueFrom:
+            secretKeyRef:
+              name: linkding-superuser
+              key: LD_SUPERUSER_PASSWORD
         volumeMounts:
         - mountPath: /etc/linkding/data
           name: linkding-data

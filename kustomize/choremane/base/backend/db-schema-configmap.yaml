@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: db-schema
+  name: db-schema-config
   labels:
     app.kubernetes.io/name: choremane
     app.kubernetes.io/component: database

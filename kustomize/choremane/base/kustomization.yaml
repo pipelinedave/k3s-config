@@ -7,3 +7,4 @@ resources:
   - oauth-configmap.yaml
   - oauth-secret-sealed.yaml
   # oauth-secret.yaml excluded as it should not be in git
+  - backend/db-schema-configmap.yaml

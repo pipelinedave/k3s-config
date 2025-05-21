@@ -25,6 +25,9 @@ spec:
           image: quay.io/oauth2-proxy/oauth2-proxy:v7.5.1
           args:
             - --config=/etc/oauth2-proxy/oauth2_proxy.cfg
+            - --standard-logging=true
+            - --auth-logging=true
+            - --request-logging=true
           ports:
             - containerPort: 4180
               name: http

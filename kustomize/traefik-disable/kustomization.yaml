@@ -1,8 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kube-system
+
+# Create a service resource directly instead of trying to patch the existing one
 resources:
 - traefik-scale-down.yaml
-
-patchesStrategicMerge:
-- traefik-service-patch.yaml
+- traefik-service.yaml

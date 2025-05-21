@@ -25,6 +25,7 @@ spec:
           image: quay.io/oauth2-proxy/oauth2-proxy:v7.5.1
           args:
             - --config=/etc/oauth2-proxy/oauth2_proxy.cfg
+            - --log-level=debug # Add this line for more detailed logging
           ports:
             - containerPort: 4180
               name: http

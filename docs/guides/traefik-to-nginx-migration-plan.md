@@ -18,15 +18,16 @@ This document outlines the step-by-step plan for migrating from Traefik to Nginx
 ### Phase 2: Gradual Migration
 
 6. Create a list of all applications currently using Traefik ingress
-6. For each application:
+7. For each application:
    - Update the Ingress resource to use `ingressClassName: nginx`
    - Update any Traefik-specific annotations to their Nginx equivalents
+   - **Delete any existing TLS secrets** that were created by cert-manager for the Traefik ingress
    - Test the application to ensure it works with Nginx
    - Document any application-specific configuration needed
 
 ### Phase 3: Finalization
 
-7. Once all applications have been migrated:
+8. Once all applications have been migrated:
    - Verify all applications are functioning correctly with Nginx
    - Permanently remove Traefik from the cluster
    - Update the documentation to reflect the new Nginx-based ingress setup
@@ -37,16 +38,34 @@ This document outlines the step-by-step plan for migrating from Traefik to Nginx
 
 ### Issues and Solutions
 
+#### TLS Secret Handling
+
+When migrating an application from Traefik to Nginx ingress, we found that the existing TLS secrets created by cert-manager (named like `<app-name>-tls` or `<app-domain>-tls`) need to be deleted. This is because:
+
+1. The TLS secrets are linked to the specific ingress controller that requested them
+2. Cert-manager won't automatically renew certificates for an ingress controller that didn't create them
+3. The secrets may contain annotations or metadata specific to Traefik
+
+The solution is to:
+
+1. Delete the existing TLS secret after updating the ingress to use Nginx
+2. Let cert-manager automatically create a new TLS secret for the Nginx ingress
+3. Verify that HTTPS works with the new certificate
+
+This approach ensures clean certificate management and avoids certificate-related issues after migration.
+
 #### K3s ServiceLoadBalancer DaemonSet
 
 With K3s, when services of type LoadBalancer are created, K3s creates a corresponding "svclb-" DaemonSet. We found that even after scaling down the Traefik deployment to 0 replicas, the `svclb-traefik` DaemonSet was still running and binding to ports 80/443, causing port conflicts with our Nginx Ingress controller.
 
 Our solution involves three steps:
+
 1. Scale down the Traefik deployment to 0 replicas
 2. Change the Traefik service from LoadBalancer to ClusterIP
 3. Change the Traefik service ports to non-standard ports (8080/8443) to avoid any conflicts
 
 This combined approach ensures that:
+
 - Traefik pods are not running
 - K3s removes the svclb-traefik DaemonSet (because the service is no longer LoadBalancer)
 - Even if there are any lingering references, they point to non-conflicting ports
@@ -68,7 +87,7 @@ The current approach preserves all Traefik configuration while just reducing rep
 | Application | Namespace | Current Status | Migration Status | Notes |
 |-------------|-----------|----------------|------------------|---------|
 | nginx-test | default | ✅ Using Nginx | Complete | Test application |
-| linkding | linkding | 🔄 In Progress | In Progress | Simple app, chosen as first real migration candidate |
+| linkding | linkding | ✅ Using Nginx | Complete | Simple app, first successful migration |
 | gotify | gotify | ⚠️ Attempted | Paused | OAuth2 proxy integration needs more work |
 | choremane-prod | choremane-prod | Using Traefik | Not Started | |
 | choremane-staging | choremane-staging | Using Traefik | Not Started | |

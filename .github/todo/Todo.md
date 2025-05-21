@@ -8,10 +8,12 @@
 
 ### High Priority
 <!-- Critical bugs and important features -->
+- [ ] #bug Investigate Traefik routing issues - Ensure Traefik is correctly routing requests to Gotify and other services, including middleware configurations.
 
 ### Medium Priority
 <!-- Enhancements and improvements -->
-- [ ] #bug Investigate Traefik dashboard issues - Fix the Traefik dashboard that doesn\'t load information when accessed via port forwarding (note: using K3S bundled Traefik)
+- [ ] #infrastructure Add Traefik configuration to GitOps repository - Extract Traefik configuration from k3s default setup and integrate it into the k3s-config repository for better management.
+- [ ] #enhancement Fix Traefik dashboard deployment - Resolve issues with the Traefik dashboard that doesn't load information when accessed via port forwarding and ensure it is accessible for monitoring (note: using K3S bundled Traefik).
 
 ### Low Priority
 <!-- Nice-to-haves and maintenance tasks -->

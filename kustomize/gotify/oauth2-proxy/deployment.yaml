@@ -46,18 +46,18 @@ spec:
             - name: config
               mountPath: /etc/oauth2-proxy
               readOnly: true
-          readinessProbe:
-            httpGet:
-              path: /ping
-              port: http
-            initialDelaySeconds: 5
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /ping
-              port: http
-            initialDelaySeconds: 15
-            periodSeconds: 20
+          # readinessProbe:
+          #   httpGet:
+          #     path: /ping
+          #     port: http
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 10
+          # livenessProbe:
+          #   httpGet:
+          #     path: /ping
+          #     port: http
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 20
       volumes:
         - name: config
           configMap:

@@ -21,3 +21,10 @@ data:
     cookie_samesite = "lax"
     cookie_secure = true # Corrected: boolean true, not string "true"
     # cookie_domain = ".stillon.top" # Set this if you need cross-subdomain cookies
+    request_logging = true
+    auth_logging = true
+    standard_logging = true
+    # The following are not strictly necessary if using env vars for secrets, but good for verbosity if needed
+    # client_secret_file = "/path/to/client_secret" # Example if using file based secrets
+    # cookie_secret_file = "/path/to/cookie_secret" # Example if using file based secrets
+    # logging_filename = "-" # Log to stdout, already default but explicit

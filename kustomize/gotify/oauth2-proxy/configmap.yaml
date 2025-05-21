@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oauth2-proxy-gotify-config
+  namespace: gotify # Ensure this is Gotify's namespace
+data:
+  oauth2_proxy.cfg: |
+    provider = "oidc"
+    oidc_issuer_url = "https://dex.stillon.top" # Your Dex issuer URL
+    client_id = "oauth2-proxy-gotify"         # Client ID configured in Dex
+    client_secret_file = "/etc/oauth2-proxy-secret/OAUTH2_PROXY_GOTIFY_CLIENT_SECRET" # Path to the Dex client secret
+    cookie_secret_file = "/etc/oauth2-proxy-cookie-secret/COOKIE_SECRET" # Path to the cookie secret
+    email_domains = "*" # Or restrict to specific email domains if needed
+    upstreams = "http://gotify.gotify.svc.cluster.local:80" # Internal service URL for Gotify
+    redirect_url = "https://gotify.stillon.top/oauth2/callback" # The redirect URL registered with Dex
+    scope = "openid profile email groups"
+    pass_access_token = true
+    set_authorization_header = true
+    skip_provider_button = true # Optional: skips the login page with a single provider
+    # whitelist_domains = ".stillon.top" # Optional: if you want to ensure redirects only happen to your domain
+    cookie_samesite = "lax"
+    cookie_secure = "true" # Ensure this is true for HTTPS
+    # cookie_domain = ".stillon.top" # Set this if you need cross-subdomain cookies

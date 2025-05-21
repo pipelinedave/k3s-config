@@ -29,6 +29,11 @@ data:
         - 'https://chores.stillon.top/api/auth/callback' # Added production URI
         name: 'Choremane'
         secretEnv: CHOREMANE_CLIENT_SECRET # Use secretEnv
+      - id: oauth2-proxy-gotify # New client for Gotify's oauth2-proxy
+        redirectURIs:
+        - 'https://gotify.stillon.top/oauth2/callback'
+        name: 'OAuth2 Proxy (Gotify)'
+        secretEnv: OAUTH2_PROXY_GOTIFY_CLIENT_SECRET
     connectors:
       - type: google
         id: google

@@ -1,0 +1,16 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: gotify # Assuming Gotify runs in the 'gotify' namespace
+resources:
+  - configmap.yaml
+  - deployment.yaml
+  - service.yaml
+  - dex-client-secret-sealed.yaml   # Sealed Dex client secret for oauth2-proxy
+  - cookie-secret-sealed.yaml # Sealed cookie secret for oauth2-proxy
+
+commonLabels:
+  app.kubernetes.io/name: oauth2-proxy
+  app.kubernetes.io/instance: oauth2-proxy-gotify
+  app.kubernetes.io/component: authentication-proxy
+  app.kubernetes.io/part-of: gotify # Indicates this proxy is for Gotify
+  app.kubernetes.io/managed-by: flux

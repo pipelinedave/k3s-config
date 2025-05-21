@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: oauth2-proxy-gotify
+  namespace: gotify # Ensure this is Gotify's namespace
+  labels:
+    app.kubernetes.io/name: oauth2-proxy
+    app.kubernetes.io/instance: oauth2-proxy-gotify
+    # app.kubernetes.io/version: "v7.5.1" # Add version if desired
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: oauth2-proxy
+      app.kubernetes.io/instance: oauth2-proxy-gotify
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: oauth2-proxy
+        app.kubernetes.io/instance: oauth2-proxy-gotify
+        # app.kubernetes.io/version: "v7.5.1"
+    spec:
+      containers:
+        - name: oauth2-proxy
+          image: quay.io/oauth2-proxy/oauth2-proxy:v7.5.1
+          args:
+            - --config=/etc/oauth2-proxy/oauth2_proxy.cfg
+          ports:
+            - containerPort: 4180
+              name: http
+          env:
+            # No direct env vars for secrets here; they are mounted from files specified in config
+            # Ensure the Dex client secret is available via client_secret_file
+            # Ensure the cookie secret is available via cookie_secret_file
+          volumeMounts:
+            - name: config
+              mountPath: /etc/oauth2-proxy
+              readOnly: true
+            - name: oauth2-proxy-secret # Volume for Dex client secret
+              mountPath: /etc/oauth2-proxy-secret
+              readOnly: true
+            - name: oauth2-proxy-cookie-secret # Volume for cookie secret
+              mountPath: /etc/oauth2-proxy-cookie-secret
+              readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 20
+      volumes:
+        - name: config
+          configMap:
+            name: oauth2-proxy-gotify-config
+        - name: oauth2-proxy-secret
+          secret:
+            secretName: oauth2-proxy-gotify-dex-client-secret # This secret will be created in the gotify namespace
+        - name: oauth2-proxy-cookie-secret
+          secret:
+            secretName: oauth2-proxy-gotify-cookie-secret # This secret will be created in the gotify namespace

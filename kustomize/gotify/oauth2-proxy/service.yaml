@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: oauth2-proxy-gotify
+  namespace: gotify # Ensure this is Gotify's namespace
+spec:
+  selector:
+    app.kubernetes.io/name: oauth2-proxy
+    app.kubernetes.io/instance: oauth2-proxy-gotify
+  ports:
+    - protocol: TCP
+      port: 80 # Or 4180 if you prefer to use the containerPort directly
+      targetPort: http # Or 4180
+      name: http

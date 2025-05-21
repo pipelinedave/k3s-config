@@ -55,6 +55,11 @@ spec:
                 secretKeyRef:
                   name: choremane-client-secret
                   key: CHOREMANE_CLIENT_SECRET
+            - name: OAUTH2_PROXY_GOTIFY_CLIENT_SECRET # Added Gotify client secret
+              valueFrom:
+                secretKeyRef:
+                  name: oauth2-proxy-gotify-client-secret
+                  key: OAUTH2_PROXY_GOTIFY_CLIENT_SECRET
           volumeMounts:
             - name: config
               mountPath: /etc/dex/cfg

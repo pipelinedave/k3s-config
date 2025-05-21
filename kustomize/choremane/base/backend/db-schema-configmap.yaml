@@ -10,7 +10,7 @@ metadata:
   annotations:
     description: Choremane database schema
 data:
-  init-db.sql: |
+  db.schema: |
     -- Table for chores
     CREATE TABLE IF NOT EXISTS chores (
         id SERIAL PRIMARY KEY,

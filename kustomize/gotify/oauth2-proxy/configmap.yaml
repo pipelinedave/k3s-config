@@ -19,5 +19,5 @@ data:
     skip_provider_button = true # Optional: skips the login page with a single provider
     # whitelist_domains = ".stillon.top" # Optional: if you want to ensure redirects only happen to your domain
     cookie_samesite = "lax"
-    cookie_secure = "true" # Ensure this is true for HTTPS
+    cookie_secure = true # Corrected: boolean true, not string "true"
     # cookie_domain = ".stillon.top" # Set this if you need cross-subdomain cookies

@@ -29,18 +29,19 @@ spec:
             - containerPort: 4180
               name: http
           env:
-            # No direct env vars for secrets here; they are mounted from files specified in config
-            # Ensure the Dex client secret is available via client_secret_file
-            # Ensure the cookie secret is available via cookie_secret_file
+            - name: OAUTH2_PROXY_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: oauth2-proxy-gotify-dex-client-secret # K8s secret in gotify ns for Dex client secret
+                  key: OAUTH2_PROXY_GOTIFY_CLIENT_SECRET   # Key in that K8s secret
+            - name: OAUTH2_PROXY_COOKIE_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: oauth2-proxy-gotify-cookie-secret # K8s secret in gotify ns for cookie secret
+                  key: COOKIE_SECRET                     # Key in that K8s secret
           volumeMounts:
             - name: config
               mountPath: /etc/oauth2-proxy
-              readOnly: true
-            - name: oauth2-proxy-secret # Volume for Dex client secret
-              mountPath: /etc/oauth2-proxy-secret
-              readOnly: true
-            - name: oauth2-proxy-cookie-secret # Volume for cookie secret
-              mountPath: /etc/oauth2-proxy-cookie-secret
               readOnly: true
           readinessProbe:
             httpGet:
@@ -58,9 +59,3 @@ spec:
         - name: config
           configMap:
             name: oauth2-proxy-gotify-config
-        - name: oauth2-proxy-secret
-          secret:
-            secretName: oauth2-proxy-gotify-dex-client-secret # This secret will be created in the gotify namespace
-        - name: oauth2-proxy-cookie-secret
-          secret:
-            secretName: oauth2-proxy-gotify-cookie-secret # This secret will be created in the gotify namespace

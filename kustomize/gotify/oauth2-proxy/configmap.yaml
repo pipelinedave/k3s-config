@@ -8,8 +8,8 @@ data:
     provider = "oidc"
     oidc_issuer_url = "https://dex.stillon.top" # Your Dex issuer URL
     client_id = "oauth2-proxy-gotify"         # Client ID configured in Dex
-    client_secret_file = "/etc/oauth2-proxy-secret/OAUTH2_PROXY_GOTIFY_CLIENT_SECRET" # Path to the Dex client secret
-    cookie_secret_file = "/etc/oauth2-proxy-cookie-secret/COOKIE_SECRET" # Path to the cookie secret
+    client_secret = "" # Placeholder, will be overridden by env var OAUTH2_PROXY_CLIENT_SECRET
+    cookie_secret = "" # Placeholder, will be overridden by env var OAUTH2_PROXY_COOKIE_SECRET
     email_domains = "*" # Or restrict to specific email domains if needed
     upstreams = "http://gotify.gotify.svc.cluster.local:80" # Internal service URL for Gotify
     redirect_url = "https://gotify.stillon.top/oauth2/callback" # The redirect URL registered with Dex

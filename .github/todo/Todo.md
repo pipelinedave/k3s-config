@@ -8,12 +8,11 @@
 
 ### High Priority
 <!-- Critical bugs and important features -->
-- [ ] #bug Investigate Traefik routing issues - Ensure Traefik is correctly routing requests to Gotify and other services, including middleware configurations.
+- make gotify oauth2 proxy work with nginx ingress - The gotify application needs to be configured to work with the Nginx ingress controller, including setting up OAuth2 proxy for authentication. (Copilot: Ongoing, major updates to docs/guides/traefik-to-nginx-migration-plan.md)
 
 ### Medium Priority
 <!-- Enhancements and improvements -->
-- [ ] #infrastructure Add Traefik configuration to GitOps repository - Extract Traefik configuration from k3s default setup and integrate it into the k3s-config repository for better management.
-- [ ] #enhancement Fix Traefik dashboard deployment - Resolve issues with the Traefik dashboard that doesn't load information when accessed via port forwarding and ensure it is accessible for monitoring (note: using K3S bundled Traefik).
+
 
 ### Low Priority
 <!-- Nice-to-haves and maintenance tasks -->
@@ -23,6 +22,7 @@
 
 ## Completed
 <!-- Finished tasks -->
+- #infrastructure Migrate from Traefik to Nginx ingress - Transition all applications from Traefik to Nginx ingress controller, ensuring proper configuration and testing. (Copilot: Ongoing, major updates to docs/guides/traefik-to-nginx-migration.md)
 - #infrastructure Move toward GitOps-first approach - Update all documentation and workflows to reflect a GitOps-first methodology, emphasizing repository changes over direct cluster modification. Ensure MCP tools are presented as the primary means of interaction for Copilot. (Copilot: Ongoing, major updates to cluster-context.md, docs/README.md, docs/adding-applications.md, docs/mcp-tools.md, docs/mcp-flux-tools.md)
 - #documentation Complete MCP server tools documentation - Ensure all available tools are documented with examples in `docs/mcp-tools.md` and `docs/mcp-flux-tools.md`. (Copilot: Completed mcp-tools.md and mcp-flux-tools.md)
 - #documentation Update repository documentation structure to reflect GitOps-first approach with comprehensive MCP tools

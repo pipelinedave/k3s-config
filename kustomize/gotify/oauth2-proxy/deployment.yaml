@@ -29,7 +29,7 @@ spec:
             - --auth-logging=true
             - --request-logging=true
           ports:
-            - containerPort: 4180
+            - containerPort: 4180 # Make sure this is 4180 to match the service
               name: http
           env:
             - name: OAUTH2_PROXY_CLIENT_SECRET

@@ -3,8 +3,8 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    kubernetes.io/ingress.class: traefik
     description: "Ingress for memodawg application."
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
   name: memodawg-ingress
   namespace: memodawg
   labels:
@@ -14,6 +14,7 @@ metadata:
     app.kubernetes.io/part-of: memodawg
     app.kubernetes.io/managed-by: flux
 spec:
+  ingressClassName: nginx
   rules:
   - host: memodawg.stillon.top
     http:

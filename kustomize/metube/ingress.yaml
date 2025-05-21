@@ -3,8 +3,7 @@ kind: Ingress
 metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     description: "Ingress for MeTube media downloader."
   name: metube
   namespace: metube
@@ -15,7 +14,7 @@ metadata:
     app.kubernetes.io/part-of: metube
     app.kubernetes.io/managed-by: flux
 spec:
-  ingressClassName: traefik
+  ingressClassName: nginx
   rules:
   - host: metube.stillon.top
     http:

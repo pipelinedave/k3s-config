@@ -93,6 +93,6 @@ The current approach preserves all Traefik configuration while just reducing rep
 | choremane-staging | choremane-staging | Using Traefik | Not Started | |
 | dex | dex | Using Traefik | Not Started | |
 | docspell | docspell | Using Traefik | Not Started | |
-| memodawg | memodawg | Using Traefik | Not Started | |
+| memodawg | memodawg | ✅ Using Nginx | Complete | Easy |
 | metube | metube | Using Traefik | Not Started | |
 | picoshare | picoshare | Using Traefik | Not Started | |

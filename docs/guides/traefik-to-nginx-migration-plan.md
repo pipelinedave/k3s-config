@@ -31,13 +31,19 @@ This document outlines the step-by-step plan for migrating from Traefik to Nginx
 
 - For detailed annotation mappings, examples, and configuration guidance, refer to the [Traefik to Nginx Migration Guide](./traefik-to-nginx-migration.md)
 
-## Rollback Plan
+## Alternative Approaches
 
-If issues occur during the migration, we can:
+### If Scaling Down Traefik Doesn't Work
 
-1. Scale up the Traefik deployment back to 1 replica
-2. Revert any Ingress resources to use Traefik
-3. Temporarily scale down the Nginx Ingress controller
+If you encounter issues with scaling down Traefik (due to immutable fields or other constraints), consider these alternatives:
+
+1. **Use ingress class selection**: Configure Nginx to only process ingresses with `ingressClassName: nginx` while Traefik continues to process its own. Migrate applications one by one.
+
+2. **Port conflict resolution**: Change the Traefik service to use different nodePort values, allowing both controllers to run simultaneously.
+
+3. **Service annotation approach**: Use service annotations to control which load balancer handles which service/port.
+
+The current approach preserves all Traefik configuration while just reducing replicas to 0, ensuring you can easily scale it back up if needed.
 
 ## Application Migration Tracker
 

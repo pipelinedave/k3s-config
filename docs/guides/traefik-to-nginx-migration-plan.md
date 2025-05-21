@@ -94,5 +94,5 @@ The current approach preserves all Traefik configuration while just reducing rep
 | dex | dex | Using Traefik | Not Started | |
 | docspell | docspell | Using Traefik | Not Started | |
 | memodawg | memodawg | ✅ Using Nginx | Complete | Easy |
-| metube | metube | Using Traefik | Not Started | |
+| metube | metube | ✅ Using Nginx | Complete | Easy |
 | picoshare | picoshare | Using Traefik | Not Started | |

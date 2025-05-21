@@ -4,6 +4,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     description: "Docspell ingress"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
   labels:
     app: docspell
     app.kubernetes.io/name: docspell
@@ -15,6 +16,7 @@ metadata:
   name: docspell-ingress
   namespace: docspell
 spec:
+  ingressClassName: nginx
   rules:
   - host: docspell.stillon.top
     http:

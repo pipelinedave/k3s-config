@@ -18,3 +18,4 @@ spec:
       port: 4180 # Changed to match the container port
       targetPort: 4180 # This correctly maps to 4180
       name: http
+  type: ClusterIP

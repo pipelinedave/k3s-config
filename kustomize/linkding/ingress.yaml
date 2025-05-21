@@ -12,11 +12,10 @@ metadata:
     app.kubernetes.io/managed-by: flux
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     description: "Ingress for Linkding bookmark manager."
 spec:
-  ingressClassName: traefik
+  ingressClassName: nginx
   rules:
   - host: linkding.stillon.top
     http:

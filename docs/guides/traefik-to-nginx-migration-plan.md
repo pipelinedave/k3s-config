@@ -68,12 +68,12 @@ The current approach preserves all Traefik configuration while just reducing rep
 | Application | Namespace | Current Status | Migration Status | Notes |
 |-------------|-----------|----------------|------------------|---------|
 | nginx-test | default | ✅ Using Nginx | Complete | Test application |
+| linkding | linkding | 🔄 In Progress | In Progress | Simple app, chosen as first real migration candidate |
+| gotify | gotify | ⚠️ Attempted | Paused | OAuth2 proxy integration needs more work |
 | choremane-prod | choremane-prod | Using Traefik | Not Started | |
 | choremane-staging | choremane-staging | Using Traefik | Not Started | |
 | dex | dex | Using Traefik | Not Started | |
 | docspell | docspell | Using Traefik | Not Started | |
-| gotify | gotify | Using Traefik | Not Started | |
-| linkding | linkding | Using Traefik | Not Started | |
 | memodawg | memodawg | Using Traefik | Not Started | |
 | metube | metube | Using Traefik | Not Started | |
 | picoshare | picoshare | Using Traefik | Not Started | |

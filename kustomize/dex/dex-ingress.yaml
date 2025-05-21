@@ -4,8 +4,7 @@ metadata:
   name: dex-ingress
   namespace: dex
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
     cert-manager.io/cluster-issuer: letsencrypt-prod
     description: "Ingress for Dex Identity Provider (v2.30.0). Host: dex.stillon.top"
   labels:
@@ -16,6 +15,7 @@ metadata:
     app.kubernetes.io/part-of: dex
     app.kubernetes.io/managed-by: flux
 spec:
+  ingressClassName: nginx
   rules:
     - host: dex.stillon.top
       http:

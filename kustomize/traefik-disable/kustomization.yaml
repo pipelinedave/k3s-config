@@ -3,3 +3,6 @@ kind: Kustomization
 namespace: kube-system
 resources:
 - traefik-scale-down.yaml
+
+patchesStrategicMerge:
+- traefik-service-patch.yaml

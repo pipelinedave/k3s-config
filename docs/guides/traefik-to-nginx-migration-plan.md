@@ -8,12 +8,16 @@ This document outlines the step-by-step plan for migrating from Traefik to Nginx
 
 1. ✅ Deploy Nginx Ingress Controller with proper RBAC permissions
 2. ✅ Temporarily disable Traefik by scaling down to 0 replicas
-3. ✅ Set up a test application with Nginx Ingress to verify functionality
-4. ✓ Verify that cert-manager integration works with Nginx Ingress
+3. ✅ Modify Traefik service to:
+   - Change from LoadBalancer to ClusterIP
+   - Change ports to avoid conflicts (8080/8443)
+   - Remove nodePorts
+4. ✅ Set up a test application with Nginx Ingress to verify functionality
+5. ✓ Verify that cert-manager integration works with Nginx Ingress
 
 ### Phase 2: Gradual Migration
 
-5. Create a list of all applications currently using Traefik ingress
+6. Create a list of all applications currently using Traefik ingress
 6. For each application:
    - Update the Ingress resource to use `ingressClassName: nginx`
    - Update any Traefik-specific annotations to their Nginx equivalents
@@ -31,11 +35,25 @@ This document outlines the step-by-step plan for migrating from Traefik to Nginx
 
 - For detailed annotation mappings, examples, and configuration guidance, refer to the [Traefik to Nginx Migration Guide](./traefik-to-nginx-migration.md)
 
+### Issues and Solutions
+
+#### K3s ServiceLoadBalancer DaemonSet
+
+With K3s, when services of type LoadBalancer are created, K3s creates a corresponding "svclb-" DaemonSet. We found that even after scaling down the Traefik deployment to 0 replicas, the `svclb-traefik` DaemonSet was still running and binding to ports 80/443, causing port conflicts with our Nginx Ingress controller.
+
+Our solution involves three steps:
+1. Scale down the Traefik deployment to 0 replicas
+2. Change the Traefik service from LoadBalancer to ClusterIP
+3. Change the Traefik service ports to non-standard ports (8080/8443) to avoid any conflicts
+
+This combined approach ensures that:
+- Traefik pods are not running
+- K3s removes the svclb-traefik DaemonSet (because the service is no longer LoadBalancer)
+- Even if there are any lingering references, they point to non-conflicting ports
+
 ## Alternative Approaches
 
-### If Scaling Down Traefik Doesn't Work
-
-If you encounter issues with scaling down Traefik (due to immutable fields or other constraints), consider these alternatives:
+If you encounter issues with the current approach (due to immutable fields or other constraints), consider these alternatives:
 
 1. **Use ingress class selection**: Configure Nginx to only process ingresses with `ingressClassName: nginx` while Traefik continues to process its own. Migrate applications one by one.
 

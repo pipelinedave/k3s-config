@@ -5,12 +5,14 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
-    description: "Ingress for Choremane frontend in production (main branch)."
+    # Add try_files directive for SPA to ensure all frontend routes return index.html
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      try_files $uri $uri/ /index.html;
+    description: "Ingress for Choremane frontend (SPA/PWA) in production (main branch)."
   labels:
     app.kubernetes.io/name: choremane
-    app.kubernetes.io/component: frontend-ingress # Changed from frontend to frontend-ingress for clarity
+    app.kubernetes.io/component: frontend-ingress
     app.kubernetes.io/part-of: choremane
     app.kubernetes.io/managed-by: flux
     app.kubernetes.io/instance: choremane-prod
@@ -25,17 +27,19 @@ spec:
     - host: chores.stillon.top
       http:
         paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frontend-service
-                port:
-                  number: 80
+          # API path must come first for proper routing precedence
           - path: /api
             pathType: Prefix
             backend:
               service:
                 name: backend-service
+                port:
+                  number: 80
+          # Frontend path for everything else
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
                 port:
                   number: 80

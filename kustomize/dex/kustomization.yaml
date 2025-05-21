@@ -10,6 +10,7 @@ resources:
 - dex-ingress.yaml
 - dex-google-credentials-sealed.yaml
 - choremane-client-secret-sealed.yaml # Added sealed Choremane client secret
+- oauth2-proxy-gotify-client-secret-sealed.yaml # Sealed client secret for Gotify's oauth2-proxy
 - dex-rbac-serviceaccount.yaml
 - dex-rbac-clusterrole.yaml
 - dex-rbac-clusterrolebinding.yaml

@@ -89,10 +89,10 @@ The current approach preserves all Traefik configuration while just reducing rep
 | nginx-test | default | ✅ Using Nginx | Complete | Test application |
 | linkding | linkding | ✅ Using Nginx | Complete | Simple app, first successful migration |
 | gotify | gotify | ⚠️ Attempted | Paused | OAuth2 proxy integration needs more work |
-| choremane-prod | choremane-prod | Using Traefik | Not Started | |
-| choremane-staging | choremane-staging | Using Traefik | Not Started | |
-| dex | dex | Using Traefik | Not Started | |
+| choremane-prod | choremane-prod | ✅ Using Nginx | Complete | Easy |
+| choremane-staging | choremane-staging | ✅ Using Nginx | Complete | Easy |
+| dex | dex | ✅ Using Nginx | Complete | Easy |
 | docspell | docspell | ✅ Using Nginx | Complete | Easy |
 | memodawg | memodawg | ✅ Using Nginx | Complete | Easy |
 | metube | metube | ✅ Using Nginx | Complete | Easy |
-| picoshare | picoshare | Using Traefik | Not Started | |
+| picoshare | picoshare | ✅ Using Nginx | Complete | Easy |

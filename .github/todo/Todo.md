@@ -2,6 +2,7 @@
 
 ## Inbox
 <!-- Add new tasks here for Copilot to organize -->
+- #infrastructure Create Ansible playbook for automated k3s cluster deployment - Develop an Ansible playbook to prepare a fresh host, deploy k3s (with --disable-traefik), install Flux, and configure it to reconcile the cluster to its final state from this repository. The playbook should support configurable top-level domains.
 
 ## Organized Tasks
 <!-- Copilot will maintain this section -->

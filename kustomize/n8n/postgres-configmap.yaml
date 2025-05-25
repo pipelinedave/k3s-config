@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: init-data
+  namespace: n8n
+  labels:
+    app.kubernetes.io/name: n8n-postgres-init
+    app.kubernetes.io/instance: n8n
+    app.kubernetes.io/component: database-init
+    app.kubernetes.io/part-of: n8n
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "ConfigMap for n8n Postgres database initialization."
+data:
+  init-data.sh: |
+    #!/bin/bash
+    set -e;
+    if [ -n "${POSTGRES_NON_ROOT_USER:-}" ] && [ -n "${POSTGRES_NON_ROOT_PASSWORD:-}" ]; then
+    	psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    		CREATE USER "${POSTGRES_NON_ROOT_USER}" WITH PASSWORD '${POSTGRES_NON_ROOT_PASSWORD}';
+    		GRANT ALL PRIVILEGES ON DATABASE ${POSTGRES_DB} TO "${POSTGRES_NON_ROOT_USER}";
+    	EOSQL
+    else
+    	echo "SETUP INFO: No Environment variables given!"
+    fi

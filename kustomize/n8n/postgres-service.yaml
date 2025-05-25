@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    service: postgres-n8n
+    app.kubernetes.io/name: n8n-postgres
+    app.kubernetes.io/instance: n8n
+    app.kubernetes.io/component: database-service
+    app.kubernetes.io/part-of: n8n
+    app.kubernetes.io/managed-by: flux
+  name: postgres-service
+  namespace: n8n
+  annotations:
+    description: "Service for n8n Postgres database."
+spec:
+  clusterIP: None
+  ports:
+    - name: "postgres"
+      port: 5432
+      targetPort: 5432
+      protocol: TCP
+  selector:
+    service: postgres-n8n

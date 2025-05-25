@@ -1,0 +1,22 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: postgresql-pv
+  namespace: n8n
+  labels:
+    app.kubernetes.io/name: n8n-postgres
+    app.kubernetes.io/instance: n8n
+    app.kubernetes.io/component: database-storage
+    app.kubernetes.io/part-of: n8n
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "PersistentVolumeClaim for n8n Postgres database."
+  finalizers:
+  - kubernetes.io/pvc-protection
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: local-path

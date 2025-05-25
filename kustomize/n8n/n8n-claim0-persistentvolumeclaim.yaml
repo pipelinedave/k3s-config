@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    service: n8n-claim0
+    app.kubernetes.io/name: n8n
+    app.kubernetes.io/instance: n8n
+    app.kubernetes.io/component: storage
+    app.kubernetes.io/part-of: n8n
+    app.kubernetes.io/managed-by: flux
+  name: n8n-claim0
+  namespace: n8n
+  annotations:
+    description: "PersistentVolumeClaim for n8n data storage."
+  finalizers:
+  - kubernetes.io/pvc-protection
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: local-path

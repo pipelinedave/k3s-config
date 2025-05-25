@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: domain-config
+  namespace: media-server
+data:
+  # Base domain configuration - update to your domain
+  BASE_DOMAIN: "stillon.top"
+  # Full FQDNs based on the pattern: service.stillon.top
+  RADARR_FQDN: "radarr.stillon.top"
+  SONARR_FQDN: "sonarr.stillon.top"
+  BAZARR_FQDN: "bazarr.stillon.top"
+  PROWLARR_FQDN: "prowlarr.stillon.top"
+  SABNZBD_FQDN: "sabnzbd.stillon.top"
+  JELLYFIN_FQDN: "jellyfin.stillon.top"
+  HEIMDALL_FQDN: "dashboard.stillon.top"
+  YTPLAYLISTARR_FQDN: "ytplaylist.stillon.top"

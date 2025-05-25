@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Reference the base from the arr repository
+resources:
+- namespace.yaml
+- github.com/DawgSons/arr//k8s/kustomize/arr/base?ref=main
+
+# Apply customizations specific to your cluster
+patches:
+- path: domain-config-patch.yaml
+  target:
+    kind: ConfigMap
+    name: domain-config
+- path: pvc-finalizers-patch.yaml
+  target:
+    kind: PersistentVolumeClaim
+
+# Customize namespace
+namespace: media-server
+
+# Add common labels
+commonLabels:
+  app.kubernetes.io/managed-by: flux

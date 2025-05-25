@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: appdata-pvc
+  namespace: media-server
+  finalizers:
+    - kubernetes.io/pvc-protection
+spec:
+  resources:
+    requests:
+      storage: 5Gi  # For application configurations
+  storageClassName: local-path
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: usenet-downloads-pvc
+  namespace: media-server
+  finalizers:
+    - kubernetes.io/pvc-protection
+spec:
+  resources:
+    requests:
+      storage: 100Gi  # For downloads
+  storageClassName: local-path
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: media-storage-pvc
+  namespace: media-server
+  finalizers:
+    - kubernetes.io/pvc-protection
+spec:
+  resources:
+    requests:
+      storage: 250Gi  # For media storage
+  storageClassName: local-path

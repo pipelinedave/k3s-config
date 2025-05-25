@@ -62,9 +62,23 @@ spec:
                   name: postgres-secret
                   key: POSTGRES_NON_ROOT_PASSWORD
             - name: N8N_PROTOCOL
-              value: http
+              value: https
             - name: N8N_PORT
-              value: "5678"
+              value: "443"
+            - name: N8N_HOST
+              value: n8n.stillon.top
+            - name: N8N_WEBHOOK_URL
+              value: https://n8n.stillon.top
+            - name: WEBHOOK_TUNNEL_URL
+              value: https://n8n.stillon.top
+            - name: N8N_SECURE_COOKIE
+              value: "true"
+            - name: NODE_ENV
+              value: production
+            - name: N8N_EDITOR_BASE_URL
+              value: https://n8n.stillon.top
+            - name: GENERIC_TIMEZONE
+              value: "UTC"
           image: n8nio/n8n
           name: n8n
           ports:

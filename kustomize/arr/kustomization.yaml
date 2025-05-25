@@ -11,9 +11,24 @@ patches:
   target:
     kind: ConfigMap
     name: domain-config
+    namespace: media-server
+
+# Specific patches for each PVC
 - path: appdata-pvc-patch.yaml
+  target:
+    kind: PersistentVolumeClaim
+    name: appdata-pvc
+    namespace: media-server
 - path: usenet-downloads-pvc-patch.yaml
+  target:
+    kind: PersistentVolumeClaim
+    name: usenet-downloads-pvc
+    namespace: media-server
 - path: media-storage-pvc-patch.yaml
+  target:
+    kind: PersistentVolumeClaim
+    name: media-storage-pvc
+    namespace: media-server
 
 # Customize namespace
 namespace: media-server

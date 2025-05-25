@@ -14,7 +14,6 @@
 ### Medium Priority
 <!-- Enhancements and improvements -->
 
-
 ### Low Priority
 <!-- Nice-to-haves and maintenance tasks -->
 

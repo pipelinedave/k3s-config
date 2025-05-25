@@ -11,9 +11,9 @@ patches:
   target:
     kind: ConfigMap
     name: domain-config
-- path: pvc-finalizers-patch.yaml
-  target:
-    kind: PersistentVolumeClaim
+- path: appdata-pvc-patch.yaml
+- path: usenet-downloads-pvc-patch.yaml
+- path: media-storage-pvc-patch.yaml
 
 # Customize namespace
 namespace: media-server

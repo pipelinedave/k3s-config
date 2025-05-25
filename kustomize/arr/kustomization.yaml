@@ -4,7 +4,7 @@ kind: Kustomization
 # Reference the base from the arr repository
 resources:
 - namespace.yaml
-- github.com/DawgSons/arr//k8s/kustomize/arr/base?ref=main
+- https://github.com/DawgSons/arr//k8s/kustomize/arr/base?ref=main
 
 # Apply customizations specific to your cluster
 patches:

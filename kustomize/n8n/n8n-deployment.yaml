@@ -65,6 +65,8 @@ spec:
               value: https
             - name: N8N_HOST
               value: n8n.stillon.top
+            - name: N8N_PORT
+              value: "443"
             - name: N8N_WEBHOOK_URL
               value: https://n8n.stillon.top
             - name: N8N_SECURE_COOKIE

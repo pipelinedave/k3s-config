@@ -66,7 +66,7 @@ spec:
             - name: N8N_HOST
               value: n8n.stillon.top
             - name: N8N_WEBHOOK_URL
-              value: https://n8n.stillon.top
+              value: https://n8n.stillon.top/
             - name: WEBHOOK_TUNNEL_URL
               value: https://n8n.stillon.top
             - name: N8N_SECURE_COOKIE

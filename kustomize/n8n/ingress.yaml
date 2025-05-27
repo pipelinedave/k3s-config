@@ -28,7 +28,7 @@ spec:
           service:
             name: n8n
             port:
-              number: 5678
+              number: 443
         path: /
         pathType: Prefix
   tls:

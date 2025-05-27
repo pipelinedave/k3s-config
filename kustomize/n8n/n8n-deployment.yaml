@@ -68,7 +68,7 @@ spec:
             - name: N8N_PORT
               value: "443"
             - name: N8N_WEBHOOK_URL
-              value: https://n8n.stillon.top
+              value: https://n8n.stillon.top:443
             - name: N8N_SECURE_COOKIE
               value: "true"
             - name: NODE_ENV
@@ -80,7 +80,7 @@ spec:
           image: n8nio/n8n
           name: n8n
           ports:
-            - containerPort: 5678
+            - containerPort: 443
           resources:
             requests:
               memory: "250Mi"

@@ -61,6 +61,8 @@ spec:
                 secretKeyRef:
                   name: postgres-secret
                   key: POSTGRES_NON_ROOT_PASSWORD
+            - name: N8N_PROTOCOL
+              value: https
             - name: N8N_HOST
               value: n8n.stillon.top
             - name: N8N_WEBHOOK_URL

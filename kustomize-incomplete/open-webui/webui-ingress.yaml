@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: open-webui-ingress
+  # namespace: open-webui
+  labels:
+    app.kubernetes.io/name: open-webui
+    app.kubernetes.io/instance: open-webui
+    app.kubernetes.io/component: ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    # If you use specific Traefik middleware (e.g., for headers, auth), add them here:
+    # traefik.ingress.kubernetes.io/router.middlewares: namespace-middleware1@kubernetescrd, namespace-middleware2@kubernetescrd
+spec:
+  rules:
+  - host: open-webui.stillon.top
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: open-webui-service
+            port:
+              name: http # Name of the port in the Service spec
+  tls:
+  - hosts:
+    - open-webui.stillon.top
+    secretName: open-webui-tls # cert-manager will create/use this secret

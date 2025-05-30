@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ollama
+  # namespace: open-webui
+  labels:
+    app.kubernetes.io/name: ollama
+    app.kubernetes.io/instance: ollama-open-webui
+    app.kubernetes.io/component: llm-backend
+spec:
+  serviceName: "ollama-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ollama # Original selector from base manifest
+      app.kubernetes.io/name: ollama # Added for consistency
+      app.kubernetes.io/instance: ollama-open-webui
+  template:
+    metadata:
+      labels:
+        app: ollama # Original label from base manifest
+        app.kubernetes.io/name: ollama
+        app.kubernetes.io/instance: ollama-open-webui
+        app.kubernetes.io/component: llm-backend
+        # app.kubernetes.io/version: "latest" # from image
+    spec:
+      containers:
+      - name: ollama
+        image: ollama/ollama:latest
+        ports:
+        - name: http
+          containerPort: 11434
+        resources:
+          requests:
+            cpu: "2000m"
+            memory: "2Gi"
+          limits:
+            cpu: "4000m"
+            memory: "4Gi"
+            nvidia.com/gpu: "0"
+        volumeMounts:
+        - name: ollama-data # Matches volumeClaimTemplates.metadata.name
+          mountPath: /root/.ollama
+        tty: true
+  volumeClaimTemplates:
+  - metadata:
+      name: ollama-data # Renamed from ollama-volume
+      labels:
+        app.kubernetes.io/name: ollama
+        app.kubernetes.io/instance: ollama-open-webui
+        app.kubernetes.io/component: storage
+      finalizers:
+      - kubernetes.io/pvc-protection
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 30Gi

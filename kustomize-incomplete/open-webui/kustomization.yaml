@@ -1,9 +1,15 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: open-webui # Setting default namespace for all resources
 resources:
-- open-webui.yaml
-- ollama-service.yaml
-- ollama-statefulset.yaml
-- webui-deployment.yaml
-- webui-service.yaml
-- webui-ingress.yaml
-- webui-pvc.yaml
-- configmap.yaml
+  # open-webui.yaml # This was the namespace definition, removed as per policy
+  - ollama-service.yaml
+  - ollama-statefulset.yaml
+  - webui-deployment.yaml
+  - webui-service.yaml
+  - webui-ingress.yaml
+  - webui-pvc.yaml
+
+commonLabels:
+  app.kubernetes.io/part-of: open-webui
+  app.kubernetes.io/managed-by: flux

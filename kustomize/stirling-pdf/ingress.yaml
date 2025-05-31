@@ -1,0 +1,33 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: stirling-pdf
+  namespace: stirling-pdf
+  labels:
+    app.kubernetes.io/name: stirling-pdf
+    app.kubernetes.io/instance: stirling-pdf
+    app.kubernetes.io/version: "latest"
+    app.kubernetes.io/component: web
+    app.kubernetes.io/part-of: stirling-pdf
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    description: "Ingress for Stirling PDF application."
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: stirling-pdf.stillon.top
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: stirling-pdf
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - stirling-pdf.stillon.top
+      secretName: stirling-pdf-tls

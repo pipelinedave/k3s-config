@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stirling-pdf
+  namespace: stirling-pdf
+  labels:
+    app.kubernetes.io/name: stirling-pdf
+    app.kubernetes.io/instance: stirling-pdf
+    app.kubernetes.io/version: "latest" # Pin to a specific version for production
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: stirling-pdf
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Stirling PDF application deployment."
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stirling-pdf
+  template:
+    metadata:
+      labels:
+        app: stirling-pdf
+        app.kubernetes.io/name: stirling-pdf
+        app.kubernetes.io/instance: stirling-pdf
+        app.kubernetes.io/version: "latest"
+        app.kubernetes.io/component: application
+        app.kubernetes.io/part-of: stirling-pdf
+        app.kubernetes.io/managed-by: flux
+    spec:
+      containers:
+      - name: stirling-pdf
+        image: stirlingtools/stirling-pdf:latest # Consider pinning to a specific version
+        ports:
+        - containerPort: 8080
+          name: http
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1.5"
+        volumeMounts:
+        - mountPath: /usr/share/stirling-pdf/configs
+          name: stirling-pdf-data
+        - mountPath: /usr/share/stirling-pdf/customFiles
+          name: stirling-pdf-data
+        - mountPath: /usr/share/stirling-pdf/logs
+          name: stirling-pdf-data
+      volumes:
+      - name: stirling-pdf-data
+        persistentVolumeClaim:
+          claimName: stirling-pdf-pvc

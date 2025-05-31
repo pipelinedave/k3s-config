@@ -1,0 +1,23 @@
+# filepath: /home/dave/src/k3s-config/kustomize/stirling-pdf/pvc.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: stirling-pdf-pvc
+  namespace: stirling-pdf
+  labels:
+    app.kubernetes.io/name: stirling-pdf
+    app.kubernetes.io/instance: stirling-pdf
+    app.kubernetes.io/version: "latest"
+    app.kubernetes.io/component: storage
+    app.kubernetes.io/part-of: stirling-pdf
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "PersistentVolumeClaim for Stirling PDF data, configs, and logs."
+  finalizers:
+  - kubernetes.io/pvc-protection
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

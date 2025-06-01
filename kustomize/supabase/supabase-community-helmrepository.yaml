@@ -5,4 +5,4 @@ metadata:
   namespace: flux-system # Manages Helm chart sources centrally
 spec:
   interval: 1h
-  url: https://supabase-community.github.io/supabase-kubernetes
+  url: https://github.com/supabase-community/supabase-kubernetes/blob/main/index.yaml

@@ -28,7 +28,32 @@ spec:
         app.kubernetes.io/part-of: supabase
         # app.kubernetes.io/version will be set by the chart or can be added here
 
+    # Configure global secrets by referencing the existing k8s secret
+    secret:
+      jwt:
+        secretRef: "supabase-initial-config" # Name of your sealed secret
+        secretRefKey:
+          anonKey: "ANON_KEY"       # Maps to 'anonKey' in the chart
+          serviceKey: "SERVICE_KEY" # Maps to 'serviceKey' in the chart
+          secret: "JWT_SECRET"      # Maps to 'secret' (JWT secret) in the chart
+      db: # For services connecting to the DB, not for the DB pod itself
+        secretRef: "supabase-initial-config"
+        secretRefKey:
+          password: "POSTGRES_PASSWORD"
+        # Provide username and database name directly as they are not in the secret
+        # and the chart uses these values if not found in the secret.
+        username: "postgres"
+        database: "postgres"
+      dashboard: # For Studio dashboard login
+        secretRef: "supabase-initial-config"
+        secretRefKey:
+          username: "DASHBOARD_USERNAME"
+          password: "DASHBOARD_PASSWORD"
+      # smtp and s3 remain disabled as per previous configuration
+
     # PostgreSQL (db)
+    # This component's secret (POSTGRES_PASSWORD) is configured directly below
+    # as it's for the database pod itself.
     db:
       enabled: true
       persistence:
@@ -38,12 +63,12 @@ spec:
         # storageClass: "your-storage-class"
         # size: 10Gi
       environment:
-        POSTGRES_USER: "postgres"
-        POSTGRES_DB: "postgres"
+        POSTGRES_USER: "postgres" # This is the user for the DB instance
+        POSTGRES_DB: "postgres"   # This is the database name for the DB instance
         POSTGRES_PASSWORD:
           valueFrom:
             secretKeyRef:
-              name: supabase-initial-config
+              name: supabase-initial-config # This remains for the DB pod
               key: POSTGRES_PASSWORD
 
     # Supabase Studio
@@ -51,25 +76,12 @@ spec:
       environment:
         STUDIO_DEFAULT_ORGANIZATION: "Stillon Org"
         STUDIO_DEFAULT_PROJECT: "Main Project"
-        SUPABASE_PUBLIC_URL: "https://supabase-api.stillon.top"
+        SUPABASE_PUBLIC_URL: "https://supabase-api.stillon.top" # Used by Studio
         NEXT_PUBLIC_ENABLE_LOGS: "true"
-        SUPABASE_URL: "https://supabase-api.stillon.top"
-        SUPABASE_ANON_KEY:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: ANON_KEY
-        SUPABASE_SERVICE_KEY:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: SERVICE_KEY
-      config: # For dashboard password
-        LOGIN_PASSWORD:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: DASHBOARD_PASSWORD
+        SUPABASE_URL: "https://supabase-api.stillon.top" # Used by Studio
+        # ANON_KEY and SERVICE_KEY will be injected by the chart via global secret.jwt
+        # DASHBOARD_PASSWORD will be injected by the chart via global secret.dashboard
+      # config: block for LOGIN_PASSWORD removed as it's handled by global secret.dashboard
       ingress:
         enabled: true
         className: "nginx"
@@ -91,41 +103,21 @@ spec:
       environment:
         API_EXTERNAL_URL: "https://supabase-api.stillon.top"
         GOTRUE_SITE_URL: "https://supabase-api.stillon.top" # Review if this should be studio or api URL
-        GOTRUE_EXTERNAL_EMAIL_ENABLED: "false"
+        GOTRUE_EXTERNAL_EMAIL_ENABLED: "false" # SMTP is disabled
         GOTRUE_MAILER_AUTOCONFIRM: "true"
-        GOTRUE_JWT_SECRET:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: JWT_SECRET
-        GOTRUE_ANON_KEY:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: ANON_KEY
-        GOTRUE_SERVICE_KEY:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: SERVICE_KEY
+        # JWT_SECRET, ANON_KEY, SERVICE_KEY will be injected by the chart via global secret.jwt
 
     # Supabase REST (PostgREST)
     rest:
       environment:
-        # PGRST_DB_URI is typically constructed by the chart using user, pass, host etc.
-        # We provide the password, anon role, and JWT secret.
         PGRST_DB_ANON_ROLE: "anon" # Default, ensure this role exists
-        PGRST_JWT_SECRET:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: JWT_SECRET
-        # The chart should use these to construct the DB URI:
-        PGRST_DB_USER: "postgres"
+        # PGRST_JWT_SECRET will be injected by the chart via global secret.jwt
+        # Database connection details for PostgREST:
+        PGRST_DB_USER: "postgres" # User for PostgREST to connect to DB
         PGRST_DB_PORT: "5432"
         PGRST_DB_HOST: "supabase-db" # Default service name for DB
-        PGRST_DB_NAME: "postgres"
-        PGRST_DB_PASSWORD:
+        PGRST_DB_NAME: "postgres"   # DB name for PostgREST to connect to
+        PGRST_DB_PASSWORD: # Password for PostgREST to connect to DB
           valueFrom:
             secretKeyRef:
               name: supabase-initial-config
@@ -137,14 +129,10 @@ spec:
       environment:
         DB_HOST: "supabase-db"
         DB_PORT: "5432"
-        DB_USER: "postgres"
+        DB_USER: "postgres" # User for Realtime to connect to DB
         DB_SSL: "false" # Assuming internal traffic
-        JWT_SECRET:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: JWT_SECRET
-        DB_PASSWORD:
+        # JWT_SECRET will be injected by the chart via global secret.jwt
+        DB_PASSWORD: # Password for Realtime to connect to DB
           valueFrom:
             secretKeyRef:
               name: supabase-initial-config
@@ -155,9 +143,9 @@ spec:
       environment:
         POSTGRES_HOST: "supabase-db"
         POSTGRES_PORT: "5432"
-        POSTGRES_USER: "postgres"
-        POSTGRES_DATABASE: "postgres"
-        POSTGRES_PASSWORD:
+        POSTGRES_USER: "postgres" # User for Meta to connect to DB
+        POSTGRES_DATABASE: "postgres" # DB name for Meta to connect to
+        POSTGRES_PASSWORD: # Password for Meta to connect to DB
           valueFrom:
             secretKeyRef:
               name: supabase-initial-config
@@ -172,82 +160,91 @@ spec:
         # storageClass: "your-storage-class"
         # size: 100Gi
       environment:
-        # DATABASE_URL is typically constructed by the chart.
-        # We provide password and other necessary keys.
         PG_META_URL: "http://supabase-meta:8080" # Service name for meta
-        ANON_KEY:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: ANON_KEY
-        SERVICE_KEY:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: SERVICE_KEY
-        JWT_SECRET:
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: JWT_SECRET
-        # For constructing DATABASE_URL if chart needs it:
-        POSTGRES_USER: "postgres"
+        # ANON_KEY, SERVICE_KEY, JWT_SECRET will be injected by chart via global secret.jwt
+        # Database connection details for Storage:
+        POSTGRES_USER: "postgres" # User for Storage to connect to DB
         POSTGRES_HOST: "supabase-db"
         POSTGRES_PORT: "5432"
-        POSTGRES_DATABASE: "postgres"
-        POSTGRES_PASSWORD:
+        POSTGRES_DATABASE: "postgres" # DB name for Storage to connect to
+        POSTGRES_PASSWORD: # Password for Storage to connect to DB
           valueFrom:
             secretKeyRef:
               name: supabase-initial-config
               key: POSTGRES_PASSWORD
 
-    # Supabase Imgproxy
-    imgproxy:
-      persistence: # Optional, for caching
-        enabled: true
-        annotations: # PVC Protection
-          "kubernetes.io/pvc-protection": "true"
-        # storageClass: "your-storage-class"
-        # size: 10Gi
+    # Supabase Functions
+    functions:
+      enabled: true # Enable if you plan to use Supabase Functions
       environment:
-        IMGPROXY_ENABLE_WEBP_DETECTION: "true"
-        IMGPROXY_SECRET: # Can be any string, often JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: JWT_SECRET
+        # JWT_SECRET, ANON_KEY, SERVICE_KEY are typically needed and should be injected by chart
+        # Database connection details for Functions:
+        DB_USERNAME: "supabase_functions_admin" # As per chart's values.yaml default
+        DB_PORT: "5432"
+        DB_HOST: "supabase-db"
+        DB_SSL: "disable"
+        # DB_PASSWORD will need to be set if supabase_functions_admin requires one.
+        # The chart's values.yaml doesn't show a password for functions user by default.
+        # Assuming for now it connects using trust or a pre-configured role.
+        # If functions fail, we may need to create a password for supabase_functions_admin
+        # and add it to supabase-initial-config and map it here.
 
-    # Supabase Kong (API Gateway)
+    # Kong API Gateway
     kong:
       environment:
-        KONG_DECLARATIVE_CONFIG: /usr/local/kong/kong.yml # Default, adjust if needed
-        KONG_LOG_LEVEL: info
-        KONG_ANON_KEY: # Used for anonymous access through Kong
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: ANON_KEY
+        KONG_ADMIN_LISTEN: "0.0.0.0:8001"
+        KONG_PROXY_LISTEN: "0.0.0.0:8000"
+        KONG_STATUS_LISTEN: "0.0.0.0:8002" # Optional status endpoint
+        KONG_NGINX_PROXY_PROXY_BUFFER_SIZE: "16k"
+        KONG_NGINX_PROXY_PROXY_BUFFERS: "4 16k"
+        # ANON_KEY, SERVICE_KEY, JWT_SECRET are used by Kong plugins,
+        # chart should configure Kong declarative config using global secrets.
       ingress:
         enabled: true
         className: "nginx"
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-prod
-          nginx.ingress.kubernetes.io/rewrite-target: /
-          nginx.ingress.kubernetes.io/proxy-body-size: "500m"
+          nginx.ingress.kubernetes.io/proxy-body-size: "500m" # Increased for large file uploads via API
         hosts:
           - host: supabase-api.stillon.top
             paths:
               - path: /
-                pathType: ImplementationSpecific
+                pathType: ImplementationSpecific # Or Prefix
         tls:
           - secretName: supabase-api-tls
             hosts:
               - supabase-api.stillon.top
 
-    # The `secret` block from the original chart values is not used here,
-    # as we are injecting secrets directly into component environments.
+    # Image Proxy (imgproxy)
+    imgproxy:
+      enabled: true # Enable if you use storage and need image transformations
+      persistence:
+        enabled: true # If you want to cache transformed images on disk
+        annotations: # PVC Protection
+          "kubernetes.io/pvc-protection": "true"
+        # storageClass: "your-storage-class"
+        # size: 20Gi
 
-    # PostRenderers are not used for labels or PVC finalizers,
-    # as these are handled by `supabase.labels` and `*.persistence.annotations` respectively.
-    # If other specific patches are needed, postRenderers can be added back.
+    # Analytics, Vector, Minio are disabled by default in this configuration
+    analytics:
+      enabled: false
+    vector:
+      enabled: false
+    minio: # Using file storage backend for Supabase Storage, so Minio is not needed
+      enabled: false
+
+    # SMTP settings (globally disabled)
+    # If you were to enable SMTP, you'd configure it here, likely with a secretRef
+    # smtp:
+    #   host: your.smtp.server
+    #   port: 587
+    #   username: your_smtp_user
+    #   password:
+    #     valueFrom:
+    #       secretKeyRef:
+    #         name: supabase-initial-config # Assuming SMTP pass is in this secret
+    #         key: SMTP_PASSWORD
+    #   sender_name: "Supabase Staging"
+    #   admin_email: "admin@stillon.top"
+    #   # ... other SMTP settings from chart's values.yaml
 

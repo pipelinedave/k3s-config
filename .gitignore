@@ -1,18 +1,60 @@
+# Files and directories to ignore
+
+# General build/temp artifacts
 test/
-# Dont be a doofus
-*secret*
-# Exclude these specific shell scripts from being ignored
-!scripts/seal_secrets.sh
-!scripts/seal-oauth-secret.sh
-# Allow sealed secret files in git
-!*-sealed.yaml
-!*-secret-sealed.yaml
-!*-credentials-sealed.yaml
+extracted/
+/tmp/
+*.tmp
+
+# Specific application config files to ignore
 version-configmap-dev.yaml
 backup.sql
 default.yaml
 
-# Temporary files created during export
-extracted/
-/tmp/
-*.tmp
+# Ignore common patterns for UNSEALED secret files
+secret.yaml
+secrets.yaml
+*.secret.yaml # General pattern
+*.secrets.yaml # General pattern
+
+
+# Specific unsealed secret filenames that were not caught by broader patterns
+# Ensure these are specific enough and do not have typos.
+**/oauth-secret-unsealed.yaml # Making this more explicit with directory wildcard
+*postgres-secret-staging.yaml
+*choremane-client-secret.yaml
+*oauth2-proxy-gotify-client-secret.yaml
+*cookie-secret.yaml
+*linkding-superuser-secret.yaml
+
+# Catch-all for other common unsealed patterns if the specific ones above miss something
+*-secret.yaml       # Should catch many variants if not already listed
+*-secrets.yaml
+*-secret-template.yaml
+*-template-secret.yaml
+*-unsealed.yaml     # Should catch variants if not already listed
+*-unsealed-secret.yaml
+*-credentials.yaml
+*-credentials-secret.yaml
+
+
+# Now, explicitly UN-ignore (include) patterns for SEALED secrets.
+!*sealed.yaml
+!sealed-*.yaml
+!*-sealed.yaml
+!*secret-sealed.yaml
+!*-credentials-sealed.yaml
+
+# Exclude these specific shell scripts from being ignored by any broad rules
+!scripts/seal_secrets.sh
+!scripts/seal-oauth-secret.sh
+kustomize-incomplete/supersecretmessage/kustomization.yaml
+kustomize-incomplete/supersecretmessage/supersecret-deployment.yaml
+kustomize-incomplete/supersecretmessage/supersecret-ingress.yaml
+kustomize-incomplete/supersecretmessage/supersecret-service.yaml
+kustomize-incomplete/supersecretmessage/vault-deployment.yaml
+kustomize-incomplete/supersecretmessage/vault-sealed.yaml
+kustomize-incomplete/supersecretmessage/vault-secret.yaml
+kustomize-incomplete/supersecretmessage/vault-service.yaml
+.gitignore
+kustomize/choremane/base/oauth-secret-unsealed.yaml

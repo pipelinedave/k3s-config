@@ -39,11 +39,17 @@ spec:
       db: # For services connecting to the DB, not for the DB pod itself
         secretRef: "supabase-initial-config"
         secretRefKey:
+          # The chart expects 'password', 'username', 'database' under secret.db.secretRefKey
+          # if secret.db.secretRef is used.
           password: "POSTGRES_PASSWORD"
-        # Provide username and database name directly as they are not in the secret
-        # and the chart uses these values if not found in the secret.
-        username: "postgres"
-        database: "postgres"
+          username: "POSTGRES_USER" # Assuming POSTGRES_USER is in your secret for other services
+          database: "POSTGRES_DB"   # Assuming POSTGRES_DB is in your secret for other services
+        # Provide username and database name directly if they are NOT in the secret
+        # and you want to use fixed values for services connecting to the DB.
+        # However, the chart's values.yaml implies these can come from the secretRef.
+        # Let's assume they are in the secret for now. If not, we'd set them here:
+        # username: "postgres" # This would be used if not found via secretRefKey.username
+        # database: "postgres" # This would be used if not found via secretRefKey.database
       dashboard: # For Studio dashboard login
         secretRef: "supabase-initial-config"
         secretRefKey:
@@ -53,7 +59,7 @@ spec:
 
     # PostgreSQL (db)
     # This component's secret (POSTGRES_PASSWORD) is configured directly below
-    # as it's for the database pod itself.
+    # as it's for the database pod itself. The global secret.db is for other services.
     db:
       enabled: true
       persistence:
@@ -63,13 +69,15 @@ spec:
         # storageClass: "your-storage-class"
         # size: 10Gi
       environment:
-        POSTGRES_USER: "postgres" # This is the user for the DB instance
-        POSTGRES_DB: "postgres"   # This is the database name for the DB instance
-        POSTGRES_PASSWORD:
+        # These are for the PostgreSQL instance itself
+        POSTGRES_USER: "postgres" # User for the DB instance
+        POSTGRES_DB: "postgres"   # Database name for the DB instance
+        POSTGRES_PASSWORD:        # Password for the DB instance
           valueFrom:
             secretKeyRef:
-              name: supabase-initial-config # This remains for the DB pod
+              name: supabase-initial-config
               key: POSTGRES_PASSWORD
+        # Any other DB specific env vars from chart's values.yaml for db component
 
     # Supabase Studio
     studio:
@@ -102,26 +110,24 @@ spec:
     auth:
       environment:
         API_EXTERNAL_URL: "https://supabase-api.stillon.top"
-        GOTRUE_SITE_URL: "https://supabase-api.stillon.top" # Review if this should be studio or api URL
+        GOTRUE_SITE_URL: "https://supabase-api.stillon.top"
         GOTRUE_EXTERNAL_EMAIL_ENABLED: "false" # SMTP is disabled
         GOTRUE_MAILER_AUTOCONFIRM: "true"
         # JWT_SECRET, ANON_KEY, SERVICE_KEY will be injected by the chart via global secret.jwt
+        # DB connection details (like DB_PASSWORD) for Auth should come from global secret.db
 
     # Supabase REST (PostgREST)
     rest:
       environment:
         PGRST_DB_ANON_ROLE: "anon" # Default, ensure this role exists
         # PGRST_JWT_SECRET will be injected by the chart via global secret.jwt
-        # Database connection details for PostgREST:
-        PGRST_DB_USER: "postgres" # User for PostgREST to connect to DB
+        # Database connection details for PostgREST (user, pass, host, port, name)
+        # should be derived by the chart using global secret.db and other defaults.
+        # We only override if necessary and if the chart supports it.
+        # For now, remove explicit PGRST_DB_PASSWORD, PGRST_DB_USER etc.
+        # Rely on the chart to use the global secret.db.
+        PGRST_DB_HOST: "supabase-db" # Explicitly set host, chart might default but good to be clear
         PGRST_DB_PORT: "5432"
-        PGRST_DB_HOST: "supabase-db" # Default service name for DB
-        PGRST_DB_NAME: "postgres"   # DB name for PostgREST to connect to
-        PGRST_DB_PASSWORD: # Password for PostgREST to connect to DB
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: POSTGRES_PASSWORD
 
     # Supabase Realtime
     realtime:
@@ -129,27 +135,18 @@ spec:
       environment:
         DB_HOST: "supabase-db"
         DB_PORT: "5432"
-        DB_USER: "postgres" # User for Realtime to connect to DB
+        # DB_USER should come from global secret.db.username if defined there and chart uses it
         DB_SSL: "false" # Assuming internal traffic
         # JWT_SECRET will be injected by the chart via global secret.jwt
-        DB_PASSWORD: # Password for Realtime to connect to DB
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: POSTGRES_PASSWORD
+        # DB_PASSWORD should come from global secret.db.password
 
     # Supabase Meta (for migrations, schema introspection)
     meta:
       environment:
         POSTGRES_HOST: "supabase-db"
         POSTGRES_PORT: "5432"
-        POSTGRES_USER: "postgres" # User for Meta to connect to DB
-        POSTGRES_DATABASE: "postgres" # DB name for Meta to connect to
-        POSTGRES_PASSWORD: # Password for Meta to connect to DB
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: POSTGRES_PASSWORD
+        # POSTGRES_USER, POSTGRES_DATABASE, POSTGRES_PASSWORD
+        # should be derived by the chart using global secret.db.
 
     # Supabase Storage
     storage:
@@ -162,16 +159,9 @@ spec:
       environment:
         PG_META_URL: "http://supabase-meta:8080" # Service name for meta
         # ANON_KEY, SERVICE_KEY, JWT_SECRET will be injected by chart via global secret.jwt
-        # Database connection details for Storage:
-        POSTGRES_USER: "postgres" # User for Storage to connect to DB
-        POSTGRES_HOST: "supabase-db"
-        POSTGRES_PORT: "5432"
-        POSTGRES_DATABASE: "postgres" # DB name for Storage to connect to
-        POSTGRES_PASSWORD: # Password for Storage to connect to DB
-          valueFrom:
-            secretKeyRef:
-              name: supabase-initial-config
-              key: POSTGRES_PASSWORD
+        # Database connection details for Storage (user, pass, host, port, name)
+        # should be derived by the chart using global secret.db.
+        POSTGRES_HOST: "supabase-db" # Explicitly set host
 
     # Supabase Functions
     functions:
@@ -179,15 +169,19 @@ spec:
       environment:
         # JWT_SECRET, ANON_KEY, SERVICE_KEY are typically needed and should be injected by chart
         # Database connection details for Functions:
-        DB_USERNAME: "supabase_functions_admin" # As per chart's values.yaml default
-        DB_PORT: "5432"
         DB_HOST: "supabase-db"
+        DB_PORT: "5432"
         DB_SSL: "disable"
-        # DB_PASSWORD will need to be set if supabase_functions_admin requires one.
-        # The chart's values.yaml doesn't show a password for functions user by default.
-        # Assuming for now it connects using trust or a pre-configured role.
-        # If functions fail, we may need to create a password for supabase_functions_admin
-        # and add it to supabase-initial-config and map it here.
+        DB_USERNAME: "supabase_functions_admin" # As per chart's values.yaml default
+        # DB_PASSWORD for supabase_functions_admin:
+        # If this user needs a password and it's in supabase-initial-config, map it here.
+        # For now, assuming chart handles or it's passwordless/trust.
+        # If errors persist for functions, add:
+        # DB_PASSWORD:
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: supabase-initial-config
+        #       key: FUNCTIONS_DB_PASSWORD # (Assuming you add this key to your secret)
 
     # Kong API Gateway
     kong:

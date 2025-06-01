@@ -1,0 +1,424 @@
+# This file will configure the Helm release for Supabase.
+# It will reference the HelmRepository defined in supabase-community-helmrepository.yaml
+# and specify the chart version and values for the Supabase deployment.
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: supabase
+  namespace: supabase # Deploys Supabase into its own namespace
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: supabase
+      version: "0.5.14" # Specify a stable chart version, update as needed
+      sourceRef:
+        kind: HelmRepository
+        name: supabase-community
+        namespace: flux-system # References the HelmRepository in flux-system
+  # It is highly recommended to manage sensitive values using SealedSecrets or a similar mechanism.
+  # For this initial setup, we will use placeholders. You MUST replace these with actual secrets management.
+  values:
+    # Global settings
+    # supabasePublicURL is used by multiple components like Studio and Auth
+    supabasePublicURL: "https://supabase-api.stillon.top" # Main API endpoint
+
+    # Secrets Management: Referencing the sealed secret
+    # The chart typically expects secret keys like 'jwt_secret', 'anon_key', etc.
+    # We will map these from our 'supabase-initial-config' secret.
+    # The exact mapping depends on how the chart structures its `values.yaml` for secrets.
+    # Assuming the chart can take `existingSecret` or similar, or we map individual env vars.
+    # For this community chart, it often involves setting environment variables directly
+    # for components and referencing secretKeyRef.
+
+    # PostgreSQL (db)
+    db:
+      enabled: true
+      # image: # Using chart default
+      # livenessProbe: # Using chart default
+      persistence:
+        enabled: true
+        # storageClass: "your-storage-class" # Specify if not using default SC
+        # size: 10Gi # Default is often 8Gi or 10Gi, adjust if needed
+      # We defined POSTGRES_PASSWORD in supabase-initial-config
+      # The chart likely uses a structure like:
+      # auth:
+      #   databasePassword:
+      #     existingSecret: supabase-initial-config
+      #     secretKey: POSTGRES_PASSWORD
+      # OR it sets an env var on the postgres pod.
+      # For this chart, it's often direct env vars or a specific secret structure.
+      # Let's assume the chart uses `postgresql.auth.existingSecret` or similar.
+      # If not, we'll need to map `db.environment` with `secretKeyRef`.
+      # Based on the example, it seems to create its own secret or take direct values.
+      # We will override specific component environment variables to use our secret.
+      environment:
+        POSTGRES_USER: "postgres" # From our secret generation step (default)
+        POSTGRES_DB: "postgres"   # Default DB name
+        # POSTGRES_PASSWORD will be injected via secretKeyRef if possible,
+        # or the chart might have a top-level `secret.db.password` which we'd populate from our secret.
+
+    studio:
+      # image: # Using chart default
+      environment:
+        STUDIO_DEFAULT_ORGANIZATION: "Stillon Org"
+        STUDIO_DEFAULT_PROJECT: "Main Project"
+        SUPABASE_PUBLIC_URL: "https://supabase-api.stillon.top" # Already set globally
+        NEXT_PUBLIC_ENABLE_LOGS: "true"
+        # SUPABASE_URL and SUPABASE_ANON_KEY are often needed by Studio
+        SUPABASE_URL: "https://supabase-api.stillon.top"
+      # livenessProbe: # Using chart default
+      ingress:
+        enabled: true
+        className: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-prod
+          nginx.ingress.kubernetes.io/proxy-body-size: "500m" # Example, adjust if needed for uploads
+          # Add other standard annotations from your cluster context
+        hosts:
+          - host: supabase-studio.stillon.top
+            paths:
+              - path: /
+                pathType: ImplementationSpecific
+        tls:
+          - secretName: supabase-studio-tls # cert-manager will create this
+            hosts:
+              - supabase-studio.stillon.top
+      # Dashboard username/password from our secret
+      # This chart might expect these under a specific `secret.dashboard` block
+      # or as env vars for the studio pod.
+      # We'll aim to inject them.
+
+    auth:
+      # image: # Using chart default
+      environment:
+        API_EXTERNAL_URL: "https://supabase-api.stillon.top"
+        GOTRUE_SITE_URL: "https://supabase-api.stillon.top" # Placeholder, as discussed
+        GOTRUE_EXTERNAL_EMAIL_ENABLED: "false" # Disabling SMTP as requested
+        GOTRUE_MAILER_AUTOCONFIRM: "true"
+        # GOTRUE_JWT_SECRET, GOTRUE_JWT_EXP, GOTRUE_ANON_KEY, GOTRUE_SERVICE_KEY
+        # will be injected from our secret.
+        # Omitting SMTP vars: GOTRUE_SMTP_ADMIN_EMAIL, GOTRUE_SMTP_HOST, etc.
+
+    rest:
+      # image: # Using chart default
+      environment:
+        # PGRST_DB_ANON_ROLE, PGRST_JWT_SECRET will be injected
+        PGRST_DB_URI: "postgresql://postgres@supabase-db/postgres" # Assuming service name `supabase-db` and user `postgres`
+
+    realtime:
+      # image: # Using chart default
+      # livenessProbe: # Using chart default
+      environment:
+        # JWT_SECRET will be injected
+        DB_HOST: "supabase-db"
+        DB_PORT: "5432"
+        DB_USER: "postgres"
+        DB_SSL: "false" # Assuming internal traffic, adjust if SSL is configured for DB
+
+    meta:
+      # image: # Using chart default
+      environment:
+        # POSTGRES_URL will be injected or constructed
+        POSTGRES_HOST: "supabase-db"
+        POSTGRES_PORT: "5432"
+        POSTGRES_USER: "postgres"
+        POSTGRES_DATABASE: "postgres"
+
+    storage:
+      # image: # Using chart default
+      # livenessProbe: # Using chart default
+      persistence:
+        enabled: true
+        # storageClass: "your-storage-class"
+        # size: 100Gi # Default is often smaller, adjust as needed
+      environment:
+        # ANON_KEY, SERVICE_KEY, JWT_SECRET will be injected
+        # DATABASE_URL will be constructed
+        PG_META_URL: "http://supabase-meta:8080" # Assuming service name
+
+    imgproxy:
+      # image: # Using chart default
+      # livenessProbe: # Using chart default
+      persistence: # Optional, for caching. Enable if desired.
+        enabled: true
+        # storageClass: "your-storage-class"
+        # size: 10Gi
+      environment:
+        IMGPROXY_ENABLE_WEBP_DETECTION: "true"
+        # IMGPROXY_SECRET will be injected (can be any string, often JWT_SECRET)
+
+    kong:
+      # image: # Using chart default
+      environment:
+        KONG_DECLARATIVE_CONFIG: /usr/local/kong/kong.yml
+        KONG_LOG_LEVEL: info
+        # KONG_PG_USER, KONG_PG_PASSWORD, KONG_PG_HOST (if using Kong with DB backend, often not needed for simple setups)
+        # KONG_PROXY_ACCESS_LOG, KONG_ADMIN_ACCESS_LOG, KONG_PROXY_ERROR_LOG, KONG_ADMIN_ERROR_LOG
+        # KONG_ANON_KEY will be injected
+      ingress:
+        enabled: true
+        className: "nginx"
+        annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-prod
+          nginx.ingress.kubernetes.io/rewrite-target: / # Chart default, verify if correct for Supabase
+          nginx.ingress.kubernetes.io/proxy-body-size: "500m" # For large file uploads via API
+          # Add other standard annotations
+        hosts:
+          - host: supabase-api.stillon.top
+            paths:
+              - path: /
+                pathType: ImplementationSpecific # Or Prefix, depending on needs
+        tls:
+          - secretName: supabase-api-tls # cert-manager will create this
+            hosts:
+              - supabase-api.stillon.top
+
+    # vector, functions, analytics: Using chart defaults for now, customize if needed.
+    # For vector, ensure hostPath for /var/log/pods is appropriate for your k3s node setup.
+    # analytics is disabled by not providing the API key.
+
+    # This is a common way the chart might expose secret configuration:
+    secret:
+      # JWT secrets
+      jwt:
+        # We are not putting plaintext secrets here.
+        # Instead, we will ensure components (auth, rest, storage, etc.)
+        # have their env vars set using secretKeyRef to 'supabase-initial-config'
+        # For example, in the 'auth' component's deployment template:
+        # env:
+        #   - name: GOTRUE_JWT_SECRET
+        #     valueFrom:
+        #       secretKeyRef:
+        #         name: supabase-initial-config
+        #         key: JWT_SECRET
+        # This needs to be supported by the chart's templates.
+        # If the chart *only* accepts plaintext via `secret.jwt.secret`,
+        # then we'd have to pass it like that, which is less ideal than secretKeyRef.
+        # The example values.yaml suggests it takes direct values here.
+        # We will override this by setting env vars directly on components using secretKeyRef.
+        # This section in values.yaml will be effectively ignored or overridden by direct env injection.
+        # anonKey: "will_be_from_sealed_secret"
+        # serviceKey: "will_be_from_sealed_secret"
+        # secret: "will_be_from_sealed_secret"
+        # This is a placeholder to show where the chart *expects* them if not using env var injection.
+        # We will rely on the chart templates to correctly use environment variables
+        # that we will populate using `secretKeyRef` where possible, or by directly
+        # setting the `env` block for each relevant component if the chart allows it.
+
+      # SMTP - disabled
+      # smtp:
+      #   username: ""
+      #   password: ""
+
+      # Dashboard credentials
+      dashboard:
+        # username: "will_be_from_sealed_secret_or_env"
+        # password: "will_be_from_sealed_secret_or_env"
+        # We'll ensure Studio's env vars SUPABASE_DASHBOARD_USERNAME/PASSWORD are set
+        # via secretKeyRef from supabase-initial-config
+
+      # DB credentials
+      db:
+        # username: "postgres"
+        # password: "will_be_from_sealed_secret_or_env"
+        # database: "postgres"
+        # We'll ensure relevant components (meta, rest, realtime, etc.) get DB credentials
+        # via secretKeyRef from supabase-initial-config for POSTGRES_PASSWORD,
+        # and use "postgres" for user/db.
+
+      # Analytics - disabled
+      # analytics:
+      #   apiKey: ""
+
+    # Overriding component environments to use our sealed secret
+    # This is a more explicit way if the chart doesn't have a global `existingSecret` pattern.
+    # Note: The exact env var names (e.g., GOTRUE_JWT_SECRET vs JWT_SECRET) depend on the specific Supabase component.
+    # We are using the keys from our `supabase-initial-config` secret.
+
+    auth_environment: # This is a common pattern: componentName_environment
+      GOTRUE_JWT_SECRET:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: JWT_SECRET
+      GOTRUE_ANON_KEY:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: ANON_KEY
+      GOTRUE_SERVICE_KEY:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: SERVICE_KEY
+
+    rest_environment:
+      PGRST_JWT_SECRET: # PostgREST uses PGRST_JWT_SECRET
+        secretKeyRef:
+          name: supabase-initial-config
+          key: JWT_SECRET
+      PGRST_DB_ANON_ROLE: "anon" # Default, ensure this role exists in Postgres
+      # PGRST_DB_URI is constructed above
+
+    realtime_environment:
+      JWT_SECRET:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: JWT_SECRET
+      DB_PASSWORD:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: POSTGRES_PASSWORD
+
+    meta_environment:
+      POSTGRES_PASSWORD:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: POSTGRES_PASSWORD
+
+    storage_environment:
+      ANON_KEY:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: ANON_KEY
+      SERVICE_KEY:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: SERVICE_KEY
+      JWT_SECRET:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: JWT_SECRET
+      FILE_SIZE_LIMIT: "52428800" # 50MB, default
+      # DATABASE_URL needs to be constructed with the password from secret
+      # Example: postgresql://postgres:${POSTGRES_PASSWORD}@supabase-db:5432/postgres
+      # This often requires the chart to support `valueFrom` for parts of an env var.
+      # If not, this might need to be handled by an init container or a more complex setup.
+      # For now, we assume the component can take DB_USER, DB_PASSWORD, DB_HOST separately if DATABASE_URL is tricky.
+      DB_USER: "postgres"
+      DB_PASSWORD:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: POSTGRES_PASSWORD
+      DB_HOST: "supabase-db"
+      DB_NAME: "postgres"
+      DB_PORT: "5432"
+
+
+    studio_environment: # Merges with studio.environment defined above
+      SUPABASE_DASHBOARD_USERNAME:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: SUPABASE_DASHBOARD_USERNAME
+      SUPABASE_DASHBOARD_PASSWORD:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: SUPABASE_DASHBOARD_PASSWORD
+      # Studio also needs ANON_KEY and SERVICE_KEY for some operations
+      SUPABASE_ANON_KEY: # This is often NEXT_PUBLIC_SUPABASE_ANON_KEY
+        secretKeyRef:
+          name: supabase-initial-config
+          key: ANON_KEY
+      SUPABASE_SERVICE_KEY:
+        secretKeyRef:
+          name: supabase-initial-config
+          key: SERVICE_KEY
+
+
+    kong_environment:
+      KONG_ANON_KEY: # Kong needs the anon key to forward to PostgREST
+        secretKeyRef:
+          name: supabase-initial-config
+          key: ANON_KEY
+
+    imgproxy_environment:
+      IMGPROXY_SECRET: # Can be any secret, using JWT_SECRET for consistency
+        secretKeyRef:
+          name: supabase-initial-config
+          key: JWT_SECRET
+
+    # Ensure PVCs will have the kubernetes.io/pvc-protection finalizer.
+    # If the chart creates PVCs directly, we might need postRenderers.
+    # If a subchart (like Bitnami PostgreSQL) creates PVCs, it usually has its own options.
+    # For the bundled 'db', 'storage', 'imgproxy' persistence:
+    # We assume the chart's PVC templates are minimal.
+    # The postRenderer below is a general approach.
+
+  # This section allows for post-rendering patches, useful for ensuring compliance
+  # with cluster policies like PVC protection if the chart doesn\'t support it directly.
+  postRenderers:
+    - kustomize:
+        patches:
+          - target:
+              kind: PersistentVolumeClaim
+              # No name specified, applies to all PVCs created by this HelmRelease
+            patch: |-
+              metadata:
+                finalizers:
+                  - kubernetes.io/pvc-protection
+          # Add standard labels to all resources created by the Helm chart
+          - target:
+              version: v1
+              kind: Pod # Targets PodSpec within Deployments, StatefulSets, etc.
+              # For direct Pods, use this. For Deployments, etc., this patch might need to be more specific
+              # or use a patch that targets the template within higher-level controllers.
+              # This is a simplified example; robust labeling might require more specific targets.
+            patch: |-
+              spec:
+                template:
+                  metadata:
+                    labels:
+                      app.kubernetes.io/name: supabase
+                      app.kubernetes.io/instance: supabase
+                      # app.kubernetes.io/version: use_chart_version_or_app_version
+                      app.kubernetes.io/managed-by: flux
+          - target: # Target Deployments
+              kind: Deployment
+            patch: |-
+              metadata:
+                labels:
+                  app.kubernetes.io/name: supabase
+                  app.kubernetes.io/instance: supabase
+                  app.kubernetes.io/managed-by: flux
+              spec:
+                template:
+                  metadata:
+                    labels:
+                      app.kubernetes.io/name: supabase
+                      app.kubernetes.io/instance: supabase
+          - target: # Target StatefulSets
+              kind: StatefulSet
+            patch: |-
+              metadata:
+                labels:
+                  app.kubernetes.io/name: supabase
+                  app.kubernetes.io/instance: supabase
+                  app.kubernetes.io/managed-by: flux
+              spec:
+                template:
+                  metadata:
+                    labels:
+                      app.kubernetes.io/name: supabase
+                      app.kubernetes.io/instance: supabase
+          - target: # Target Services
+              kind: Service
+            patch: |-
+              metadata:
+                labels:
+                  app.kubernetes.io/name: supabase
+                  app.kubernetes.io/instance: supabase
+                  app.kubernetes.io/managed-by: flux
+          - target: # Target Ingresses
+              kind: Ingress
+              group: networking.k8s.io
+            patch: |-
+              metadata:
+                labels:
+                  app.kubernetes.io/name: supabase
+                  app.kubernetes.io/instance: supabase
+                  app.kubernetes.io/managed-by: flux
+
+# Ensure all components that need JWT_SECRET, ANON_KEY, or SERVICE_KEY
+# have these environment variables correctly mapped from 'supabase-initial-config'.
+# This includes: auth, rest, realtime, storage, functions, studio (for some ops), kong, imgproxy.
+# Ensure database credentials (user/password/db_name/host) are correctly propagated to:
+# auth, rest, realtime, meta, storage, functions.
+

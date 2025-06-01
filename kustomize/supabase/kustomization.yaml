@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: supabase # Ensures all resources in this Kustomization are targeted for the supabase namespace
+resources:
+  - supabase-community-helmrepository.yaml
+  - supabase-helmrelease.yaml
+  - sealed-supabase-initial-config-secrets.yaml # Add the sealed secret resource
+
+# If you need to apply any specific patches or additional manifests for Supabase
+# that are not covered by the Helm chart, you can add them here.
+# For example:
+# - sealed-secrets.yaml # If you manage your secrets this way
+# - network-policy.yaml
+
+# Patches can be used to modify the HelmRelease or other resources if needed.
+# patchesStrategicMerge:
+# - |-
+#   # Example: Patching the HelmRelease to add a specific label
+#   apiVersion: helm.toolkit.fluxcd.io/v2beta1
+#   kind: HelmRelease
+#   metadata:
+#     name: supabase
+#     labels:
+#       my-custom-label: supabase-app

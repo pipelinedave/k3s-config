@@ -1,0 +1,31 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: supabase
+  namespace: flux-system # This Kustomization object itself is in flux-system
+spec:
+  interval: 10m
+  path: ./kustomize/supabase # Path to the kustomization directory for Supabase
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system # Assumes your GitRepository source is named flux-system
+  targetNamespace: supabase # Deploys resources into the supabase namespace
+  # If you need to wait for other resources to be ready before deploying Supabase,
+  # you can add dependencies here.
+  # dependsOn:
+  #   - name: cert-manager
+  #   - name: nginx-ingress
+  # Health checks to ensure Supabase components become ready
+  healthChecks:
+    # Check for the HelmRelease to be Ready
+    - apiVersion: helm.toolkit.fluxcd.io/v2beta1
+      kind: HelmRelease
+      name: supabase
+      namespace: supabase # Namespace where HelmRelease is deployed
+    # Add more specific health checks for key Supabase deployments if needed
+    # For example, checking the Supabase Studio deployment:
+    # - apiVersion: apps/v1
+    #   kind: Deployment
+    #   name: supabase-studio # The name might vary based on the Helm chart
+    #   namespace: supabase

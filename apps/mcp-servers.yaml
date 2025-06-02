@@ -1,0 +1,19 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: mcp-servers # Changed from mcp-server-kubernetes
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./kustomize/mcp-servers # Points to the parent directory
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: mcp-servers
+  healthChecks:
+    # Add health checks for each MCP server deployment as they are created
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: kubernetes-mcp-server
+      namespace: mcp-servers

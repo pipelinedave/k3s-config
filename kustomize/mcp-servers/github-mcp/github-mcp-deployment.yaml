@@ -43,8 +43,8 @@ spec:
             fi
             export GITHUB_PERSONAL_ACCESS_TOKEN="$GITHUB_TOKEN"
             echo "Starting socat to adapt github-mcp-server on TCP port 8081"
-            # MODIFIED path for EXEC to where the custom Dockerfile places the binary
-            exec socat TCP-LISTEN:8081,fork,reuseaddr EXEC:'/usr/local/bin/github-mcp-server'
+            # Added stdio argument to the github-mcp-server execution
+            exec socat TCP-LISTEN:8081,fork,reuseaddr EXEC:'/usr/local/bin/github-mcp-server stdio'
         ports:
         - name: mcp-port
           containerPort: 8081

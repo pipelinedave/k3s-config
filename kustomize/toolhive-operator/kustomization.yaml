@@ -7,8 +7,8 @@ resources:
   - helm-repository.yaml
   - helm-release-crds.yaml
   - helm-release-operator.yaml
-  # Uncomment to deploy example MCP server
   - example-mcp-server.yaml
+  - mcp-server-fetch.yaml
 
 commonLabels:
   app.kubernetes.io/name: toolhive-operator

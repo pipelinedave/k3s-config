@@ -138,6 +138,63 @@ kubectl describe mcpserver <name> -n toolhive-system
 kubectl logs -n toolhive-system <mcp-server-pod>
 ```
 
+## Deployed MCP Servers
+
+### fetch
+
+- **Purpose**: Web content fetching capabilities for LLMs
+- **Image**: `mcp/fetch:latest`
+- **Transport**: stdio
+- **Tools**: `fetch` - Fetches content from websites
+- **Secrets**: None required
+- **Network**: Outbound connections allowed
+
+### Example Server (mkp)
+
+- **Purpose**: Example Kubernetes MCP server for testing
+- **Image**: `ghcr.io/stackloklabs/mkp/server`
+- **Transport**: sse (Server-Sent Events)
+- **Tools**: Kubernetes API interactions
+- **Port**: 8080
+
+## Available MCP Servers from Registry
+
+The ToolHive project maintains a curated registry of MCP servers. Some notable ones include:
+
+**Development & DevOps:**
+
+- `git` - Git repository interaction
+- `github` - GitHub API integration (requires token)
+- `gitlab` - GitLab API integration (requires token)
+- `terraform` - Terraform/IaC development
+- `k8s` (mkp) - Kubernetes cluster interaction
+
+**Data & Analysis:**
+
+- `postgres` - PostgreSQL database access
+- `sqlite` - SQLite database with business insights
+- `redis` - Redis key-value store interaction
+
+**Security & Monitoring:**
+
+- `semgrep` - Code security scanning
+- `osv` - Open Source Vulnerabilities database
+- `grafana` - Monitoring and observability
+
+**Web & APIs:**
+
+- `fetch` - Web content fetching
+- `brave-search` - Web search capabilities
+- `firecrawl` - Advanced web scraping
+
+**Productivity:**
+
+- `slack` - Slack workspace integration
+- `atlassian` - Confluence and Jira integration
+- `gdrive` - Google Drive file operations
+
+To see the full registry: [ToolHive Registry JSON](https://raw.githubusercontent.com/stacklok/toolhive/main/pkg/registry/data/registry.json)
+
 ## References
 
 - [ToolHive GitHub Repository](https://github.com/stacklok/toolhive)

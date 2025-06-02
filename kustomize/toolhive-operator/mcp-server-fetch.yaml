@@ -1,0 +1,61 @@
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: fetch
+  namespace: toolhive-system
+  labels:
+    app.kubernetes.io/name: fetch
+    app.kubernetes.io/instance: fetch
+    app.kubernetes.io/component: mcp-server
+    app.kubernetes.io/part-of: toolhive
+    app.kubernetes.io/managed-by: toolhive-operator
+spec:
+  # Image from the curated registry
+  image: mcp/fetch:latest
+  
+  # Transport method - stdio is standard for most MCP servers
+  transport: stdio
+  
+  # No environment variables needed for fetch server
+  env: []
+  
+  # Security: Use built-in network permission profile
+  permissionProfile:
+    type: builtin
+    name: network  # Allows outbound connections for fetching websites
+  
+  # Resource limits for security and stability
+  podTemplateSpec:
+    spec:
+      serviceAccountName: toolhive
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        fsGroup: 65534
+      containers:
+      - name: mcp
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 65534
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: var-tmp
+          mountPath: /var/tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
+      - name: var-tmp
+        emptyDir: {}

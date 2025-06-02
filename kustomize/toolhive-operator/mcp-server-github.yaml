@@ -1,0 +1,45 @@
+apiVersion: toolhive.stacklok.dev/v1alpha1
+kind: MCPServer
+metadata:
+  name: github
+  namespace: toolhive-system
+  labels:
+    app.kubernetes.io/name: github-mcp
+    app.kubernetes.io/instance: github-mcp
+    app.kubernetes.io/component: mcp-server
+    app.kubernetes.io/part-of: toolhive
+    app.kubernetes.io/managed-by: toolhive-operator
+spec:
+  # Official GitHub MCP server image
+  image: ghcr.io/github/github-mcp-server
+  
+  # Transport method - stdio is standard for most MCP servers
+  transport: stdio
+  port: 8080
+  
+  # Network permissions for GitHub API access
+  permissionProfile:
+    type: builtin
+    name: network
+  
+  # Secret for GitHub authentication
+  secrets:
+    - name: github-token
+      token: token
+      targetEnvName: GITHUB_PERSONAL_ACCESS_TOKEN
+  
+  # Environment variables for GitHub API
+  env:
+    - name: GITHUB_API_URL
+      value: https://api.github.com
+    - name: LOG_LEVEL
+      value: info
+  
+  # Resource limits for security and stability
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "128Mi"
+    limits:
+      cpu: "200m"
+      memory: "256Mi"

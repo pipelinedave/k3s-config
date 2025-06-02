@@ -19,43 +19,27 @@ spec:
   # No environment variables needed for fetch server
   env: []
   
-  # Security: Use built-in network permission profile
+  # Security: Use built-in network permission profile  
   permissionProfile:
     type: builtin
     name: network  # Allows outbound connections for fetching websites
   
   # Resource limits for security and stability
-  podTemplateSpec:
-    spec:
-      serviceAccountName: toolhive
-      securityContext:
-        runAsNonRoot: true
-        runAsUser: 65534
-        fsGroup: 65534
-      containers:
-      - name: mcp
-        securityContext:
-          allowPrivilegeEscalation: false
-          capabilities:
-            drop:
-            - ALL
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
-          runAsUser: 65534
-        resources:
-          limits:
-            cpu: "200m"
-            memory: "256Mi"
-          requests:
-            cpu: "50m"
-            memory: "64Mi"
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-        - name: var-tmp
-          mountPath: /var/tmp
-      volumes:
-      - name: tmp
-        emptyDir: {}
-      - name: var-tmp
-        emptyDir: {}
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "200m"
+      memory: "256Mi"
+  
+  # Override security context to fix permission issues
+  securityContext:
+    runAsUser: 1000  # Use a standard user ID instead of 65534
+    runAsGroup: 1000
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    readOnlyRootFilesystem: false  # Allow writing to filesystem for executables
+    capabilities:
+      drop:
+        - ALL

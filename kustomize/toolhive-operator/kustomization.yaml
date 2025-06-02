@@ -7,7 +7,6 @@ resources:
   - helm-repository.yaml
   - helm-release-crds.yaml
   - helm-release-operator.yaml
-  - example-mcp-server.yaml
   - mcp-server-fetch.yaml
 
 commonLabels:

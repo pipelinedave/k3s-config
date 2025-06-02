@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: github-mcp-server
+  namespace: mcp-servers
+  labels:
+    app.kubernetes.io/name: github-mcp-server
+    app.kubernetes.io/instance: github-mcp-server
+    app.kubernetes.io/version: "latest"
+    app.kubernetes.io/component: server
+    app.kubernetes.io/part-of: mcp-servers
+    app.kubernetes.io/managed-by: flux
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: github-mcp-server
+      app.kubernetes.io/instance: github-mcp-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: github-mcp-server
+        app.kubernetes.io/instance: github-mcp-server
+        app.kubernetes.io/version: "latest"
+        app.kubernetes.io/component: server
+        app.kubernetes.io/part-of: mcp-servers
+        app.kubernetes.io/managed-by: flux
+    spec:
+      automountServiceAccountToken: false
+      containers:
+      - name: github-mcp-server-adapter
+        image: pipelinedave/github-mcp-adapter:latest
+        command:
+          - sh
+          - -c
+          - |
+            set -e
+            # GITHUB_TOKEN is sourced from the secret via envFrom.
+            # github-mcp-server expects GITHUB_PERSONAL_ACCESS_TOKEN.
+            if [ -z "$GITHUB_TOKEN" ]; then
+              echo "Error: GITHUB_TOKEN environment variable is not set. Check secret 'github-mcp-credentials'." >&2
+              exit 1
+            fi
+            export GITHUB_PERSONAL_ACCESS_TOKEN="$GITHUB_TOKEN"
+            echo "Starting socat to adapt github-mcp-server on TCP port 8081"
+            # MODIFIED path for EXEC to where the custom Dockerfile places the binary
+            exec socat TCP-LISTEN:8081,fork,reuseaddr EXEC:'/usr/local/bin/github-mcp-server'
+        ports:
+        - name: mcp-port
+          containerPort: 8081
+          protocol: TCP
+        envFrom:
+        - secretRef:
+            name: github-mcp-credentials
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "200m"
+            memory: "128Mi"
+        readinessProbe:
+          tcpSocket:
+            port: mcp-port
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        livenessProbe:
+          tcpSocket:
+            port: mcp-port
+          initialDelaySeconds: 30
+          periodSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          # capabilities:
+          #   drop:
+          #   - ALL

@@ -4,12 +4,11 @@ kind: Kustomization
 namespace: toolhive-system
 
 resources:
-  - namespace.yaml
   - helm-repository.yaml
   - helm-release-crds.yaml
   - helm-release-operator.yaml
   # Uncomment to deploy example MCP server
-  # - example-mcp-server.yaml
+  - example-mcp-server.yaml
 
 commonLabels:
   app.kubernetes.io/name: toolhive-operator

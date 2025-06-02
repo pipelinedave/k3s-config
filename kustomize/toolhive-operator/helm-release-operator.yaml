@@ -1,0 +1,116 @@
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: toolhive-operator
+  namespace: toolhive-system
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: toolhive-operator
+      version: ">=0.0.9"
+      sourceRef:
+        kind: HelmRepository
+        name: toolhive
+        namespace: toolhive-system
+      interval: 5m
+  dependsOn:
+    - name: toolhive-operator-crds
+      namespace: toolhive-system
+  install:
+    createNamespace: false
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    # Operator configuration
+    operator:
+      replicaCount: 1
+      image: "ghcr.io/stacklok/toolhive/operator:v0.0.39"
+      imagePullPolicy: IfNotPresent
+      
+      # Resource limits
+      resources:
+        limits:
+          cpu: 500m
+          memory: 128Mi
+        requests:
+          cpu: 10m
+          memory: 64Mi
+      
+      # Security context
+      containerSecurityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        readOnlyRootFilesystem: true
+        runAsNonRoot: true
+        runAsUser: 1000
+      
+      podSecurityContext:
+        runAsNonRoot: true
+      
+      # Service account
+      serviceAccount:
+        create: true
+        name: "toolhive-operator"
+        automountServiceAccountToken: true
+        annotations: {}
+        labels: {}
+      
+      # Probes
+      livenessProbe:
+        httpGet:
+          path: /healthz
+          port: health
+        initialDelaySeconds: 15
+        periodSeconds: 20
+      
+      readinessProbe:
+        httpGet:
+          path: /readyz
+          port: health
+        initialDelaySeconds: 5
+        periodSeconds: 10
+      
+      # Networking
+      ports:
+        - containerPort: 8080
+          name: metrics
+          protocol: TCP
+        - containerPort: 8081
+          name: health
+          protocol: TCP
+      
+      # Runner image for MCP servers
+      toolhiveRunnerImage: "ghcr.io/stacklok/toolhive:v0.0.39"
+      
+      # Proxy host configuration
+      proxyHost: "0.0.0.0"
+    
+    # Toolhive RBAC configuration
+    toolhive:
+      rbac:
+        enabled: true
+        serviceAccount:
+          name: "toolhive"
+        role:
+          name: "toolhive"
+          bindingName: "toolhive-binding"
+          rules:
+            - apiGroups: ["apps"]
+              resources: ["statefulsets"]
+              verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "apply"]
+            - apiGroups: [""]
+              resources: ["services"]
+              verbs: ["get", "list", "watch", "create", "update", "patch", "delete", "apply"]
+            - apiGroups: [""]
+              resources: ["pods"]
+              verbs: ["get", "list", "watch"]
+            - apiGroups: [""]
+              resources: ["pods/log"]
+              verbs: ["get"]
+            - apiGroups: [""]
+              resources: ["pods/attach"]
+              verbs: ["create", "get"]

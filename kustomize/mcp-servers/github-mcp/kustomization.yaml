@@ -5,4 +5,4 @@ namespace: mcp-servers
 resources:
 - github-mcp-deployment.yaml
 - github-mcp-service.yaml
-- github-mcp-credentials-sealedsecret.yaml
+- github-mcp-credentials-sealed.yaml

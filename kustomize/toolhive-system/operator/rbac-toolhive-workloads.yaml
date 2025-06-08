@@ -35,6 +35,9 @@ subjects:
 - kind: ServiceAccount
   name: toolhive
   namespace: toolhive-system
+- kind: ServiceAccount
+  name: mkp-proxy-runner
+  namespace: toolhive-system
 roleRef:
   kind: Role
   name: toolhive-workloads

@@ -7,8 +7,10 @@ resources:
   - helm-repository.yaml
   - helm-release-crds.yaml
   - helm-release-operator.yaml
-  - mcp-server-github.yaml
+  - service-account-toolhive.yaml
   - github-token-secret-sealed.yaml
+  - service-account-mkp-proxy-runner.yaml
+  - rbac-toolhive-workloads.yaml
 
 commonLabels:
   app.kubernetes.io/name: toolhive-operator

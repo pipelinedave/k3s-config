@@ -4,11 +4,9 @@ kind: Kustomization
 namespace: toolhive-system
 
 resources:
-- helm-release-crds.yaml
-- helm-release-operator.yaml
-- helm-repository.yaml
-- rbac-toolhive-workloads.yaml
-- service-account-toolhive.yaml
+- github-token-secret-sealed.yaml
+- service-account-mkp-proxy-runner.yaml
+- mkp.yaml
 
 commonLabels:
   app.kubernetes.io/component: mcpservers

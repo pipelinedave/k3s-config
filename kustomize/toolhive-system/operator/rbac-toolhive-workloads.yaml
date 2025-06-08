@@ -5,8 +5,17 @@ metadata:
   name: toolhive-workloads
   namespace: toolhive-system
 rules:
-- apiGroups: ["apps", ""]
-  resources: ["statefulsets", "services"]
+- apiGroups: ["", "apps", "batch"]
+  resources:
+    - pods
+    - services
+    - configmaps
+    - secrets
+    - statefulsets
+    - deployments
+    - daemonsets
+    - jobs
+    - cronjobs
   verbs:
     - get
     - list

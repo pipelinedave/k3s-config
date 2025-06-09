@@ -28,11 +28,11 @@ spec:
     targetPort: 80
   - name: dns-udp
     protocol: UDP
-    port: 53
+    port: 32367
     targetPort: 53
   - name: dns-tcp
     protocol: TCP
-    port: 53
+    port: 32367
     targetPort: 53
   type: LoadBalancer
   externalTrafficPolicy: Local

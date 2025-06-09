@@ -1,44 +1,43 @@
 ﻿# kustomize/toolhive-operator/rbac-toolhive-workloads.yaml
 apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
+kind: ClusterRole
 metadata:
   name: toolhive-workloads
-  namespace: toolhive-system
 rules:
-- apiGroups: ["", "apps", "batch"]
-  resources:
-    - pods
-    - services
-    - configmaps
-    - secrets
-    - statefulsets
-    - deployments
-    - daemonsets
-    - jobs
-    - cronjobs
-  verbs:
-    - get
-    - list
-    - watch
-    - create
-    - update
-    - patch
-    - delete
-    - apply
+  - apiGroups: ["", "apps", "batch", "kustomize.toolkit.fluxcd.io"]
+    resources:
+      - pods
+      - services
+      - configmaps
+      - secrets
+      - statefulsets
+      - deployments
+      - daemonsets
+      - jobs
+      - cronjobs
+      - kustomizations
+    verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+      - apply
 ---
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
   name: bind-toolhive-workloads
-  namespace: toolhive-system
 subjects:
-- kind: ServiceAccount
-  name: toolhive
-  namespace: toolhive-system
-- kind: ServiceAccount
-  name: mkp-proxy-runner
-  namespace: toolhive-system
+  - kind: ServiceAccount
+    name: toolhive
+    namespace: toolhive-system
+  - kind: ServiceAccount
+    name: mkp-proxy-runner
+    namespace: toolhive-system
 roleRef:
-  kind: Role
+  kind: ClusterRole
   name: toolhive-workloads
   apiGroup: rbac.authorization.k8s.io

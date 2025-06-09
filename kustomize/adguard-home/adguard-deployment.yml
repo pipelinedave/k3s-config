@@ -32,8 +32,6 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
-      hostNetwork: true
-      dnsPolicy: ClusterFirstWithHostNet
       initContainers:
       - name: init-config
         image: busybox

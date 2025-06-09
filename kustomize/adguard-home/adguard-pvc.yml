@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: adguard-pvc
+  namespace: adguard
+  labels:
+    app: adguard-home
+    app.kubernetes.io/name: adguard
+    app.kubernetes.io/instance: adguard
+  annotations:
+    description: "PVC for AdGuard Home configuration and data"
+  finalizers:
+  - kubernetes.io/pvc-protection
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+  selector:
+    matchLabels:
+      app: adguard

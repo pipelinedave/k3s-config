@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: adguard
+  namespace: adguard
+  labels:
+    app.kubernetes.io/name: adguard
+    app.kubernetes.io/instance: adguard
+    app.kubernetes.io/component: ingress
+    app.kubernetes.io/part-of: adguard
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    description: "Ingress for AdGuard Home."
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: adguard.stillon.top
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: adguard-home
+            port:
+              number: 3000
+  tls:
+  - hosts:
+    - adguard.stillon.top
+    secretName: adguard-tls

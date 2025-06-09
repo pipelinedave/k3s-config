@@ -5,6 +5,7 @@ resources:
 - adguard-configmap.yml
 - adguard-deployment.yml
 - adguard-pvc.yml
+- adguard-config-pvc.yml
 # - adguard-secret.yml
 - adguard-service.yml
 - adguard-ingress.yaml

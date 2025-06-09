@@ -89,12 +89,12 @@ spec:
         volumeMounts:
         - name: adguard-data
           mountPath: /opt/adguardhome/work
-        - name: adguard-config
-          mountPath: /opt/adguardhome/conf
+        - name: adguard-config-pvc
+          mountPath: /adguardhome/conf
       volumes:
       - name: adguard-data
         persistentVolumeClaim:
           claimName: adguard-pvc
-      - name: adguard-config
-        configMap:
-          name: adguard-config
+      - name: adguard-config-pvc
+        persistentVolumeClaim:
+          claimName: adguard-config-pvc

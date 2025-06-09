@@ -71,9 +71,9 @@ spec:
             memory: "512Mi"
         securityContext:
           readOnlyRootFilesystem: false
-          runAsNonRoot: true
-          runAsUser: 1000
-          allowPrivilegeEscalation: false
+          runAsNonRoot: false
+          # runAsUser: 1000
+          allowPrivilegeEscalation: true
         livenessProbe:
           httpGet:
             path: /

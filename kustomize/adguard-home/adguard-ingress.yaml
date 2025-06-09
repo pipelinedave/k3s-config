@@ -19,27 +19,27 @@ spec:
   - host: adguard.stillon.top
     http:
       paths:
-      - path: /dns-query
+      - path: /dns
         pathType: Exact
         backend:
           service:
             name: adguard-home
             port:
               number: 53
-      - path: /admin
-        pathType: Prefix
-        backend:
-          service:
-            name: adguard-home
-            port:
-              number: 80
-      - path: /
+      - path: /init
         pathType: Prefix
         backend:
           service:
             name: adguard-home
             port:
               number: 3000
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: adguard-home
+            port:
+              number: 80
   tls:
   - hosts:
     - adguard.stillon.top

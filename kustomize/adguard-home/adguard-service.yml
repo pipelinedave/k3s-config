@@ -4,6 +4,7 @@ metadata:
   name: adguard-home
   namespace: adguard-home
   labels:
+    description: ""
     app: adguard-home
     app.kubernetes.io/name: adguard
     app.kubernetes.io/instance: adguard

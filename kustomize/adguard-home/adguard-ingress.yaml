@@ -27,7 +27,7 @@ spec:
             port:
               number: 53
       - path: /init
-        pathType: Prefix
+        pathType: Exact
         backend:
           service:
             name: adguard-home

@@ -7,6 +7,9 @@ metadata:
     app: adguard-home
     app.kubernetes.io/name: adguard
     app.kubernetes.io/instance: adguard
+    app.kubernetes.io/component: storage
+    app.kubernetes.io/part-of: adguard
+    app.kubernetes.io/managed-by: flux
   annotations:
     description: "PVC for AdGuard Home configuration and data"
   finalizers:
@@ -18,6 +21,3 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  selector:
-    matchLabels:
-      app: adguard

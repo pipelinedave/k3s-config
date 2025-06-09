@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: adguard
-  namespace: adguard
+  namespace: adguard-home
   labels:
     app.kubernetes.io/name: adguard
     app.kubernetes.io/instance: adguard

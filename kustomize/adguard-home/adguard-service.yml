@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: adguard-home
-  namespace: adguard
+  namespace: adguard-home
   labels:
     app: adguard-home
     app.kubernetes.io/name: adguard

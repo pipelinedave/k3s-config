@@ -9,13 +9,10 @@ metadata:
     app.kubernetes.io/instance: adguard
     app.kubernetes.io/component: service
     app.kubernetes.io/part-of: adguard
-    app.kubernetes.io/managed-by: flux
-  annotations:
+    app.kubernetes.io/managed-by: flux  annotations:
     prometheus.io/scrape: "true"
     prometheus.io/port: "3000"
     cert-manager.io/cluster-issuer: letsencrypt-prod
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
     description: "Service for AdGuard Home adblocking solution."
 spec:
   selector:

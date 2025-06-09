@@ -72,20 +72,21 @@ spec:
         securityContext:
           readOnlyRootFilesystem: false
           runAsNonRoot: false
-          # runAsUser: 1000
-          allowPrivilegeEscalation: true
-        # livenessProbe:
-        #   httpGet:
-        #     path: /
-        #     port: 3000
-        #   initialDelaySeconds: 60
-        #   periodSeconds: 10
-        # readinessProbe:
-        #   httpGet:
-        #     path: /
-        #     port: 3000
-        #   initialDelaySeconds: 30
-        #   periodSeconds: 5
+          # runAsUser: 1000          allowPrivilegeEscalation: true
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 5
+          timeoutSeconds: 5
         volumeMounts:
         - name: adguard-data
           mountPath: /opt/adguardhome/work

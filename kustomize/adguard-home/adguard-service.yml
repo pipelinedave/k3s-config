@@ -9,7 +9,7 @@ metadata:
     app.kubernetes.io/instance: adguard
     app.kubernetes.io/component: service
     app.kubernetes.io/part-of: adguard
-    app.kubernetes.io/managed-by: flux  annotations:
+    app.kubernetes.io/managed-by: flux
     prometheus.io/scrape: "true"
     prometheus.io/port: "3000"
     cert-manager.io/cluster-issuer: letsencrypt-prod

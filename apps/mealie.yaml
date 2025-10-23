@@ -1,0 +1,18 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: mealie
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./kustomize/mealie
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  targetNamespace: mealie
+  healthChecks:
+    - apiVersion: apps/v1
+      kind: Deployment
+      name: mealie
+      namespace: mealie

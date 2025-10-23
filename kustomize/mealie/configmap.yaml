@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mealie-config
+  namespace: mealie
+  labels:
+    app.kubernetes.io/name: mealie
+    app.kubernetes.io/instance: mealie
+    app.kubernetes.io/component: config
+    app.kubernetes.io/part-of: mealie
+    app.kubernetes.io/managed-by: flux
+data:
+  ALLOW_SIGNUP: "true"
+  PUID: "1000"
+  PGID: "1000"
+  TZ: "Europe/Berlin"
+  MAX_WORKERS: "1"
+  WEB_CONCURRENCY: "1"
+  BASE_URL: "https://mealie.stillon.top"

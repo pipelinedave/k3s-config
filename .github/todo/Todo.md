@@ -9,10 +9,11 @@
 
 ### High Priority
 <!-- Critical bugs and important features -->
-- make gotify oauth2 proxy work with nginx ingress - The gotify application needs to be configured to work with the Nginx ingress controller, including setting up OAuth2 proxy for authentication. (Copilot: Ongoing, major updates to docs/guides/traefik-to-nginx-migration-plan.md)
+- deploy Mealie (https://docs.mealie.io/documentation/getting-started/introduction/)
 
 ### Medium Priority
 <!-- Enhancements and improvements -->
+- make gotify oauth2 proxy work with nginx ingress - The gotify application needs to be configured to work with the Nginx ingress controller, including setting up OAuth2 proxy for authentication. (Copilot: Ongoing, major updates to docs/guides/traefik-to-nginx-migration-plan.md)
 
 ### Low Priority
 <!-- Nice-to-haves and maintenance tasks -->

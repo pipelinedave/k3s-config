@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: kafka
+  namespace: kafka
+  labels:
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/version: "3.6.1"
+    app.kubernetes.io/component: broker
+    app.kubernetes.io/part-of: kafka
+    app.kubernetes.io/managed-by: flux
+spec:
+  serviceName: kafka-headless
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kafka
+      app.kubernetes.io/instance: kafka
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kafka
+        app.kubernetes.io/instance: kafka
+        app.kubernetes.io/version: "3.6.1"
+        app.kubernetes.io/component: broker
+        app.kubernetes.io/part-of: kafka
+        app.kubernetes.io/managed-by: flux
+    spec:
+      containers:
+      - name: kafka
+        image: confluentinc/cp-kafka:7.5.3
+        ports:
+        - containerPort: 9092
+          name: kafka
+        - containerPort: 9093
+          name: controller
+        env:
+        - name: KAFKA_HEAP_OPTS
+          value: "-Xmx1G -Xms1G"
+        - name: KAFKA_JVM_PERFORMANCE_OPTS
+          value: "-server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:InitiatingHeapOccupancyPercent=35 -XX:+ExplicitGCInvokesConcurrent -Djava.awt.headless=true"
+        volumeMounts:
+        - name: kafka-data
+          mountPath: /var/lib/kafka/data
+        - name: kafka-logs
+          mountPath: /opt/kafka/kafka-logs
+        - name: kafka-config
+          mountPath: /etc/kafka/server.properties
+          subPath: server.properties
+        command:
+        - sh
+        - -c
+        - |
+          # Format storage if not already formatted
+          if [ ! -f /var/lib/kafka/data/meta.properties ]; then
+            kafka-storage format -t 4L6g3nShT-eMCtK--X86sw -c /etc/kafka/server.properties
+          fi
+          # Start Kafka
+          kafka-server-start /etc/kafka/server.properties
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        livenessProbe:
+          tcpSocket:
+            port: 9092
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          tcpSocket:
+            port: 9092
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      volumes:
+      - name: kafka-data
+        persistentVolumeClaim:
+          claimName: kafka-data
+      - name: kafka-logs
+        persistentVolumeClaim:
+          claimName: kafka-logs
+      - name: kafka-config
+        configMap:
+          name: kafka-config

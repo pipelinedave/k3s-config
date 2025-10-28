@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-headless
+  namespace: kafka
+  labels:
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/instance: kafka
+    app.kubernetes.io/component: headless-service
+    app.kubernetes.io/part-of: kafka
+    app.kubernetes.io/managed-by: flux
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - port: 9092
+    targetPort: 9092
+    protocol: TCP
+    name: kafka
+  - port: 9093
+    targetPort: 9093
+    protocol: TCP
+    name: controller
+  selector:
+    app.kubernetes.io/name: kafka
+    app.kubernetes.io/instance: kafka

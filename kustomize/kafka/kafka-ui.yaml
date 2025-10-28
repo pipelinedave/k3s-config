@@ -72,22 +72,20 @@ kind: Ingress
 metadata:
   name: kafka-ui
   namespace: kafka
-  labels:
-    app.kubernetes.io/name: kafka-ui
-    app.kubernetes.io/instance: kafka-ui
-    app.kubernetes.io/component: ui-ingress
-    app.kubernetes.io/part-of: kafka
-    app.kubernetes.io/managed-by: flux
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+    nginx.ingress.kubernetes.io/proxy-http-version: "1.1"
+    nginx.ingress.kubernetes.io/enable-websocket: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
   ingressClassName: nginx
   tls:
-  - hosts:
-    - kafka-ui.stillon.top
+  - hosts: [kafka-ui.stillon.top]
     secretName: kafka-ui-tls
   rules:
   - host: kafka-ui.stillon.top

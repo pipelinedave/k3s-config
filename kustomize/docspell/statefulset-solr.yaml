@@ -51,11 +51,11 @@ spec:
           timeoutSeconds: 5
         resources:
           limits:
-            cpu: "2"
-            memory: 8Gi
-          requests:
             cpu: "1"
-            memory: 4Gi
+            memory: 2Gi
+          requests:
+            cpu: "500m"
+            memory: 1Gi
         volumeMounts:
         - mountPath: /var/solr
           name: solr-data

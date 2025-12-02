@@ -36,11 +36,11 @@ spec:
           name: http
         resources:
           requests:
-            memory: "512Mi"
-            cpu: "500m"
+            memory: "256Mi"
+            cpu: "250m"
           limits:
-            memory: "2Gi"
-            cpu: "1.5"
+            memory: "1Gi"
+            cpu: "1"
         volumeMounts:
         - mountPath: /usr/share/stirling-pdf/configs
           name: stirling-pdf-data

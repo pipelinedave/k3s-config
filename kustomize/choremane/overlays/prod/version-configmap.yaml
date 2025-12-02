@@ -2,16 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: choremane-version
-  labels:
-    app.kubernetes.io/name: choremane
-    app.kubernetes.io/component: version-config
-    app.kubernetes.io/part-of: choremane
-    app.kubernetes.io/managed-by: flux
-    app.kubernetes.io/instance: choremane-prod
-    app.kubernetes.io/version: main
-  annotations:
-    description: "Defines version tags and images for Choremane production deployment (main branch)."
 data:
-  VERSION_TAG: main
-  BACKEND_IMAGE: "pipelinedave/choremane-backend:main"
-  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:main"
+  VERSION_TAG: prod-test-10
+  BACKEND_IMAGE: "pipelinedave/choremane-backend:prod-test-10"
+  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:prod-test-10"

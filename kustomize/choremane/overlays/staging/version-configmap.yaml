@@ -2,16 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: choremane-version
-  labels:
-    app.kubernetes.io/name: choremane
-    app.kubernetes.io/component: version-config
-    app.kubernetes.io/part-of: choremane
-    app.kubernetes.io/managed-by: flux
-    app.kubernetes.io/instance: choremane-staging
-    app.kubernetes.io/version: 6a69a83a6fdc3cdff1f006a4983a46d11d09085c
-  annotations:
-    description: "Defines version tags and images for Choremane staging deployment (commit 6a69a83)."
 data:
-  VERSION_TAG: 6a69a83a6fdc3cdff1f006a4983a46d11d09085c
-  BACKEND_IMAGE: "pipelinedave/choremane-backend:6a69a83a6fdc3cdff1f006a4983a46d11d09085c"
-  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:6a69a83a6fdc3cdff1f006a4983a46d11d09085c"
+  VERSION_TAG: 14c565b82f26dbaa6bb23cd616af5331b6f826ea
+  BACKEND_IMAGE: "pipelinedave/choremane-backend:14c565b82f26dbaa6bb23cd616af5331b6f826ea"
+  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:14c565b82f26dbaa6bb23cd616af5331b6f826ea"

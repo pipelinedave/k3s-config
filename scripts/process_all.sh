@@ -5,8 +5,12 @@
 # 1. Find all namespaces in the repository
 # 2. Process each namespace to clean resources and seal sensitive data
 
+# Determine repository root based on script location
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+
 # Get list of namespaces from apps directory
-NAMESPACES=$(find /home/dave/src/k3s-config/apps -name "*.yaml" -exec basename {} \; | sed 's/\.yaml$//')
+NAMESPACES=$(find "${REPO_ROOT}/apps" -name "*.yaml" -exec basename {} \; | sed 's/\.yaml$//')
 
 # Exclude system namespaces
 EXCLUDE_LIST="kube-system kube-public kube-node-lease cert-manager"

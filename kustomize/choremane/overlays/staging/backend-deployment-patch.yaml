@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: pipelinedave/choremane-backend:ce29a4fde8c6329237c57d432bac61f5cdcca3a5
+          image: pipelinedave/choremane-backend:2b52045dbf7879fe40513147402cea24beacc5bb
           envFrom:
           - configMapRef:
               name: choremane-version

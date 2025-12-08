@@ -3,6 +3,6 @@ kind: ConfigMap
 metadata:
   name: choremane-version
 data:
-  VERSION_TAG: prod-test-13
-  BACKEND_IMAGE: "pipelinedave/choremane-backend:prod-test-13"
-  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:prod-test-13"
+  VERSION_TAG: prod-test-14
+  BACKEND_IMAGE: "pipelinedave/choremane-backend:prod-test-14"
+  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:prod-test-14"

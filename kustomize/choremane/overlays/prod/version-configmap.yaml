@@ -5,4 +5,4 @@ metadata:
 data:
   VERSION_TAG: prod-test-16
   BACKEND_IMAGE: "pipelinedave/choremane-backend:prod-test-16"
-  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:prod-test-16"
+  FRONTEND_IMAGE: "pipelinedave/choremane-frontend:prod-test-14"

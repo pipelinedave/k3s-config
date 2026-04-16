@@ -34,6 +34,12 @@ data:
         - 'https://gotify.stillon.top/oauth2/callback'
         name: 'OAuth2 Proxy (Gotify)'
         secretEnv: OAUTH2_PROXY_GOTIFY_CLIENT_SECRET
+      - id: choretwo
+        redirectURIs:
+        - 'https://choretwo-staging.stillon.top/api/auth/callback'
+        - 'https://choretwo.stillon.top/api/auth/callback'
+        name: 'Choretwo'
+        secretEnv: CHORETWO_CLIENT_SECRET
     connectors:
       - type: google
         id: google

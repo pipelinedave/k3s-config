@@ -1,0 +1,19 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: choretwo-staging
+  namespace: flux-system
+spec:
+  targetNamespace: choretwo-staging
+  interval: 5m
+  path: ./kustomize/choretwo/overlays/staging
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  wait: true
+  timeout: 5m
+  dependsOn:
+  - name: dex
+  - name: nginx-ingress
+  - name: cert-manager

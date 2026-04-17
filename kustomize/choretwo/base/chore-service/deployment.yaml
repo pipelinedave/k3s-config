@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chore-service
+  labels:
+    app: chore-service
+    component: chores
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chore-service
+  template:
+    metadata:
+      labels:
+        app: chore-service
+    spec:
+      containers:
+      - name: chore-service
+        image: pipelinedave/chore-service:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: DATABASE_URL
+          value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/choretwo?schema=chores
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: postgres-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: postgres-password
+        - name: REDIS_URL
+          value: redis://redis:6379
+        - name: AUTH_SERVICE_URL
+          value: http://auth-service:80
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      restartPolicy: Always

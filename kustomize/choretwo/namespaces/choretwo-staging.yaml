@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: choretwo-staging
+  labels:
+    app.kubernetes.io/part-of: choretwo
+    app.kubernetes.io/component: infrastructure

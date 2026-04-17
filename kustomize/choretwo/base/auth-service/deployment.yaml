@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-service
+  labels:
+    app: auth-service
+    component: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-service
+  template:
+    metadata:
+      labels:
+        app: auth-service
+    spec:
+      containers:
+      - name: auth-service
+        image: pipelinedave/auth-service:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: DATABASE_URL
+          value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/choretwo?schema=auth
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: postgres-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: postgres-password
+        - name: REDIS_URL
+          value: redis://redis:6379
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: jwt-secret
+        - name: DEX_ISSUER_URL
+          value: https://dex.stillon.top
+        - name: DEX_CLIENT_ID
+          value: choretwo
+        - name: DEX_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: dex-client-secret
+        - name: USE_MOCK_AUTH
+          value: "false"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      restartPolicy: Always

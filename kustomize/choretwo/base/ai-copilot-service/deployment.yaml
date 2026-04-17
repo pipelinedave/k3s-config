@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ai-copilot-service
+  labels:
+    app: ai-copilot-service
+    component: ai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ai-copilot-service
+  template:
+    metadata:
+      labels:
+        app: ai-copilot-service
+    spec:
+      containers:
+      - name: ai-copilot-service
+        image: pipelinedave/ai-copilot-service:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: DATABASE_URL
+          value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@postgres:5432/choretwo?schema=ai
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: postgres-user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: postgres-password
+        - name: OLLAMA_URL
+          value: http://host.docker.internal:11434
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      restartPolicy: Always

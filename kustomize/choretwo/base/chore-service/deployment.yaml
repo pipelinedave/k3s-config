@@ -23,7 +23,10 @@ spec:
           name: http
         env:
         - name: DATABASE_URL
-          value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@staging-postgres:5432/choretwo?schema=chores&sslmode=disable
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: database-url-chores
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: auth-service
-        image: pipelinedave/auth-service:7bfffd174281f71567e915f5e60c3a35c55d57a5
+        image: pipelinedave/auth-service:97a148cd25dc9b34f9767b5e2b6e562c0fff6c66
         ports:
         - containerPort: 8000
           name: http

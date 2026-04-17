@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: log-service
-        image: pipelinedave/log-service:469e01906904a783aaabff291712bfcbf3893f95
+        image: pipelinedave/log-service:7bfffd174281f71567e915f5e60c3a35c55d57a5
         ports:
         - containerPort: 8000
           name: http

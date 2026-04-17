@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: notification-service
-        image: pipelinedave/notification-service:7d33535eb3bd6f2baa0df86779b7381e2d6e6ef1
+        image: pipelinedave/notification-service:f9dba4910a562e4b5d73a7b74ab4310564467e30
         ports:
         - containerPort: 8000
           name: http

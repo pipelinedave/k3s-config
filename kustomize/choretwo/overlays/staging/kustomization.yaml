@@ -9,10 +9,10 @@ commonLabels:
 
 patches:
 - patch: |-
-    - op: replace
-      path: /spec/template/spec/containers/0/env
+    - op: add
+      path: /spec/template/spec/containers/0/env/-
       value:
-      - name: USE_MOCK_AUTH
+        name: USE_MOCK_AUTH
         value: "true"
   target:
     kind: Deployment

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: ai-copilot-service
-        image: pipelinedave/ai-copilot-service:94ecf8a0e78b7ad4349bfb82dd5b50e7047c0307
+        image: pipelinedave/ai-copilot-service:d53ae2e0f5c95ade7bbf2060c85236c502cfb00e
         ports:
         - containerPort: 8000
           name: http

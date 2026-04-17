@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: chore-service
-        image: pipelinedave/chore-service:ea324a21b0dd0fe0324fdf586172596378671769
+        image: pipelinedave/chore-service:6d4ed603300df70ed630a45e6e05ab3ab50dff00
         ports:
         - containerPort: 8000
           name: http

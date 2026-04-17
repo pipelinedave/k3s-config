@@ -1,4 +1,4 @@
-﻿apiVersion: toolhive.stacklok.dev/v1alpha1
+apiVersion: toolhive.stacklok.dev/v1alpha1
 kind: MCPServer
 metadata:
   name: mkp
@@ -6,7 +6,7 @@ metadata:
 spec:
   image: ghcr.io/stackloklabs/mkp/server
   transport: sse
-  port: 8080
+  proxyPort: 8080
   permissionProfile:
     type: builtin
     name: network

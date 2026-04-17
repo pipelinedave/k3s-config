@@ -23,7 +23,7 @@ spec:
           name: http
         env:
         - name: DATABASE_URL
-          value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@staging-postgres:5432/choretwo?schema=notifications
+          value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@staging-postgres:5432/choretwo?schema=notifications&sslmode=disable
         - name: POSTGRES_USER
           valueFrom:
             secretKeyRef:

@@ -50,8 +50,6 @@ spec:
             secretKeyRef:
               name: choretwo-secrets
               key: dex-client-secret
-        - name: USE_MOCK_AUTH
-          value: "false"
         livenessProbe:
           httpGet:
             path: /health

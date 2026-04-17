@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: pipelinedave/frontend:d53ae2e0f5c95ade7bbf2060c85236c502cfb00e
+        image: pipelinedave/frontend:7d33535eb3bd6f2baa0df86779b7381e2d6e6ef1
         ports:
         - containerPort: 80
           name: http

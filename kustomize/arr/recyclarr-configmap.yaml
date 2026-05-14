@@ -1,0 +1,96 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: recyclarr-config
+  namespace: media-server
+data:
+  recyclarr.yml: |
+    schema_version: 8
+
+    sonarr:
+      series:
+        base_url: !ext env SONARR_URL
+        api_key: !ext env SONARR_API_KEY
+
+        quality_definition:
+          type: series
+
+        quality_profiles:
+          - trash_id: dca7e5e9e99c703bcbdaaa471dd40e98
+            reset_unmatched_scores:
+              enabled: true
+
+        custom_format_groups:
+          add:
+            - trash_id: 158188097a58d7687dee647e04af0da3
+              select:
+                - 47435ece6b99a0b477caf360e79ba0bb
+            - trash_id: 59c3af66780d08332fdc64e68297098f
+              select:
+                - 15a05bc7c1a36e2b57fd628f8977e2fc
+                - 32b367365729d530ca1c124a0b180c64
+                - 85c61753df5da1fb2aab6f2a47426b09
+                - 6f808933a71bd9666531610cb8c059cc
+                - fbcb31d8dabd2a319072b84fc0b7249c
+                - 9c11cd3f07101cdba90a2d81cf0e56b4
+                - e2315f990da2e2cbfc9fa5b7a6fcfe48
+                - 23297a736ca77c0fc8e70f8edd7ee56c
+
+        search:
+          backend:
+            enabled: true
+          scheduled_task:
+            interval_minutes: 1440
+          snatching:
+            enabled: true
+
+    radarr:
+      movie:
+        base_url: !ext env RADARR_URL
+        api_key: !ext env RADARR_API_KEY
+
+        quality_definition:
+          type: movie
+
+        quality_profiles:
+          - trash_id: 2b90e905c99490edc7c7a5787443748b
+            reset_unmatched_scores:
+              enabled: true
+
+        custom_format_groups:
+          add:
+            - trash_id: f8bf8eab4617f12dfdbd16303d8da245
+              select:
+                - dc98083864ea246d05a42df0d05f81cc
+            - trash_id: a3ac6af01d78e4f21fcb75f601ac96df
+              select:
+                - b8cd450cbfa689c0259a01d9e29ba3d6
+                - cae4ca30163749b891686f95532519bd
+                - b6832f586342ef70d9c128d40c07b872
+                - cc444569854e9de0b084ab2b8b1532b2
+                - ed38b889b31be83fda192888e2286d83
+                - 0a3f082873eb454bde444150b70253cc
+                - e6886871085226c3da1830830146846c
+                - 90a6f9a284dff5103f6346090e6280c8
+                - e204b80c87be9497a8a6eaff48f72905
+                - 712d74cd88bceb883ee32f773656b1f5
+                - bfd8eb01832d646a0a89c4deb46f8564
+            - trash_id: bc85e56ee3bd0f01467866d5f1261543
+              select:
+                - 8608a2ed20c636b8a62de108e9147713
+                - f9cf598d55ce532d63596b060a6db9ee
+                - 54795711b78ea87e56127928c423689b
+                - 1bfc773c53283d47c68e535811da30b7
+                - aee01d40cd1bf4bcded81ee62f0f3659
+                - a2ab25194f463f057a5559c03c84a3df
+                - 08d120d5a003ec4954b5b255c0691d79
+                - 439f9d71becaed589058ec949e037ff3
+                - 2d136d4e33082fe573d06b1f237c40dd
+
+        search:
+          backend:
+            enabled: true
+          scheduled_task:
+            interval_minutes: 1440
+          snatching:
+            enabled: true

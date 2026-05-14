@@ -4,6 +4,9 @@ kind: Kustomization
 # Reference the base from the arr repository
 resources:
 - https://github.com/DawgSons/arr/k8s/kustomize/arr/base?ref=main
+- arr-secrets.yaml
+- recyclarr-configmap.yaml
+- recyclarr-cronjob.yaml
 
 # Apply customizations specific to your cluster
 patches:

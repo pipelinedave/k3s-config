@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: picoshare
+  namespace: picoshare
+spec:
+  template:
+    spec:
+      containers:
+      - name: picoshare
+        image: docker.io/mtlynch/picoshare:1.4.5

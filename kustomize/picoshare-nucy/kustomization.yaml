@@ -10,3 +10,8 @@ patches:
   patch: |-
     - op: remove
       path: /spec/volumeName
+- path: image-patch.yaml
+  target:
+    kind: Deployment
+    name: picoshare
+    namespace: picoshare

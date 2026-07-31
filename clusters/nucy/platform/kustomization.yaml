@@ -3,3 +3,12 @@ kind: Kustomization
 resources:
 - https://github.com/jetstack/cert-manager/releases/download/v1.18.2/cert-manager.yaml
 - https://github.com/bitnami-labs/sealed-secrets/releases/download/v0.32.1/controller.yaml
+patches:
+- target:
+		kind: Deployment
+		name: sealed-secrets-controller
+		namespace: kube-system
+	patch: |-
+		- op: replace
+			path: /spec/template/spec/containers/0/image
+			value: docker.io/bitnami/sealed-secrets-controller:0.32.1

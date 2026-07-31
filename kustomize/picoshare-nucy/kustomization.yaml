@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../picoshare
+patches:
+- target:
+    kind: PersistentVolumeClaim
+    name: picoshare-pvc
+    namespace: picoshare
+  patch: |-
+    - op: remove
+      path: /spec/volumeName

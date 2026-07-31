@@ -1,0 +1,15 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  creationTimestamp: null
+  name: cloudflared-tunnel-token
+  namespace: kube-system
+spec:
+  encryptedData:
+    TUNNEL_TOKEN: AgC0zGzXdfjTiAOIvt51ADUDpw3e+Vb2qszijoT4uwunY3oUwN434kRiLSk1lSFgLYsweMV9h6e/X492b/Rf7Bkq9bQwkO/Zam4dJJ7inC5ZRHVi4AuX6T6jTnFCouIm6LkkCMS5EsSkbaUI2O8yM3io9R0aUMYLmRs0Vyh91XynInquGyqOrp38A/bJkka/f/mzzHCUozqx3pX7pvpYqon9lOFRspUuUCvYaU4+4pfV9YHyPOzyH0CaRqbdABiWhvDE0z9bip7cXnu/5WvWRvB2uB4nDIlQ++dwF5wbCdf/ZrFbm2k/2FZmEa40ljojQOeLgO0wq49MLzCKoZ83rAwyiYs0IvaqZXz71GPktTGfHXK2jf8+TFf4rcGP5SO5IOa1ZBGi4bHocZbhD7IlO5Hgiz1qdtJ1yfHePknvLlCVINhmKbE8wVBGqQOK/1ekRYGWeaAlxq5D2f3yoY4GrUlu6J+6abnHclRcvsWhJjfKKUDn/tIVZiVrCnWAK0qykIBvBVQRjos8i6/AkZEkpK4JMeuwFPTGxKyeEIcJwvahe5Tonfssz/iqcgT23cPRyBQsaLeULKlZ1qaeAZ2eCFql4u6X8ulRJm36N/ZIZOwifEaAoLfA5Lm+lBmlXcehHgVJcrXhKTVX+7ttpyof6aWfKYD/fwWgNmUNvXCfX09XwXSaNNC3UbdEl853iUq7BsZ777mw8lDw0NSDFlRITvVq+8tiwJLZOUiISR6GMzEdcBz5WMckonK6PxNm2Y8OlZ2gQj/qkUURVYdqynxh27tLNjcwfrOtSToUJjX1hAiMZ/vxVTmTVcQqIdlYDSZIJY+kA0daPSVZ+qk8lHS7QaLl1hzgyMlZ2ReUaR0mbpY8QYxiIuVba7qETVl2eVRWJ69oueROYIXINZwI4Kha3oMTFuK9WvfUPA1mmZ8h2Ie8+w3VfpoLrNGG
+  template:
+    metadata:
+      creationTimestamp: null
+      name: cloudflared-tunnel-token
+      namespace: kube-system
+---

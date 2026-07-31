@@ -12,3 +12,16 @@ patches:
     - op: replace
       path: /spec/template/spec/containers/0/image
       value: docker.io/bitnami/sealed-secrets-controller:0.32.1
+- target:
+    kind: Deployment
+    name: cert-manager
+    namespace: cert-manager
+  patch: |-
+    - op: add
+      path: /spec/template/spec/hostAliases
+      value:
+        - ip: 192.168.178.46
+          hostnames:
+            - chores.stillon.top
+            - share.stillon.top
+            - dex.stillon.top

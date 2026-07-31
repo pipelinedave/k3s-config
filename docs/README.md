@@ -33,6 +33,7 @@ This repository follows a GitOps-first approach for managing the cluster. Key do
 - [Adding New Applications](guides/adding-applications.md) - Step-by-step instructions for adding new applications to the cluster.
 - [GitOps Examples](guides/gitops-examples.md) - Practical examples of GitOps practices.
 - [Monitoring Flux and Reconciling Resources with MCP Tools](guides/flux-monitoring-reconciliation.md) - How to use MCP tools to monitor and manage Flux.
+- [Nucy Phase 1 Migration Plan](guides/nucy-phase1-migration-plan.md) - Minimal migration plan for chores/share to the home NUC while preserving GitOps workflow.
 
 ## Reference
 

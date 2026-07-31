@@ -233,7 +233,7 @@ Current observed home WAN IPv4 from local environment:
 
 - `92.208.35.4`
 
-### Option A: Direct NAT forwarding to nucy
+### Option A (recommended primary): Direct NAT forwarding to nucy + Porkbun DDNS
 
 Prerequisites:
 
@@ -251,6 +251,39 @@ DNS changes:
 1. Update `chores.stillon.top` A record from `161.97.88.129` to `92.208.35.4`.
 2. Update `share.stillon.top` A record from `161.97.88.129` to `92.208.35.4`.
 3. Keep other hostnames on bigboi unchanged during phase 1.
+
+Automate DNS drift handling (recommended):
+
+1. Ensure Porkbun API access is enabled and create API credentials.
+2. Install the updater on nucy:
+
+```bash
+ssh -i ~/.ssh/id_ed25519_nuc dave@192.168.178.46 'mkdir -p ~/k3s-config/scripts/systemd'
+scp -i ~/.ssh/id_ed25519_nuc scripts/porkbun_ddns_update.sh dave@192.168.178.46:~/k3s-config/scripts/
+scp -i ~/.ssh/id_ed25519_nuc scripts/systemd/porkbun-ddns-update.service dave@192.168.178.46:~/k3s-config/scripts/systemd/
+scp -i ~/.ssh/id_ed25519_nuc scripts/systemd/porkbun-ddns-update.timer dave@192.168.178.46:~/k3s-config/scripts/systemd/
+scp -i ~/.ssh/id_ed25519_nuc scripts/install_porkbun_ddns_timer.sh dave@192.168.178.46:~/k3s-config/scripts/
+ssh -i ~/.ssh/id_ed25519_nuc dave@192.168.178.46 'bash ~/k3s-config/scripts/install_porkbun_ddns_timer.sh'
+```
+
+3. On nucy, edit `/etc/porkbun-ddns.env` and set real values for:
+- `PORKBUN_API_KEY`
+- `PORKBUN_SECRET_API_KEY`
+
+4. Trigger first update and verify:
+
+```bash
+ssh -i ~/.ssh/id_ed25519_nuc dave@192.168.178.46 'sudo systemctl start porkbun-ddns-update.service && sudo systemctl status porkbun-ddns-update.service --no-pager'
+```
+
+5. Confirm DNS now points to current home WAN IP:
+
+```bash
+for h in chores.stillon.top share.stillon.top; do
+	echo "== $h =="
+	getent ahostsv4 "$h" | awk '{print $1}' | sort -u
+done
+```
 
 Validation after DNS change:
 
@@ -271,9 +304,9 @@ Rollback (if needed):
 1. Revert `chores.stillon.top` and `share.stillon.top` A records back to `161.97.88.129`.
 2. Re-enable old port forward path if disabled.
 
-### Option B (recommended primary): Cloudflare Tunnel
+### Option B: Cloudflare Tunnel
 
-Use this as the default external exposure path when WAN IP stability is uncertain.
+Use this only if you move authoritative DNS for the relevant hostnames to Cloudflare (full zone move or delegated subdomain).
 
 Repository state prepared:
 
@@ -286,6 +319,28 @@ Activation steps:
 1. In Cloudflare Zero Trust, create a tunnel and add public hostnames:
 - `chores.stillon.top` -> `http://nginx-ingress.kube-system.svc.cluster.local:80`
 - `share.stillon.top` -> `http://nginx-ingress.kube-system.svc.cluster.local:80`
+
+How to get the tunnel token (UI path):
+
+1. Open Cloudflare dashboard.
+2. Go to Zero Trust.
+3. Go to Networks -> Tunnels.
+4. Create or select your tunnel.
+5. In tunnel setup/connect flow, choose Docker or Kubernetes connector.
+6. Copy the value passed to `--token` (or shown as tunnel token).
+
+Alternative token command (if `cloudflared` CLI is installed and authenticated locally):
+
+```bash
+cloudflared tunnel token <tunnel-name>
+```
+
+DNS note:
+
+- Yes, you still need DNS records for `chores.stillon.top` and `share.stillon.top`.
+- If you add Public Hostnames from the Tunnel UI for a zone managed in the same Cloudflare account, Cloudflare can create/manage those DNS records automatically.
+- If not auto-created, create proxied CNAME records for each hostname to `<tunnel-uuid>.cfargotunnel.com`.
+- You do not need to point these records to your home public IP when using the tunnel.
 
 2. Export the tunnel token locally and generate a SealedSecret manifest:
 

@@ -285,6 +285,11 @@ for h in chores.stillon.top share.stillon.top; do
 done
 ```
 
+Note about wildcard DNS:
+
+- If the zone has a wildcard `*.stillon.top` A record, `chores`/`share` must exist as explicit A records to override it.
+- `scripts/porkbun_ddns_update.sh` handles this by creating missing records before updating them.
+
 Validation after DNS change:
 
 ```bash
@@ -298,6 +303,12 @@ Expected:
 
 - TLS certificates for `chores.stillon.top` and `share.stillon.top` are `Ready=True`.
 - Ingress routes land on nucy services.
+
+If HTTPS checks time out after DNS cutover:
+
+- Confirm FritzBox forwards external TCP `80` and `443` to `192.168.178.46`.
+- Some routers do not support NAT loopback; local-network tests to your own public IP can fail even when external access works.
+- Validate from a truly external network (for example mobile data) before concluding ingress is unreachable.
 
 Rollback (if needed):
 

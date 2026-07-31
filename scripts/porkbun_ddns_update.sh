@@ -35,14 +35,33 @@ update_record() {
     endpoint_label=""
   fi
 
-  local endpoint="https://api.porkbun.com/api/json/v3/dns/editByNameType/${DOMAIN}/A/${endpoint_label}"
-  local payload
-  payload="$(cat <<JSON
-{"apikey":"${PORKBUN_API_KEY}","secretapikey":"${PORKBUN_SECRET_API_KEY}","content":"${current_ip}","ttl":"${TTL}"}
+  local check_endpoint="https://api.porkbun.com/api/json/v3/dns/retrieveByNameType/${DOMAIN}/A/${endpoint_label}"
+  local check_payload
+  check_payload="$(cat <<JSON
+{"apikey":"${PORKBUN_API_KEY}","secretapikey":"${PORKBUN_SECRET_API_KEY}"}
 JSON
 )"
 
-  local response
+  local check_response
+  check_response="$(curl -fsS -H 'Content-Type: application/json' -d "$check_payload" "$check_endpoint")"
+
+  local endpoint payload response
+
+  # Porkbun editByNameType only updates existing records. If none exist (e.g. wildcard-only zones), create one.
+  if printf '%s' "$check_response" | grep -q '"records":\[\]'; then
+    endpoint="https://api.porkbun.com/api/json/v3/dns/create/${DOMAIN}"
+    payload="$(cat <<JSON
+{"apikey":"${PORKBUN_API_KEY}","secretapikey":"${PORKBUN_SECRET_API_KEY}","name":"${record_label}","type":"A","content":"${current_ip}","ttl":"${TTL}"}
+JSON
+)"
+  else
+    endpoint="https://api.porkbun.com/api/json/v3/dns/editByNameType/${DOMAIN}/A/${endpoint_label}"
+    payload="$(cat <<JSON
+{"apikey":"${PORKBUN_API_KEY}","secretapikey":"${PORKBUN_SECRET_API_KEY}","content":"${current_ip}","ttl":"${TTL}"}
+JSON
+)"
+  fi
+
   response="$(curl -fsS -H 'Content-Type: application/json' -d "$payload" "$endpoint")"
 
   local status

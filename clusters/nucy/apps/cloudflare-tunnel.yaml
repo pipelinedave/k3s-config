@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 1h
   prune: true
-  suspend: true
+  suspend: false
   sourceRef:
     kind: GitRepository
     name: flux-system

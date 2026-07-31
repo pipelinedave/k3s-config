@@ -20,6 +20,22 @@ RECORDS="${RECORDS:-chores share}"
 TTL="${TTL:-600}"
 IP_PROVIDER_URL="${IP_PROVIDER_URL:-https://api.ipify.org}"
 
+read -r -a records_array <<<"$RECORDS"
+
+# Safety guard: this updater is intended for explicit host cutovers only.
+# It must not overwrite wildcard or apex records unless explicitly allowed.
+for record in "${records_array[@]}"; do
+  case "$record" in
+    "*"|"@")
+      if [[ "${ALLOW_WILDCARD_UPDATES:-0}" != "1" ]]; then
+        echo "Refusing to update reserved record '$record'." >&2
+        echo "Set ALLOW_WILDCARD_UPDATES=1 only when you intentionally want to modify wildcard/apex records." >&2
+        exit 1
+      fi
+      ;;
+  esac
+done
+
 current_ip="$(curl -4fsS "$IP_PROVIDER_URL")"
 
 if [[ ! "$current_ip" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
@@ -29,13 +45,15 @@ fi
 
 update_record() {
   local record_label="$1"
-  local endpoint_label="$record_label"
+  local endpoint_name
 
   if [[ "$record_label" == "@" ]]; then
-    endpoint_label=""
+    endpoint_name="$DOMAIN"
+  else
+    endpoint_name="${record_label}.${DOMAIN}"
   fi
 
-  local check_endpoint="https://api.porkbun.com/api/json/v3/dns/retrieveByNameType/${DOMAIN}/A/${endpoint_label}"
+  local check_endpoint="https://api.porkbun.com/api/json/v3/dns/retrieveByNameType/${DOMAIN}/A/${endpoint_name}"
   local check_payload
   check_payload="$(cat <<JSON
 {"apikey":"${PORKBUN_API_KEY}","secretapikey":"${PORKBUN_SECRET_API_KEY}"}
@@ -55,9 +73,9 @@ JSON
 JSON
 )"
   else
-    endpoint="https://api.porkbun.com/api/json/v3/dns/editByNameType/${DOMAIN}/A/${endpoint_label}"
+    endpoint="https://api.porkbun.com/api/json/v3/dns/editByNameType/${DOMAIN}/A/${endpoint_name}"
     payload="$(cat <<JSON
-{"apikey":"${PORKBUN_API_KEY}","secretapikey":"${PORKBUN_SECRET_API_KEY}","content":"${current_ip}","ttl":"${TTL}"}
+{"apikey":"${PORKBUN_API_KEY}","secretapikey":"${PORKBUN_SECRET_API_KEY}","content":"${current_ip}"}
 JSON
 )"
   fi
@@ -80,6 +98,6 @@ JSON
   fi
 }
 
-for record in $RECORDS; do
+for record in "${records_array[@]}"; do
   update_record "$record"
 done

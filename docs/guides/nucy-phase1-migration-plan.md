@@ -223,6 +223,14 @@ Current Flux status summary:
 
 ## External Exposure and DNS Cutover
 
+Desired split state for progressive migration:
+
+- `chores.stillon.top` -> nucy
+- `share.stillon.top` -> nucy
+- `*.stillon.top` -> bigboi (temporary until full migration)
+
+This split keeps all non-migrated services on bigboi while phase-1 services move first.
+
 Current observed DNS (2026-07-31):
 
 - `stillon.top` -> `161.97.88.129` (bigboi)
@@ -250,7 +258,8 @@ DNS changes:
 
 1. Update `chores.stillon.top` A record from `161.97.88.129` to `92.208.35.4`.
 2. Update `share.stillon.top` A record from `161.97.88.129` to `92.208.35.4`.
-3. Keep other hostnames on bigboi unchanged during phase 1.
+3. Keep wildcard `*.stillon.top` A record on `161.97.88.129` during phase 1.
+4. Keep other hostnames on bigboi unchanged during phase 1.
 
 Automate DNS drift handling (recommended):
 
@@ -289,6 +298,15 @@ Note about wildcard DNS:
 
 - If the zone has a wildcard `*.stillon.top` A record, `chores`/`share` must exist as explicit A records to override it.
 - `scripts/porkbun_ddns_update.sh` handles this by creating missing records before updating them.
+- `scripts/porkbun_ddns_update.sh` is intentionally restricted to explicit records (default `RECORDS="chores share"`) and refuses wildcard/apex updates unless `ALLOW_WILDCARD_UPDATES=1` is set.
+
+Progressive cutover playbook (recommended):
+
+1. Start with wildcard on bigboi.
+2. Move one hostname at a time by adding/updating an explicit record to nucy.
+3. Validate app and TLS for that hostname.
+4. Continue until all desired hosts are explicit on nucy.
+5. Only then repoint wildcard to nucy (or remove wildcard and keep explicit records).
 
 Validation after DNS change:
 
@@ -317,11 +335,18 @@ Rollback (if needed):
 
 ### Option B: Cloudflare Tunnel
 
-Use this only if you move authoritative DNS for the relevant hostnames to Cloudflare (full zone move or delegated subdomain).
+Selected permanent solution for nucy phase 1.
+
+Current state:
+
+- Direct inbound IPv4 to the FRITZ!Box is not a viable long-term option on the current ISP connection.
+- `cloudflare-tunnel` is active in Flux on nucy.
+- `chores.stillon.top` and `share.stillon.top` are being moved from direct A records to tunnel-backed CNAME records.
+- The old Porkbun IPv4 DDNS timer on nucy was disabled so it cannot overwrite tunnel DNS.
 
 Repository state prepared:
 
-- Flux app resource: `clusters/nucy/apps/cloudflare-tunnel.yaml` (currently `suspend: true`)
+- Flux app resource: `clusters/nucy/apps/cloudflare-tunnel.yaml` (`suspend: false`)
 - Cloudflared deployment manifests: `kustomize/cloudflare-tunnel/`
 - Token sealing helper: `scripts/seal_cloudflared_token.sh`
 
@@ -350,7 +375,7 @@ DNS note:
 
 - Yes, you still need DNS records for `chores.stillon.top` and `share.stillon.top`.
 - If you add Public Hostnames from the Tunnel UI for a zone managed in the same Cloudflare account, Cloudflare can create/manage those DNS records automatically.
-- If not auto-created, create proxied CNAME records for each hostname to `<tunnel-uuid>.cfargotunnel.com`.
+- If DNS remains authoritative at Porkbun, create CNAME records for each hostname to `<tunnel-uuid>.cfargotunnel.com`.
 - You do not need to point these records to your home public IP when using the tunnel.
 
 2. Export the tunnel token locally and generate a SealedSecret manifest:
@@ -377,6 +402,12 @@ KUBECONFIG=~/.kube/config-nucy flux reconcile kustomization cloudflare-tunnel -n
 KUBECONFIG=~/.kube/config-nucy kubectl -n kube-system get pods -l app.kubernetes.io/name=cloudflared -o wide
 ```
 
+Current tunnel target for phase-1 hostnames:
+
+```text
+771b93ed-ec7d-4041-b716-8ffe62196289.cfargotunnel.com
+```
+
 5. Validate externally:
 
 ```bash
@@ -384,4 +415,4 @@ curl -Ik https://chores.stillon.top
 curl -Ik https://share.stillon.top
 ```
 
-If you later prefer direct NAT, Option A remains compatible and can be used without removing the tunnel setup.
+Keep wildcard `*.stillon.top` on bigboi until the remaining services are migrated, then move those hostnames one by one or replace the wildcard strategy entirely.

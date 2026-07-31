@@ -20,6 +20,10 @@ RECORDS="chores share"
 # Optional settings
 TTL=600
 IP_PROVIDER_URL=https://api.ipify.org
+
+# Keep this at 0 for progressive host-by-host migration.
+# Set to 1 only when you intentionally need to update '*' or '@'.
+ALLOW_WILDCARD_UPDATES=0
 EOF
   sudo chmod 600 /etc/porkbun-ddns.env
 fi

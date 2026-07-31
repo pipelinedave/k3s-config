@@ -5,5 +5,8 @@ resources:
 - cert-manager.yaml
 - dex.yaml
 - choremane-prod.yaml
+- choremane-staging.yaml
+- choretwo-staging.yaml
+- choretwo-production.yaml
 - picoshare.yaml
 - cloudflare-tunnel.yaml

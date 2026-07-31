@@ -1,0 +1,11 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sabnzbd
+  namespace: media-server
+spec:
+  template:
+    spec:
+      containers:
+        - name: sabnzbd
+          image: ghcr.io/hotio/sabnzbd:5.0.2

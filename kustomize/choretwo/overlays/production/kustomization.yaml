@@ -3,6 +3,5 @@ kind: Kustomization
 resources:
 - ../../base
 namespace: choretwo-production
-namePrefix: prod-
 commonLabels:
   environment: production

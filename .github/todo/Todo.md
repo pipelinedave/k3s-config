@@ -2,7 +2,6 @@
 
 ## Inbox
 <!-- Add new tasks here for Copilot to organize -->
-- #infrastructure Create Ansible playbook for automated k3s cluster deployment - Develop an Ansible playbook to prepare a fresh host, deploy k3s (with --disable-traefik), install Flux, and configure it to reconcile the cluster to its final state from this repository. The playbook should support configurable top-level domains.
 
 ## Organized Tasks
 <!-- Copilot will maintain this section -->
@@ -14,6 +13,7 @@
 ### Medium Priority
 <!-- Enhancements and improvements -->
 - make gotify oauth2 proxy work with nginx ingress - The gotify application needs to be configured to work with the Nginx ingress controller, including setting up OAuth2 proxy for authentication. (Copilot: Ongoing, major updates to docs/guides/traefik-to-nginx-migration-plan.md)
+- [ ] #infrastructure Build Ansible bootstrap for k3s GitOps hosts - Create a host-prep and bootstrap playbook that installs k3s (`--disable-traefik`), installs Flux, and reconciles this repo to target state with configurable top-level domain input.
 
 ### Low Priority
 <!-- Nice-to-haves and maintenance tasks -->

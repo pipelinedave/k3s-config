@@ -5,6 +5,7 @@ metadata:
   namespace: dex
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/service-upstream: "true"
     cert-manager.io/cluster-issuer: letsencrypt-prod
     description: "Ingress for Dex Identity Provider (v2.30.0). Host: dex.stillon.top"
   labels:

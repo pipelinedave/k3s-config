@@ -12,3 +12,7 @@ spec:
     - http01:
         ingress:
           class: nginx
+          ingressTemplate:
+            metadata:
+              annotations:
+                nginx.ingress.kubernetes.io/service-upstream: "true"

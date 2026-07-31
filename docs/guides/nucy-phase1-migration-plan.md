@@ -194,3 +194,128 @@ KUBECONFIG=~/.kube/config-nucy kubectl get pods -A
 
 - bigboi k3s admin client cert had expired and was restored by k3s restart on 2026-07-31.
 - nucy currently runs Docker workloads and has constrained RAM, so phase-1 minimal scope is mandatory.
+
+## Live Progress (2026-07-31)
+
+Completed:
+
+- k3s installed on nucy (`v1.36.2+k3s1`) with Traefik disabled.
+- Flux bootstrapped to `./clusters/nucy`.
+- Nucy scaffold committed and pushed through `main`.
+- Platform prerequisites added and reconciled:
+	- cert-manager controller stack (Running)
+	- sealed-secrets controller CRD installed and controller running with fixed image tag `0.32.1`
+- Sealed-secrets key material from bigboi imported into nucy so dex-related secrets can decrypt.
+- `picoshare` fixed and Ready on nucy:
+	- PVC pinning issue handled in `kustomize/picoshare-nucy` by removing immutable `spec.volumeName`
+	- image updated to `docker.io/mtlynch/picoshare:1.4.5`
+- `dex` is Ready on nucy.
+- `choremane-prod` is Ready on nucy.
+
+Important operational note:
+
+- `choremane-prod` needed runtime secrets (`postgres-secret`, `choremane-oauth-secret`) created directly in the cluster because the existing SealedSecret payload for `choremane-oauth-secret` still could not decrypt on nucy.
+- This keeps phase 1 functional, but should be followed by re-sealing these secrets for nucy and committing them so secret management is fully GitOps-managed.
+
+Current Flux status summary:
+
+- Ready: `flux-system`, `platform`, `apps`, `nginx-ingress`, `cert-manager`, `picoshare`, `dex`, `choremane-prod`
+
+## External Exposure and DNS Cutover
+
+Current observed DNS (2026-07-31):
+
+- `stillon.top` -> `161.97.88.129` (bigboi)
+- `chores.stillon.top` -> `161.97.88.129` (bigboi)
+- `share.stillon.top` -> `161.97.88.129` (bigboi)
+
+Current observed home WAN IPv4 from local environment:
+
+- `92.208.35.4`
+
+### Option A: Direct NAT forwarding to nucy
+
+Prerequisites:
+
+- Nucy has a reserved/static LAN IP (`192.168.178.46`).
+- FritzBox can forward TCP `80` and `443` to nucy.
+
+Router changes:
+
+1. Create a port forward for TCP `80` to `192.168.178.46:80`.
+2. Create a port forward for TCP `443` to `192.168.178.46:443`.
+3. Disable/adjust any conflicting port forwards still targeting bigboi path.
+
+DNS changes:
+
+1. Update `chores.stillon.top` A record from `161.97.88.129` to `92.208.35.4`.
+2. Update `share.stillon.top` A record from `161.97.88.129` to `92.208.35.4`.
+3. Keep other hostnames on bigboi unchanged during phase 1.
+
+Validation after DNS change:
+
+```bash
+curl -Ik https://chores.stillon.top
+curl -Ik https://share.stillon.top
+KUBECONFIG=~/.kube/config-nucy kubectl get certificate -A
+KUBECONFIG=~/.kube/config-nucy kubectl get challenges.acme.cert-manager.io -A
+```
+
+Expected:
+
+- TLS certificates for `chores.stillon.top` and `share.stillon.top` are `Ready=True`.
+- Ingress routes land on nucy services.
+
+Rollback (if needed):
+
+1. Revert `chores.stillon.top` and `share.stillon.top` A records back to `161.97.88.129`.
+2. Re-enable old port forward path if disabled.
+
+### Option B (recommended primary): Cloudflare Tunnel
+
+Use this as the default external exposure path when WAN IP stability is uncertain.
+
+Repository state prepared:
+
+- Flux app resource: `clusters/nucy/apps/cloudflare-tunnel.yaml` (currently `suspend: true`)
+- Cloudflared deployment manifests: `kustomize/cloudflare-tunnel/`
+- Token sealing helper: `scripts/seal_cloudflared_token.sh`
+
+Activation steps:
+
+1. In Cloudflare Zero Trust, create a tunnel and add public hostnames:
+- `chores.stillon.top` -> `http://nginx-ingress.kube-system.svc.cluster.local:80`
+- `share.stillon.top` -> `http://nginx-ingress.kube-system.svc.cluster.local:80`
+
+2. Export the tunnel token locally and generate a SealedSecret manifest:
+
+```bash
+export TUNNEL_TOKEN='paste-token-from-cloudflare'
+./scripts/seal_cloudflared_token.sh
+```
+
+3. Add the sealed secret file to `kustomize/cloudflare-tunnel/kustomization.yaml`:
+
+```yaml
+resources:
+	- deployment.yaml
+	- cloudflared-token-sealed.yaml
+```
+
+4. Unsuspend and reconcile on nucy:
+
+```bash
+KUBECONFIG=~/.kube/config-nucy flux resume kustomization cloudflare-tunnel -n flux-system
+KUBECONFIG=~/.kube/config-nucy flux reconcile source git flux-system -n flux-system
+KUBECONFIG=~/.kube/config-nucy flux reconcile kustomization cloudflare-tunnel -n flux-system
+KUBECONFIG=~/.kube/config-nucy kubectl -n kube-system get pods -l app.kubernetes.io/name=cloudflared -o wide
+```
+
+5. Validate externally:
+
+```bash
+curl -Ik https://chores.stillon.top
+curl -Ik https://share.stillon.top
+```
+
+If you later prefer direct NAT, Option A remains compatible and can be used without removing the tunnel setup.

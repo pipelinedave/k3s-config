@@ -6,3 +6,4 @@ resources:
 - dex.yaml
 - choremane-prod.yaml
 - picoshare.yaml
+- cloudflare-tunnel.yaml

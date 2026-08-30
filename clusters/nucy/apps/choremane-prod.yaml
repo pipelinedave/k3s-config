@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   targetNamespace: choremane-prod
-  interval: 5m
+  interval: 1m
   path: ./kustomize/choremane/overlays/prod
   prune: false
   sourceRef:

@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restgeld-postgres
+  labels:
+    app: restgeld
+    component: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restgeld
+      component: database
+  template:
+    metadata:
+      labels:
+        app: restgeld
+        component: database
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+              name: postgres
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: restgeld-secrets
+                  key: postgres-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: restgeld-secrets
+                  key: postgres-password
+            - name: POSTGRES_DB
+              value: restgeld_core
+            - name: POSTGRES_MULTIPLE_DATABASES
+              value: "restgeld_core,restgeld_auth"
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - restgeld
+                - -d
+                - restgeld_core
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - pg_isready
+                - -U
+                - restgeld
+                - -d
+                - restgeld_core
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: restgeld-postgres-pvc
+      restartPolicy: Always

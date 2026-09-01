@@ -1,0 +1,52 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: restgeld-ingress
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - restgeld.stillon.top
+      secretName: restgeld-tls
+  rules:
+    - host: restgeld.stillon.top
+      http:
+        paths:
+          - path: /api/monitoring
+            pathType: Prefix
+            backend:
+              service:
+                name: restgeld-monitoring-service
+                port:
+                  number: 8083
+          - path: /api/billing
+            pathType: Prefix
+            backend:
+              service:
+                name: restgeld-billing-service
+                port:
+                  number: 8082
+          - path: /api/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: restgeld-auth-service
+                port:
+                  number: 8081
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: restgeld-backend
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: restgeld-frontend
+                port:
+                  number: 80

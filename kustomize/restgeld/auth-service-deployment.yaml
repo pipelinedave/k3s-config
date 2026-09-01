@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restgeld-auth-service
+  labels:
+    app: restgeld
+    component: auth-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restgeld
+      component: auth-service
+  template:
+    metadata:
+      labels:
+        app: restgeld
+        component: auth-service
+    spec:
+      containers:
+        - name: auth-service
+          image: pipelinedave/restgeld-auth-service:latest
+          ports:
+            - containerPort: 8081
+              name: http
+          env:
+            - name: PORT
+              value: "8081"
+            - name: DB_HOST
+              value: restgeld-postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: restgeld-secrets
+                  key: postgres-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: restgeld-secrets
+                  key: postgres-password
+            - name: DB_NAME
+              value: restgeld_auth
+          livenessProbe:
+            httpGet:
+              path: /api/auth/health
+              port: 8081
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/auth/health
+              port: 8081
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      restartPolicy: Always

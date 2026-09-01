@@ -1,0 +1,20 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: restgeld
+resources:
+  - namespace.yaml
+  - postgres-pvc.yaml
+  - postgres-deployment.yaml
+  - postgres-service.yaml
+  - backend-deployment.yaml
+  - backend-service.yaml
+  - auth-service-deployment.yaml
+  - auth-service-service.yaml
+  - billing-service-deployment.yaml
+  - billing-service-service.yaml
+  - monitoring-service-deployment.yaml
+  - monitoring-service-service.yaml
+  - frontend-deployment.yaml
+  - frontend-service.yaml
+  - ingress.yaml
+  - restgeld-secrets.yaml

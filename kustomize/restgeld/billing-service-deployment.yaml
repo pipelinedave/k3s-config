@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restgeld-billing-service
+  labels:
+    app: restgeld
+    component: billing-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restgeld
+      component: billing-service
+  template:
+    metadata:
+      labels:
+        app: restgeld
+        component: billing-service
+    spec:
+      containers:
+        - name: billing-service
+          image: pipelinedave/restgeld-billing-service:latest
+          ports:
+            - containerPort: 8082
+              name: http
+          env:
+            - name: PORT
+              value: "8082"
+            - name: DB_HOST
+              value: restgeld-postgres
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: restgeld-secrets
+                  key: postgres-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: restgeld-secrets
+                  key: postgres-password
+            - name: DB_NAME
+              value: restgeld_auth
+          livenessProbe:
+            httpGet:
+              path: /api/billing/health
+              port: 8082
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/billing/health
+              port: 8082
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      restartPolicy: Always

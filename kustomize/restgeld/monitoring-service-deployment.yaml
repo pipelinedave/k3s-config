@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: restgeld-monitoring-service
+  labels:
+    app: restgeld
+    component: monitoring-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: restgeld
+      component: monitoring-service
+  template:
+    metadata:
+      labels:
+        app: restgeld
+        component: monitoring-service
+    spec:
+      containers:
+        - name: monitoring-service
+          image: pipelinedave/restgeld-monitoring-service:latest
+          ports:
+            - containerPort: 8083
+              name: http
+          env:
+            - name: PORT
+              value: "8083"
+            - name: CORE_API_URL
+              value: "http://restgeld-backend:80"
+            - name: AUTH_SERVICE_URL
+              value: "http://restgeld-auth-service:8081"
+            - name: BILLING_SERVICE_URL
+              value: "http://restgeld-billing-service:8082"
+          livenessProbe:
+            httpGet:
+              path: /api/monitoring/health
+              port: 8083
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/monitoring/health
+              port: 8083
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      restartPolicy: Always

@@ -9,4 +9,3 @@ resources:
 - notification-service/
 - ai-copilot-service/
 - frontend/
-- ingress.yaml

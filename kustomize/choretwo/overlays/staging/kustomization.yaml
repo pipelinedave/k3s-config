@@ -2,6 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - ../../base
+- ingress.yaml
 namespace: choretwo-staging
 commonLabels:
   environment: staging
@@ -13,6 +14,16 @@ patches:
       value:
         name: USE_MOCK_AUTH
         value: "true"
+    - op: add
+      path: /spec/template/spec/containers/0/env/-
+      value:
+        name: SERVER_URL
+        value: "https://choretwo-staging.stillon.top"
+    - op: add
+      path: /spec/template/spec/containers/0/env/-
+      value:
+        name: FRONTEND_URL
+        value: "https://choretwo-staging.stillon.top"
   target:
     kind: Deployment
     name: auth-service

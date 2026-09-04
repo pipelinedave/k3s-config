@@ -4,8 +4,10 @@ resources:
 - postgres/
 - redis/
 - auth-service/
-- chore-service/
-- log-service/
-- notification-service/
-- ai-copilot-service/
+# Ausgegliedert in den Monolith (modular monolith, ein FastAPI-Prozess):
+# - chore-service/
+# - log-service/
+# - notification-service/
+# - ai-copilot-service/
+- monolith/
 - frontend/

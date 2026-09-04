@@ -26,28 +26,28 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: chore-service
+            name: monolith
             port:
               number: 80
       - path: /api/logs
         pathType: Prefix
         backend:
           service:
-            name: log-service
+            name: monolith
             port:
               number: 80
       - path: /api/notify
         pathType: Prefix
         backend:
           service:
-            name: notification-service
+            name: monolith
             port:
               number: 80
       - path: /api/ai
         pathType: Prefix
         backend:
           service:
-            name: ai-copilot-service
+            name: monolith
             port:
               number: 80
       - path: /

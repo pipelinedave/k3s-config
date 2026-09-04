@@ -4,7 +4,7 @@ metadata:
   name: choretwo-staging
   namespace: flux-system
 spec:
-  suspend: true
+  suspend: false
   targetNamespace: choretwo-staging
   interval: 5m
   path: ./kustomize/choretwo/overlays/staging

@@ -7,6 +7,10 @@ namespace: choretwo-staging
 commonLabels:
   environment: staging
 
+images:
+- name: pipelinedave/frontend
+  newTag: 7bbab627ad98036c5ea2b8f3ff6c4c253f0a36fb
+
 patches:
 - patch: |-
     - op: add

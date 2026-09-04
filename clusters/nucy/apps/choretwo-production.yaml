@@ -4,6 +4,7 @@ metadata:
   name: choretwo-production
   namespace: flux-system
 spec:
+  suspend: true
   targetNamespace: choretwo-production
   interval: 5m
   path: ./kustomize/choretwo/overlays/production

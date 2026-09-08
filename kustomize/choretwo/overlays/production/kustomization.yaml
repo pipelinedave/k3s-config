@@ -7,6 +7,14 @@ namespace: choretwo-production
 commonLabels:
   environment: production
 
+images:
+- name: pipelinedave/frontend
+  newTag: 4eb950ecb29e17ffcd50f8d58a0b9a0364c7bb61
+- name: pipelinedave/monolith
+  newTag: e0891c1db3db6b1a67ff4789120bd47d0789da32
+- name: pipelinedave/auth-service
+  newTag: 199e0eacc7e4773d68088d239b5692988f589d77
+
 patches:
 - patch: |-
     - op: add

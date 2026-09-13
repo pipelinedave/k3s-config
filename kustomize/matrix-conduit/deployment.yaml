@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: matrix-conduit
     app.kubernetes.io/instance: matrix-conduit
-    app.kubernetes.io/version: "0.9.0"
+    app.kubernetes.io/version: "v0.10.13"
     app.kubernetes.io/component: application
     app.kubernetes.io/part-of: matrix-conduit
     app.kubernetes.io/managed-by: flux
@@ -25,14 +25,14 @@ spec:
         app: matrix-conduit
         app.kubernetes.io/name: matrix-conduit
         app.kubernetes.io/instance: matrix-conduit
-        app.kubernetes.io/version: "0.9.0"
+        app.kubernetes.io/version: "v0.10.13"
         app.kubernetes.io/component: application
         app.kubernetes.io/part-of: matrix-conduit
         app.kubernetes.io/managed-by: flux
     spec:
       containers:
       - name: matrix-conduit
-        image: matrixconduit/matrix-conduit:0.9.0
+        image: matrixconduit/matrix-conduit:v0.10.13
         ports:
         - name: http
           containerPort: 6167

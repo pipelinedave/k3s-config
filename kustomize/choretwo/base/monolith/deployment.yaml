@@ -53,10 +53,15 @@ spec:
           value: redis://redis:6379
         - name: GATWAY_URL
           value: https://gotify.stillon.top
-        - name: OLLAMA_URL
-          value: http://host.docker.internal:11434
-        - name: AI_MODEL
-          value: mistral
+        - name: ADESSO_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: adesso-api-key
+        - name: ADESSO_HUB_URL
+          value: https://adesso-ai-hub.3asabc.de/v1/chat/completions
+        - name: ADESSO_MODEL
+          value: deepseek-v4-flash-sovereign
         livenessProbe:
           httpGet:
             path: /health

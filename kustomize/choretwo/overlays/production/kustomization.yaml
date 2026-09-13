@@ -9,9 +9,9 @@ commonLabels:
 
 images:
 - name: pipelinedave/frontend
-  newTag: 4eb950ecb29e17ffcd50f8d58a0b9a0364c7bb61
+  newTag: 33ceadb1df61bb3cc48514675621346b99e5f0b4
 - name: pipelinedave/monolith
-  newTag: e0891c1db3db6b1a67ff4789120bd47d0789da32
+  newTag: 33ceadb1df61bb3cc48514675621346b99e5f0b4
 - name: pipelinedave/auth-service
   newTag: 7791e6798c298cbbb82a40062ae585e9b22a2368
 

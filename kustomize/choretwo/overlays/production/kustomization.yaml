@@ -11,7 +11,7 @@ images:
 - name: pipelinedave/frontend
   newTag: 33ceadb1df61bb3cc48514675621346b99e5f0b4
 - name: pipelinedave/monolith
-  newTag: 33ceadb1df61bb3cc48514675621346b99e5f0b4
+  newTag: f971dde0e5dd44bef40c7ffc69bb5d69c0d4dad8
 - name: pipelinedave/auth-service
   newTag: 7791e6798c298cbbb82a40062ae585e9b22a2368
 

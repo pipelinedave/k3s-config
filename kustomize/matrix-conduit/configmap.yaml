@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: matrix-conduit-config
+  namespace: matrix
+  labels:
+    app.kubernetes.io/name: matrix-conduit
+    app.kubernetes.io/instance: matrix-conduit
+    app.kubernetes.io/part-of: matrix-conduit
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Server- und Homeserver-Konfiguration fuer Conduit"
+data:
+  # Homeserver-Domain (muss mit dem TLS-Host im Ingress uebereinstimmen)
+  CONDUIT_SERVER_NAME: "stillon.top"
+  # Persistente Speicherung via RocksDB auf gemountetem PVC
+  CONDUIT_DATABASE_PATH: "/var/lib/conduit"
+  # Interner HTTP-Port (Service/Ingress routen auf diesen Port)
+  CONDUIT_PORT: "6167"
+  # Maximale Anzahl gleichzeitiger Requests (DoS-Schutz)
+  CONDUIT_MAX_REQUESTS: "200"
+  # Vertrauenswuerdige Federation-Server (kommagetrennt, falls gefiltert werden soll)
+  CONDUIT_TRUSTED_SERVERS: ""
+  # Registrierung offen/geschlossen (fuer privaten Homeserver auf false)
+  CONDUIT_ALLOW_REGISTRATION: "false"
+  # Federation (Server-zu-Server) aktiv
+  CONDUIT_ALLOW_FEDERATION: "true"

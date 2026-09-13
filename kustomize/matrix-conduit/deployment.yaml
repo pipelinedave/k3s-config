@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matrix-conduit
+  namespace: matrix
+  labels:
+    app.kubernetes.io/name: matrix-conduit
+    app.kubernetes.io/instance: matrix-conduit
+    app.kubernetes.io/version: "0.9.0"
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: matrix-conduit
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "Matrix-Homeserver (Conduit) Deployment"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: matrix-conduit
+      app.kubernetes.io/name: matrix-conduit
+      app.kubernetes.io/instance: matrix-conduit
+  template:
+    metadata:
+      labels:
+        app: matrix-conduit
+        app.kubernetes.io/name: matrix-conduit
+        app.kubernetes.io/instance: matrix-conduit
+        app.kubernetes.io/version: "0.9.0"
+        app.kubernetes.io/component: application
+        app.kubernetes.io/part-of: matrix-conduit
+        app.kubernetes.io/managed-by: flux
+    spec:
+      containers:
+      - name: matrix-conduit
+        image: matrixconduit/matrix-conduit:0.9.0
+        ports:
+        - name: http
+          containerPort: 6167
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: matrix-conduit-config
+        # Bot-User-Registrierungssecrets (CONDUIT_PASSWORD, appservice-Tokens usw.)
+        # kommen spaeter als SealedSecret (siehe docs/adding-applications.md, kubeseal).
+        #envFrom:
+        #- secretRef:
+        #    name: matrix-conduit-sealed
+        volumeMounts:
+        - mountPath: /var/lib/conduit
+          name: matrix-conduit-storage
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 1000m
+            memory: 1Gi
+      volumes:
+      - name: matrix-conduit-storage
+        persistentVolumeClaim:
+          claimName: matrix-conduit-storage

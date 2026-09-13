@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# Namespace wird manuell angelegt (Repo-Konvention, Schutz vor prune-Deletion):
+#   kubectl create namespace matrix
+# (namespace.yaml liegt als Referenz, ist aber NICHT flux-managed)
+resources:
+- configmap.yaml
+- deployment.yaml
+- service.yaml
+- ingress.yaml
+- pvc.yaml

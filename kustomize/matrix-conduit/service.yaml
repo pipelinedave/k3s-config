@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: matrix-conduit
+  namespace: matrix
+  labels:
+    app.kubernetes.io/name: matrix-conduit
+    app.kubernetes.io/instance: matrix-conduit
+    app.kubernetes.io/version: "0.9.0"
+    app.kubernetes.io/component: service
+    app.kubernetes.io/part-of: matrix-conduit
+    app.kubernetes.io/managed-by: flux
+  annotations:
+    description: "ClusterIP-Service fuer Matrix-Homeserver (Client-Server API)"
+spec:
+  ports:
+  - name: http
+    port: 6167
+    protocol: TCP
+    targetPort: 6167
+  selector:
+    app: matrix-conduit
+    app.kubernetes.io/name: matrix-conduit
+    app.kubernetes.io/instance: matrix-conduit
+  type: ClusterIP

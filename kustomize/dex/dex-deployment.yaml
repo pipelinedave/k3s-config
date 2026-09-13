@@ -60,6 +60,11 @@ spec:
                 secretKeyRef:
                   name: oauth2-proxy-gotify-client-secret
                   key: OAUTH2_PROXY_GOTIFY_CLIENT_SECRET
+            - name: CHORETWO_CLIENT_SECRET # Added Choretwo client secret
+              valueFrom:
+                secretKeyRef:
+                  name: choretwo-client-secret
+                  key: CHORETWO_CLIENT_SECRET
           volumeMounts:
             - name: config
               mountPath: /etc/dex/cfg

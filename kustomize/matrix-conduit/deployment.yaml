@@ -37,17 +37,21 @@ spec:
         - name: http
           containerPort: 6167
           protocol: TCP
-        envFrom:
-        - configMapRef:
-            name: matrix-conduit-config
-        # Bot-User-Registrierungssecrets (CONDUIT_PASSWORD, appservice-Tokens usw.)
-        # kommen spaeter als SealedSecret (siehe docs/adding-applications.md, kubeseal).
-        #envFrom:
-        #- secretRef:
-        #    name: matrix-conduit-sealed
+        # Conduit >=0.7 laedt die Konfiguration ausschliesslich via CONDUIT_CONFIG
+        # aus einer TOML-Datei (alte CONDUIT_*-Env-Variablen werden ignoriert).
+        env:
+        - name: CONDUIT_CONFIG
+          value: /etc/conduit.toml
+        # Bot-User-Registrierungssecrets (registration_token, appservice-Tokens usw.)
+        # kommen spaeter als SealedSecret und koennen hier per secretRef ergaenzt werden
+        # (siehe docs/adding-applications.md, kubeseal).
         volumeMounts:
         - mountPath: /var/lib/conduit
           name: matrix-conduit-storage
+        - mountPath: /etc/conduit.toml
+          subPath: conduit.toml
+          name: matrix-conduit-config
+          readOnly: true
         resources:
           requests:
             cpu: 100m
@@ -59,3 +63,6 @@ spec:
       - name: matrix-conduit-storage
         persistentVolumeClaim:
           claimName: matrix-conduit-storage
+      - name: matrix-conduit-config
+        configMap:
+          name: matrix-conduit-config

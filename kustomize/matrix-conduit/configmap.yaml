@@ -9,19 +9,47 @@ metadata:
     app.kubernetes.io/part-of: matrix-conduit
     app.kubernetes.io/managed-by: flux
   annotations:
-    description: "Server- und Homeserver-Konfiguration fuer Conduit"
+    description: "Conduit-Konfiguration (TOML) fuer Matrix-Homeserver; wird als /etc/conduit.toml gemountet und via CONDUIT_CONFIG geladen"
 data:
-  # Homeserver-Domain (muss mit dem TLS-Host im Ingress uebereinstimmen)
-  CONDUIT_SERVER_NAME: "stillon.top"
-  # Persistente Speicherung via RocksDB auf gemountetem PVC
-  CONDUIT_DATABASE_PATH: "/var/lib/conduit"
-  # Interner HTTP-Port (Service/Ingress routen auf diesen Port)
-  CONDUIT_PORT: "6167"
-  # Maximale Anzahl gleichzeitiger Requests (DoS-Schutz)
-  CONDUIT_MAX_REQUESTS: "200"
-  # Vertrauenswuerdige Federation-Server (kommagetrennt, falls gefiltert werden soll)
-  CONDUIT_TRUSTED_SERVERS: ""
-  # Registrierung offen/geschlossen (fuer privaten Homeserver auf false)
-  CONDUIT_ALLOW_REGISTRATION: "false"
-  # Federation (Server-zu-Server) aktiv
-  CONDUIT_ALLOW_FEDERATION: "true"
+  conduit.toml: |
+    # Conduit v0.10 Konfiguration (offizielles TOML-Schema, vgl. conduit-example.toml)
+    # WICHTIG: Conduit >=0.7 laedt die Konfiguration NUR via CONDUIT_CONFIG=<pfad>.
+    # Die alten statischen CONDUIT_*-Env-Variablen werden nicht mehr ausgewertet.
+
+    [global]
+    # Homeserver-Domain (Suffix fuer User-/Room-IDs). Basis-Domain verwenden;
+    # client-/server-Erreichbarkeit wird ueber well_known auf matrix.stillon.top geroutet.
+    server_name = "stillon.top"
+
+    # Persistente Speicherung via RocksDB auf dem gemounteten PVC
+    database_backend = "rocksdb"
+    database_path = "/var/lib/conduit"
+
+    # Interner HTTP-Port (Service/Ingress routen hierher)
+    port = 6167
+
+    # Max. Upload-Groesse (Bytes)
+    max_request_size = 20_000_000
+
+    # Privater Homeserver: Registrierung geschlossen (Zugang nur via Admin-Tool/Invitation)
+    allow_registration = false
+    registration_token = ""
+
+    # Update-Check deaktivieren (immutable, deterministisch im k3s)
+    allow_check_for_updates = false
+
+    # Federation (Server-zu-Server) deaktiviert fuer privates R&D-Netzwerk.
+    # Bei Bedarf spaeter auf true + trusted_servers erweitern.
+    allow_federation = false
+
+    # Im Container muss Conduit auf allen Interfaces lauschen, damit der
+    # Service/Ingress ihn erreichen kann (nicht nur 127.0.0.1).
+    address = "0.0.0.0"
+
+    # Log-Verbosity (tracing-subscriber EnvFilter)
+    #log = "info"
+
+    [global.well_known]
+    # Client-/Server-Erreichbarkeit der Homeserver-Domain auf die Ingress-Host umleiten
+    client = "https://matrix.stillon.top"
+    server = "matrix.stillon.top:443"

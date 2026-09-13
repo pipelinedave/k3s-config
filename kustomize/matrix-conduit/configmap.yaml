@@ -33,7 +33,12 @@ data:
 
     # Privater Homeserver: Registrierung geschlossen (Zugang nur via Admin-Tool/Invitation)
     allow_registration = false
-    registration_token = ""
+    # Conduit v0.10 erzwingt einen nicht-leeren registration_token (sonst BadConfig-Crash),
+    # auch bei allow_registration=false. Der Token erlaubt die einmalige Admin-Registrierung
+    # der ersten (Bot-)User. HINWEIS: Da Conduit den Token nur aus der TOML liest (keine
+    # env-Interpolation), liegt er hier in der ConfigMap. Bei kuenftigem externem/Federation-
+    # Zugriff sollte er als Secret via initContainer/envsubst überfuehrt werden (SealedSecret).
+    registration_token = "DTWRkbzC5SiBVc4W4Twh5E8bFGbTvXla"
 
     # Update-Check deaktivieren (immutable, deterministisch im k3s)
     allow_check_for_updates = false

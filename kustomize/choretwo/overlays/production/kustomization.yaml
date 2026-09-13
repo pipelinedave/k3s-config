@@ -13,7 +13,7 @@ images:
 - name: pipelinedave/monolith
   newTag: e0891c1db3db6b1a67ff4789120bd47d0789da32
 - name: pipelinedave/auth-service
-  newTag: 199e0eacc7e4773d68088d239b5692988f589d77
+  newTag: 7791e6798c298cbbb82a40062ae585e9b22a2368
 
 patches:
 - patch: |-

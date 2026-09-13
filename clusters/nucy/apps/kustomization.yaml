@@ -9,3 +9,4 @@ resources:
 - choretwo-staging.yaml
 - picoshare.yaml
 - cloudflare-tunnel.yaml
+- matrix-conduit.yaml

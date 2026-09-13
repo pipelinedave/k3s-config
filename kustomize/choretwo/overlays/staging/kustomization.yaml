@@ -8,8 +8,18 @@ commonLabels:
   environment: staging
 
 images:
+- name: pipelinedave/ai-copilot-service
+  newName: pipelinedave/ai-copilot-service
+  newTag: 857bb5a638555e316917c74415889088380e21e8
+- name: pipelinedave/auth-service
+  newName: pipelinedave/auth-service
+  newTag: 857bb5a638555e316917c74415889088380e21e8
 - name: pipelinedave/frontend
-  newTag: 4eb950ecb29e17ffcd50f8d58a0b9a0364c7bb61
+  newName: pipelinedave/frontend
+  newTag: 857bb5a638555e316917c74415889088380e21e8
+- name: pipelinedave/monolith
+  newName: pipelinedave/monolith
+  newTag: 857bb5a638555e316917c74415889088380e21e8
 
 patches:
 - patch: |-

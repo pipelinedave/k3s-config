@@ -50,6 +50,13 @@ spec:
             name: monolith
             port:
               number: 80
+      - path: /api/export
+        pathType: Prefix
+        backend:
+          service:
+            name: monolith
+            port:
+              number: 80
       - path: /
         pathType: Prefix
         backend:

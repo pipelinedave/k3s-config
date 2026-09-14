@@ -19,7 +19,7 @@ images:
   newTag: 857bb5a638555e316917c74415889088380e21e8
 - name: pipelinedave/monolith
   newName: pipelinedave/monolith
-  newTag: 857bb5a638555e316917c74415889088380e21e8
+  newTag: 5e55b90dceceee8d9f18201720851f299eb94c9b
 
 patches:
 - patch: |-

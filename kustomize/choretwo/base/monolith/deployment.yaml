@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: monolith
-        image: pipelinedave/monolith:857bb5a638555e316917c74415889088380e21e8
+        image: pipelinedave/monolith:f4acf1adfbbe6548a44b0e3686259fb6bea3e5a9
         ports:
         - containerPort: 8000
           name: http

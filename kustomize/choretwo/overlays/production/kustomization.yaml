@@ -33,6 +33,11 @@ patches:
       value:
         name: FRONTEND_URL
         value: "https://choretwo.stillon.top"
+    - op: add
+      path: /spec/template/spec/containers/0/env/-
+      value:
+        name: HTTPS_ONLY
+        value: "true"
   target:
     kind: Deployment
     name: auth-service

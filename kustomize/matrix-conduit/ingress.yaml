@@ -4,7 +4,8 @@ metadata:
   name: matrix-conduit
   namespace: matrix
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    # DNS01-Issuer (Cloudflare API), weil HTTP-01 hinter dem Cloudflare-Tunnel 404 liefert.
+    cert-manager.io/cluster-issuer: letsencrypt-dns01
     kubernetes.io/ingress.class: nginx
     description: "Ingress fuer Matrix-Homeserver (Client-Server API)"
   labels:

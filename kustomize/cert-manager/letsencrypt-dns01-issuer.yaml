@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-dns01
+spec:
+  acme:
+    email: kingovi@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-dns01
+    server: https://acme-v02.api.letsencrypt.org/directory
+    solvers:
+    - dns01:
+        cloudflare:
+          # Moderner Cloudflare API-Zugriffstoken (Zone -> DNS -> Edit) fuer stillon.top.
+          # Kein # (Zone-) oder api-key-Modus: Nur api-token nutzen.
+          apiTokenSecretRef:
+            name: cloudflare-api-token
+            # ClusterIssuer sucht das Secret standardmaessig im cert-manager-Namespace.
+            # Explizit gesetzt, damit klar ist wo es liegt.
+            namespace: cert-manager

@@ -3,3 +3,4 @@ kind: Kustomization
 
 resources:
   - letsencrypt-prod-issuer.yaml
+  - letsencrypt-dns01-issuer.yaml

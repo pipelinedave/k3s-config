@@ -2566,6 +2566,8 @@ spec:
           httpGet:
             path: /healthz
             port: healthz
+          timeoutSeconds: 5
+          failureThreshold: 5
         name: manager
         ports:
         - containerPort: 9090
@@ -2581,6 +2583,8 @@ spec:
           httpGet:
             path: /
             port: http
+          timeoutSeconds: 5
+          failureThreshold: 5
         resources:
           limits:
             cpu: 1000m
@@ -3393,6 +3397,8 @@ spec:
           httpGet:
             path: /healthz
             port: healthz
+          timeoutSeconds: 5
+          failureThreshold: 5
         name: manager
         ports:
         - containerPort: 8080
@@ -3405,6 +3411,8 @@ spec:
           httpGet:
             path: /readyz
             port: healthz
+          timeoutSeconds: 5
+          failureThreshold: 5
         resources:
           limits:
             cpu: 1000m
@@ -4943,6 +4951,8 @@ spec:
           httpGet:
             path: /healthz
             port: healthz
+          timeoutSeconds: 5
+          failureThreshold: 5
         name: manager
         ports:
         - containerPort: 8080
@@ -4955,6 +4965,8 @@ spec:
           httpGet:
             path: /readyz
             port: healthz
+          timeoutSeconds: 5
+          failureThreshold: 5
         resources:
           limits:
             cpu: 1000m
@@ -6384,6 +6396,8 @@ spec:
           httpGet:
             path: /healthz
             port: healthz
+          timeoutSeconds: 5
+          failureThreshold: 5
         name: manager
         ports:
         - containerPort: 9090
@@ -6402,6 +6416,8 @@ spec:
           httpGet:
             path: /readyz
             port: healthz
+          timeoutSeconds: 5
+          failureThreshold: 5
         resources:
           limits:
             cpu: 1000m

@@ -21,7 +21,7 @@ spec:
         command: ["sh", "-c", "until nslookup postgres.choretwo-production.svc.cluster.local; do echo 'waiting for DNS postgres'; sleep 2; done"]
       containers:
       - name: monolith
-        image: pipelinedave/monolith:6ce70fbf867d08ae97e6431d8fbdba9ee3e48c8a
+        image: pipelinedave/monolith:8a7b700d62ef8eea4b8a923b8742125a95c57581
         ports:
         - containerPort: 8000
           name: http

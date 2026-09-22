@@ -15,5 +15,6 @@ spec:
           # Kein # (Zone-) oder api-key-Modus: Nur api-token nutzen.
           apiTokenSecretRef:
             name: cloudflare-api-token
+            key: api-token
             # ClusterIssuer sucht das Secret immer im cert-manager-Namespace
             # (kein namespace-Feld im CRD-Schema).

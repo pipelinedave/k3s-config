@@ -57,15 +57,15 @@ spec:
           value: redis://redis:6379
         - name: GATWAY_URL
           value: https://gotify.stillon.top
-        - name: ADESSO_API_KEY
+        - name: LLM_API_KEY
           valueFrom:
             secretKeyRef:
               name: choretwo-secrets
-              key: adesso-api-key
-        - name: ADESSO_HUB_URL
-          value: https://adesso-ai-hub.3asabc.de/v1/chat/completions
-        - name: ADESSO_MODEL
-          value: deepseek-v4-flash-sovereign
+              key: llm-api-key
+        - name: LLM_BASE_URL
+          value: https://api.synthetic.new/openai/v1
+        - name: LLM_MODEL
+          value: hf:zai-org/GLM-5.3-Flash
         livenessProbe:
           httpGet:
             path: /health

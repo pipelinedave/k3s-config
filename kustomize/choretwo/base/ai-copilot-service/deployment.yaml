@@ -37,8 +37,15 @@ spec:
             secretKeyRef:
               name: choretwo-secrets
               key: postgres-password
-        - name: OLLAMA_URL
-          value: http://host.docker.internal:11434
+        - name: LLM_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: choretwo-secrets
+              key: llm-api-key
+        - name: LLM_BASE_URL
+          value: https://api.synthetic.new/openai/v1
+        - name: LLM_MODEL
+          value: hf:zai-org/GLM-5.3-Flash
         livenessProbe:
           httpGet:
             path: /health

@@ -10,16 +10,16 @@ commonLabels:
 images:
 - name: pipelinedave/ai-copilot-service
   newName: pipelinedave/ai-copilot-service
-  newTag: 63bc16a5766d044fb55b138e2736e54476db4c78
+  newTag: 5671ffde141fe45d7b11c21d78395785f8d6e21c
 - name: pipelinedave/auth-service
   newName: pipelinedave/auth-service
-  newTag: 63bc16a5766d044fb55b138e2736e54476db4c78
+  newTag: 5671ffde141fe45d7b11c21d78395785f8d6e21c
 - name: pipelinedave/frontend
   newName: pipelinedave/frontend
-  newTag: 63bc16a5766d044fb55b138e2736e54476db4c78
+  newTag: 5671ffde141fe45d7b11c21d78395785f8d6e21c
 - name: pipelinedave/monolith
   newName: pipelinedave/monolith
-  newTag: 63bc16a5766d044fb55b138e2736e54476db4c78
+  newTag: 5671ffde141fe45d7b11c21d78395785f8d6e21c
 
 patches:
 - patch: |-

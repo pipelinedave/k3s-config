@@ -32,7 +32,8 @@ data:
     max_request_size = 20_000_000
 
     # Privater Homeserver: Registrierung geschlossen (Zugang nur via Admin-Tool/Invitation)
-    allow_registration = false
+    # TEMPORAER true (26.09.2026): dave-Account anlegen, danach sofort revert auf false.
+    allow_registration = true
     # Conduit v0.10 erzwingt einen nicht-leeren registration_token (sonst BadConfig-Crash),
     # auch bei allow_registration=false. Der Token erlaubt die einmalige Admin-Registrierung
     # der ersten (Bot-)User. HINWEIS: Da Conduit den Token nur aus der TOML liest (keine

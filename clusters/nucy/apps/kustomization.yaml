@@ -4,9 +4,6 @@ resources:
 - nginx-ingress.yaml
 - cert-manager.yaml
 - dex.yaml
-- choremane-prod.yaml
-- choretwo-production.yaml
-- choretwo-staging.yaml
 - picoshare.yaml
 - cloudflare-tunnel.yaml
 - matrix-conduit.yaml
